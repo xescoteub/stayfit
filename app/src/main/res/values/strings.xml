@@ -34,5 +34,11 @@
 
     <string name="home_screen_title">Home</string>
     <string name="home_screen_text">Can\'t walk? then fly!</string>
+    <string name="arm">arm</string>
+    <string name="leg">leg</string>
+    <string name="abs">abs</string>
+    <string name="chest">chest</string>
+    <string name="back">back</string>
+    <string name="extra">extra</string>
 
 </resources>

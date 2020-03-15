@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.workouts.ArmMenu"></activity>
         <activity
-            android:name="com.stayfit.ui.login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,10 +20,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.stayfit.ui.onboarding.OnBoardingActivity"
+            android:name=".ui.onboarding.OnBoardingActivity"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.stayfit.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="fullSensor" />
     </application>
 

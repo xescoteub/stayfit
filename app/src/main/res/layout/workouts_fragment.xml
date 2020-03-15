@@ -1,12 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workouts.WorkoutsFragment">
+    tools:context=".ui.workouts.WorkoutsFragment"
+    android:orientation="vertical">
 
-    <TextView
+    <ImageButton
+        android:id="@+id/btn_arm"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Workouts fragment" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/arm"
+        android:scaleType="fitXY"
+        android:src="@drawable/arm"
+        android:onClick="startArmMenu"/>
+
+    <ImageButton
+        android:id="@+id/btn_leg"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/leg"
+        android:scaleType="fitXY"
+        android:src="@drawable/leg" />
+
+    <ImageButton
+        android:id="@+id/btn_abs"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/abs"
+        android:scaleType="fitXY"
+        android:src="@drawable/abs" />
+
+    <ImageButton
+        android:id="@+id/btn_chest"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+
+        android:contentDescription="@string/chest"
+        android:scaleType="fitXY"
+        android:src="@drawable/chest" />
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/back"
+        android:scaleType="fitXY"
+        android:src="@drawable/back" />
+
+    <ImageButton
+        android:id="@+id/btn_extra"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/extra"
+        android:scaleType="fitXY"
+        android:src="@drawable/extra" />
+</LinearLayout>

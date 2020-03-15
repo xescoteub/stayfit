@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.navigation:navigation-ui:2.2.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/navigation-ui-2.2.1.aar/e2ecbc8a0e5aa31d4ff1460c937003da/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/navigation-ui-2.2.1.aar/e2ecbc8a0e5aa31d4ff1460c937003da/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b6932b233dd69cd01632149e281f8236/navigation-ui-2.2.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b6932b233dd69cd01632149e281f8236/navigation-ui-2.2.1/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
