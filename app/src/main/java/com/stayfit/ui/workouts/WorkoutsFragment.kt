@@ -30,8 +30,4 @@ class WorkoutsFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(WorkoutsViewModel::class.java)
         // TODO: Use the ViewModel
     }
-    fun startArmMenu(view: View) {
-        //val intent = Intent(this, ArmMenu::class.java)
-        //startActivity(intent)
-    }
 }

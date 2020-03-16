@@ -66,5 +66,6 @@
         android:background="#00FFFFFF"
         android:contentDescription="@string/extra"
         android:scaleType="fitXY"
-        android:src="@drawable/extra" />
+        android:src="@drawable/extra"
+        android:onClick="startExtraMenu"/>
 </LinearLayout>
