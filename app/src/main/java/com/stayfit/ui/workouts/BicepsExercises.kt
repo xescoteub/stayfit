@@ -1,26 +1,24 @@
 package com.stayfit.ui.workouts
 
-import android.R
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.BarbellCurl
-
 
 class BicepsExercises : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_biceps_exercises) // Da error, pero si que va. No debería de darlo.
+        setContentView(R.layout.activity_biceps_exercises)
         //create object of listview
-
+    /*
         //create object of listview
-        var listView: ListView = findViewById<View>(R.id.listview) as ListView
+        var listView: ListView = findViewById<View>(android.R.id.list_view) as ListView
         //create ArrayList of String
         var arrayList: ArrayList<String> = ArrayList()
         //Add elements to arraylist
@@ -32,18 +30,21 @@ class BicepsExercises : AppCompatActivity() {
         arrayList.add("Cable Curl")
         arrayList.add("Concentration Curl")
         //Create Adapter
-        val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, R.layout.simple_list_item_1,
+        val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1,
             arrayList as List<Any>?
         )
         //assign adapter to listview
         listView.setAdapter(arrayAdapter)
         //add listener to listview
-        listView.setOnItemClickListener(OnItemClickListener { adapterView, view, i, l ->
+        listView.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
             //startBarbellCurl()
-        })
+        })*/
     }
+
+
     fun startBarbellCurl(view: View) {
         val intent = Intent(this, BarbellCurl::class.java)
         startActivity(intent)
     }
+
 }

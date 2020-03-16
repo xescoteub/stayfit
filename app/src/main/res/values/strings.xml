@@ -40,5 +40,9 @@
     <string name="chest">chest</string>
     <string name="back">back</string>
     <string name="extra">extra</string>
+    <string name="cardio">cardio</string>
+    <string name="stretches">stretches</string>
+    <string name="yoga">yoga</string>
+    <string name="meditation">meditation</string>
 
 </resources>

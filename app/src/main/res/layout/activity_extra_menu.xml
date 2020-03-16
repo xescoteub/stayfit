@@ -1,27 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.workouts.ExtraMenu"
-    android:paddingTop="120dp"
-    android:paddingBottom="120dp">
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="75dp"
+    android:orientation="vertical">
+    <ImageButton
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:id="@+id/btn_cardio"
-        android:text="cardio"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="30dp"/>
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="75dp"
+        android:src="@drawable/cardio"
+        android:scaleType="fitXY"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/cardio"/>
+    <ImageButton
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:id="@+id/btn_stretches"
-        android:text="stretches"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btn_cardio"
-        android:layout_margin="30dp"/>
+        android:src="@drawable/stretches"
+        android:scaleType="fitXY"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/stretches"/>
+    <ImageButton
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/btn_yoga"
+        android:src="@drawable/yoga"
+        android:scaleType="fitXY"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/yoga"/>
+    <ImageButton
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/btn_meditation"
+        android:src="@drawable/meditation"
+        android:scaleType="fitXY"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/meditation"/>
 
-</RelativeLayout>
+
+</LinearLayout>
