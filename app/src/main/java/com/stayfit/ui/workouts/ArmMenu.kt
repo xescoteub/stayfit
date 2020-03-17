@@ -17,8 +17,4 @@ class ArmMenu : AppCompatActivity() {
         val intent = Intent(this, BicepsExercises::class.java)
         startActivity(intent)
     }
-    fun startArmMenu(view: View) {
-        val intent = Intent(this, ArmMenu::class.java)
-        startActivity(intent)
-    }
 }

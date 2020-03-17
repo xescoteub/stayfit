@@ -21,7 +21,7 @@ class ActivityFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_fragment, container, false)
+        return inflater.inflate(R.layout.activity_calendar, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
