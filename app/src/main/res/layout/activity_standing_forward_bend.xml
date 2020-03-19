@@ -4,21 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workouts.listexercises.BicepsExercises">
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/biceps_list"
-        />
-    <!--
-    <Button
+    tools:context=".ui.workouts.exercises.leg.StandingForwardBend">
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_barbellcurl"
-        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
-        android:text="Barvell Curl"
-        android:onClick="startBarbellCurl"/>
--->
+        android:layout_centerVertical="true"
+        android:text="Standing Forward Bend"
+        android:textStyle="bold" />
+
 </RelativeLayout>

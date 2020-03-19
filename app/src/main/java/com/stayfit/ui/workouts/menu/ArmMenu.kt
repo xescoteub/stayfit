@@ -1,10 +1,11 @@
-package com.stayfit.ui.workouts
+package com.stayfit.ui.workouts.menu
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.stayfit.R
+import com.stayfit.ui.workouts.listexercises.BicepsExercises
 
 class ArmMenu : AppCompatActivity() {
 

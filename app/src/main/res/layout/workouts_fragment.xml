@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workouts.WorkoutsFragment"
+    tools:context=".ui.workouts.menu.WorkoutsFragment"
     android:orientation="vertical">
 
     <ImageButton
@@ -25,7 +25,8 @@
         android:background="#00FFFFFF"
         android:contentDescription="@string/leg"
         android:scaleType="fitXY"
-        android:src="@drawable/leg" />
+        android:src="@drawable/leg"
+        android:onClick="startLegExercises"/>
 
     <ImageButton
         android:id="@+id/btn_abs"

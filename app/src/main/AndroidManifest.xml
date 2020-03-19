@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.workouts.BicepsExercises"></activity>
+        <activity android:name=".ui.workouts.exercises.leg.StandingForwardBend" />
+        <activity android:name=".ui.workouts.listexercises.LegExercises" />
+        <activity android:name=".ui.workouts.listexercises.BicepsExercises" />
         <activity android:name=".ui.activity.Calendar" />
-        <activity android:name=".ui.workouts.ExtraMenu" />
-        <activity android:name=".ui.workouts.exercises.BarbellCurl" />
-        <activity android:name=".ui.workouts.ArmMenu" />
+        <activity android:name=".ui.workouts.menu.ExtraMenu" />
+        <activity android:name=".ui.workouts.exercises.arm.biceps.BarbellCurl" />
+        <activity android:name=".ui.workouts.menu.ArmMenu" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:screenOrientation="fullSensor">

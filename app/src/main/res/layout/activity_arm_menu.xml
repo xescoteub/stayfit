@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workouts.ArmMenu"
-    android:paddingTop="120dp"
-    android:paddingBottom="120dp">
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="75dp"
+    tools:context=".ui.workouts.menu.ArmMenu"
+    android:orientation="vertical">
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/biceps"
+        android:scaleType="fitXY"
+        android:src="@drawable/biceps"
         android:id="@+id/btn_biceps"
-        android:text="biceps"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="30dp"
         android:onClick="startBicepsExercises"/>
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:id="@+id/btn_triceps"
-        android:text="triceps"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btn_biceps"
-        android:layout_margin="30dp"/>
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="75dp"
-        android:layout_below="@+id/btn_triceps"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/btn_shoulder"
-        android:text="shoulder"
-        android:layout_margin="30dp"/>
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/triceps"
+        android:scaleType="fitXY"
+        android:src="@drawable/triceps"
+        android:id="@+id/btn_triceps"/>
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/shoulder"
+        android:scaleType="fitXY"
+        android:src="@drawable/shoulder"
+        android:id="@+id/btn_shoulder"/>
 
-</RelativeLayout>
+</LinearLayout>

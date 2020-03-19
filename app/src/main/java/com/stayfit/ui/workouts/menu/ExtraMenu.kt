@@ -1,13 +1,13 @@
-package com.stayfit.ui.workouts.exercises
+package com.stayfit.ui.workouts.menu
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.stayfit.R
 
-class BarbellCurl : AppCompatActivity() {
+class ExtraMenu : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_barbell_curl)
+        setContentView(R.layout.activity_extra_menu)
     }
 }
