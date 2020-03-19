@@ -36,7 +36,8 @@
         android:background="#00FFFFFF"
         android:contentDescription="@string/abs"
         android:scaleType="fitXY"
-        android:src="@drawable/abs" />
+        android:src="@drawable/abs"
+        android:onClick="startAbsExercises"/>
 
     <ImageButton
         android:id="@+id/btn_chest"
@@ -47,7 +48,8 @@
 
         android:contentDescription="@string/chest"
         android:scaleType="fitXY"
-        android:src="@drawable/chest" />
+        android:src="@drawable/chest"
+        android:onClick="startChestExercises"/>
 
     <ImageButton
         android:id="@+id/btn_back"
@@ -57,7 +59,8 @@
         android:background="#00FFFFFF"
         android:contentDescription="@string/back"
         android:scaleType="fitXY"
-        android:src="@drawable/back" />
+        android:src="@drawable/back"
+        android:onClick="startBackExercises"/>
 
     <ImageButton
         android:id="@+id/btn_extra"

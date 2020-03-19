@@ -24,7 +24,8 @@
         android:contentDescription="@string/triceps"
         android:scaleType="fitXY"
         android:src="@drawable/triceps"
-        android:id="@+id/btn_triceps"/>
+        android:id="@+id/btn_triceps"
+        android:onClick="startTricepsExercises"/>
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -33,6 +34,7 @@
         android:contentDescription="@string/shoulder"
         android:scaleType="fitXY"
         android:src="@drawable/shoulder"
-        android:id="@+id/btn_shoulder"/>
+        android:id="@+id/btn_shoulder"
+        android:onClick="startShoulderExercises"/>
 
 </LinearLayout>
