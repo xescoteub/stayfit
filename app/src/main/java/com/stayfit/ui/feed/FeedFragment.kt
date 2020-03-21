@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.stayfit.R
-import com.stayfit.ui.profile.ProfileViewModel
-import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : Fragment() {
 
@@ -19,8 +16,6 @@ class FeedFragment : Fragment() {
     }
 
     private lateinit var viewModel: FeedViewModel
-
-    private lateinit var blogAdapter: BlogRecyclerAdapter
 
     private val TAG = "FeedFragment"
 
