@@ -14,7 +14,7 @@
         android:id="@+id/navigation_workouts"
         android:icon="@drawable/ic_timer"
         android:title="@string/title_workouts" />
-
+    
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_person"
