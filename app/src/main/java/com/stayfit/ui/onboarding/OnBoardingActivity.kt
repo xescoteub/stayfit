@@ -3,7 +3,6 @@ package com.stayfit.ui.onboarding
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
-import android.view.View
 import android.widget.TextView
 
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +16,6 @@ import com.stayfit.config.AppPrefs
 import com.stayfit.hide
 import com.stayfit.show
 import com.stayfit.ui.login.LoginActivity
-import com.stayfit.ui.workouts.ArmMenu
 
 class OnBoardingActivity : AppCompatActivity() {
 

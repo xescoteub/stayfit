@@ -1,10 +1,13 @@
-package com.stayfit.ui.workouts
+package com.stayfit.ui.workouts.menu
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.stayfit.R
+import com.stayfit.ui.workouts.listexercises.BicepsExercises
+import com.stayfit.ui.workouts.listexercises.ShoulderExercises
+import com.stayfit.ui.workouts.listexercises.TricepsExercises
 
 class ArmMenu : AppCompatActivity() {
 
@@ -17,8 +20,12 @@ class ArmMenu : AppCompatActivity() {
         val intent = Intent(this, BicepsExercises::class.java)
         startActivity(intent)
     }
-    fun startArmMenu(view: View) {
-        val intent = Intent(this, ArmMenu::class.java)
+    fun startTricepsExercises(view: View) {
+        val intent = Intent(this, TricepsExercises::class.java)
+        startActivity(intent)
+    }
+    fun startShoulderExercises(view: View) {
+        val intent = Intent(this, ShoulderExercises::class.java)
         startActivity(intent)
     }
 }

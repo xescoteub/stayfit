@@ -44,5 +44,8 @@
     <string name="stretches">stretches</string>
     <string name="yoga">yoga</string>
     <string name="meditation">meditation</string>
+    <string name="biceps">biceps</string>
+    <string name="triceps">triceps</string>
+    <string name="shoulder">shoulder</string>
 
 </resources>

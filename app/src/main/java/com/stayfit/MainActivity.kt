@@ -6,11 +6,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.stayfit.ui.workouts.ArmMenu
-import com.stayfit.ui.workouts.ExtraMenu
+import com.stayfit.ui.workouts.listexercises.AbsExercises
+import com.stayfit.ui.workouts.listexercises.BackExercises
+import com.stayfit.ui.workouts.listexercises.ChestExercises
+import com.stayfit.ui.workouts.menu.ArmMenu
+import com.stayfit.ui.workouts.menu.ExtraMenu
+import com.stayfit.ui.workouts.listexercises.LegExercises
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,7 +41,22 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ArmMenu::class.java)
         startActivity(intent)
     }
-
+    fun startLegExercises(view: View) {
+        val intent = Intent(this, LegExercises::class.java)
+        startActivity(intent)
+    }
+    fun startAbsExercises(view: View) {
+        val intent = Intent(this, AbsExercises::class.java)
+        startActivity(intent)
+    }
+    fun startChestExercises(view: View) {
+        val intent = Intent(this, ChestExercises::class.java)
+        startActivity(intent)
+    }
+    fun startBackExercises(view: View) {
+        val intent = Intent(this, BackExercises::class.java)
+        startActivity(intent)
+    }
     fun startExtraMenu(view: View) {
         val intent = Intent(this, ExtraMenu::class.java)
         startActivity(intent)

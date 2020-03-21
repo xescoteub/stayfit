@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_workouts"
-        android:name="com.stayfit.ui.workouts.WorkoutsFragment"
+        android:name="com.stayfit.ui.workouts.menu.WorkoutsFragment"
         android:label="@string/title_workouts"
         tools:layout="@layout/workouts_fragment" />
 
