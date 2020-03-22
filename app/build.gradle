@@ -50,6 +50,8 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.0"
     implementation "android.arch.lifecycle:viewmodel:1.1.0"
 
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+
     // Lottie is a mobile library for Android and iOS that parses Adobe After Effects
     // animations exported as json and renders them natively on mobile!
     def lottieVersion = "3.4.0"

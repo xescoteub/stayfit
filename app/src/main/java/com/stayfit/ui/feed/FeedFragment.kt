@@ -40,12 +40,12 @@ class FeedFragment : Fragment() {
     }
 
     private fun addCars() {
-        carlist.add(Cars("Toyota","good car, good car, good car, good car, good car, good car, good car, good car, good car, good car", R.drawable.toyota) )
-        carlist.add(Cars("Hyundai","good car, good car, good car, good car, good car, good car, good car, good car, good car, good car", R.drawable.hyundai) )
-        carlist.add(Cars("Marcedese","good car, good car, good car, good car, good car, good car, good car, good car, good car, good car", R.drawable.marcedese) )
-        carlist.add(Cars("Bentley","good car, good car, good car, good car, good car, good car, good car, good car, good car, good car", R.drawable.bentley) )
-        carlist.add(Cars("Nissan","good car, good car, good car, good car, good car, good car, good car, good car, good car, good car", R.drawable.nissan) )
-        carlist.add(Cars("Ford","good car, good car, good car, good car, good car, good car, good car, good car, good car, good car", R.drawable.ford) )
+        carlist.add(Cars("Blog 1","Blog 1 description", R.drawable.blog_1) )
+        carlist.add(Cars("Blog 2","Blog 2 description", R.drawable.blog_2) )
+        carlist.add(Cars("Blog 3","Blog 2 description", R.drawable.blog_2) )
+        carlist.add(Cars("Blog 4","Blog 3 description", R.drawable.blog_2) )
+        carlist.add(Cars("Blog 5","Blog 4 description", R.drawable.blog_2) )
+        carlist.add(Cars("Blog 6","Blog 5 description", R.drawable.blog_2) )
     }
 
     private fun showList() {
