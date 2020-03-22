@@ -13,7 +13,7 @@ import com.stayfit.R
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : Fragment() {
-    lateinit var carlist: ArrayList<Cars>
+    lateinit var blogList: ArrayList<Blog>
 
     companion object {
         fun newInstance() = FeedFragment()
@@ -34,23 +34,22 @@ class FeedFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(FeedViewModel::class.java)
-        carlist = ArrayList()
+        blogList = ArrayList()
         addCars()
         showList()
     }
 
     private fun addCars() {
-        carlist.add(Cars("Blog 1","Blog 1 description", R.drawable.blog_1) )
-        carlist.add(Cars("Blog 2","Blog 2 description", R.drawable.blog_2) )
-        carlist.add(Cars("Blog 3","Blog 2 description", R.drawable.blog_2) )
-        carlist.add(Cars("Blog 4","Blog 3 description", R.drawable.blog_2) )
-        carlist.add(Cars("Blog 5","Blog 4 description", R.drawable.blog_2) )
-        carlist.add(Cars("Blog 6","Blog 5 description", R.drawable.blog_2) )
+        blogList.add(Blog("Blog 1","Blog 1 description", R.drawable.blog_1) )
+        blogList.add(Blog("Blog 2","Blog 2 description", R.drawable.blog_2) )
+        blogList.add(Blog("Blog 3","Blog 2 description", R.drawable.blog_3) )
+        blogList.add(Blog("Blog 4","Blog 3 description", R.drawable.blog_4) )
+        blogList.add(Blog("Blog 5","Blog 4 description", R.drawable.blog_5) )
     }
 
     private fun showList() {
-        carRecycler.layoutManager = LinearLayoutManager(activity)
-        carRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
-        carRecycler.adapter = CarAdapter(carlist)
+        blogRecycler.layoutManager = LinearLayoutManager(activity)
+        blogRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
+        blogRecycler.adapter = BlogAdapter(blogList)
     }
 }
