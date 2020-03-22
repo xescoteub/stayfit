@@ -8,8 +8,8 @@ local.properties
 # Gradle generated files
 
 # User-specific configurations
-/.idea/
 *.iml
+/.idea/
 
 # OS-specific files
 .DS_Store
