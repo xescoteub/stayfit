@@ -14,7 +14,8 @@
         android:src="@drawable/cardio"
         android:scaleType="fitXY"
         android:background="#00FFFFFF"
-        android:contentDescription="@string/cardio"/>
+        android:contentDescription="@string/cardio"
+        android:onClick="startCardioExercises"/>
     <ImageButton
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -23,7 +24,8 @@
         android:src="@drawable/stretches"
         android:scaleType="fitXY"
         android:background="#00FFFFFF"
-        android:contentDescription="@string/stretches"/>
+        android:contentDescription="@string/stretches"
+        android:onClick="startStretchesExercises"/>
     <ImageButton
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -32,7 +34,8 @@
         android:src="@drawable/yoga"
         android:scaleType="fitXY"
         android:background="#00FFFFFF"
-        android:contentDescription="@string/yoga"/>
+        android:contentDescription="@string/yoga"
+        android:onClick="startYogaExercises"/>
     <ImageButton
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -41,7 +44,8 @@
         android:src="@drawable/meditation"
         android:scaleType="fitXY"
         android:background="#00FFFFFF"
-        android:contentDescription="@string/meditation"/>
+        android:contentDescription="@string/meditation"
+        android:onClick="startMeditationExercises"/>
 
 
 </LinearLayout>

@@ -10,8 +10,30 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:padding="50dp"
         android:text="Assisted Reverse Side Setup"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:id="@+id/txt_AssistedReverseSideSetup"/>
+    <!--
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_AssistedReverseSideSetup"
+        android:paddingTop="100dp"
+        android:layout_centerHorizontal="true">
+        <VideoView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/videoAssistedReverseSideSetup"/>
+    </RelativeLayout> -->
+    <VideoView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txt_AssistedReverseSideSetup"
+        android:id="@+id/videoAssistedReverseSideSetup"/>
+
 
 </RelativeLayout>
