@@ -11,12 +11,12 @@
     <string name="onboarding_slide1_desc">StayFit is an effortless way to track all your physical activities including sleep, heart rate and calories burned.</string>
 
     <!-- Onboarding screen 2 -->
-    <string name="onboarding_slide2_title">Accurate statistics</string>
-    <string name="onboarding_slide2_desc">StayFit tracks each activity with great accuracy letting you plan your workout sessions propertly</string>
+    <string name="onboarding_slide2_title">Personalized</string>
+    <string name="onboarding_slide2_desc">StayFit creates personalized routines based on your data to help you get in shape and improve your health</string>
 
     <!-- Onboarding screen 3 -->
-    <string name="onboarding_slide3_title">Accurate statistics</string>
-    <string name="onboarding_slide3_desc">StayFit tracks each activity with great accuracy letting you plan your workout sessions propertly</string>
+    <string name="onboarding_slide3_title">Scheduled</string>
+    <string name="onboarding_slide3_desc">Set reminders to develop a good habit</string>
 
     <string name="next">Next</string>
     <string name="skip">Skip</string>
