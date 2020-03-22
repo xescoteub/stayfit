@@ -9,7 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.workouts.exercises.arm.shoulder.BarbellOverheadShoulderPress"></activity>
+        <activity android:name=".ui.workouts.exercises.extra.meditation.TheStimulatingBreath"></activity>
+        <activity android:name=".ui.workouts.listexercises.MeditationExercises" />
+        <activity android:name=".ui.workouts.exercises.extra.yoga.Tadasana" />
+        <activity android:name=".ui.workouts.listexercises.YogaExercises" />
+        <activity android:name=".ui.workouts.exercises.extra.stretches.StandingHamstringStretch" />
+        <activity android:name=".ui.workouts.listexercises.StretchesExercises" />
+        <activity android:name=".ui.workouts.exercises.extra.cardio.Runningstairs" />
+        <activity android:name=".ui.workouts.listexercises.CardioExercises" />
+        <activity android:name=".ui.workouts.exercises.arm.shoulder.BarbellOverheadShoulderPress" />
         <activity android:name=".ui.workouts.listexercises.ShoulderExercises" />
         <activity android:name=".ui.workouts.exercises.arm.triceps.ClosegripBenchPress" />
         <activity android:name=".ui.workouts.listexercises.TricepsExercises" />
