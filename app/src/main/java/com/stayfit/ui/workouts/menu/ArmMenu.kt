@@ -35,7 +35,7 @@ class ArmMenu : AppCompatActivity() {
         (armRecycler.adapter as CategoryAdapter).setOnItemClickListener(object :
             CategoryAdapter.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
-                startConcreteExercise(armList[position].name)
+                if (position<armList.size){startConcreteExercise(armList[position].name)}  //position mas grande que la mida -> solucionar
             }
             override fun onItemLongClick(position: Int, v: View?) {
             }

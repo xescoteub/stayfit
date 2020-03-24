@@ -37,7 +37,7 @@ class ExtraMenu : AppCompatActivity() {
         (extraRecycler.adapter as CategoryAdapter).setOnItemClickListener(object :
             CategoryAdapter.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
-                startConcreteExercise(extraList[position].name)
+                if (position<extraList.size){startConcreteExercise(extraList[position].name)} //position mas grande que la mida -> solucionar
             }
             override fun onItemLongClick(position: Int, v: View?) {
             }
