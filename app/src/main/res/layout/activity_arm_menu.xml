@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.workouts.menu.ArmMenu"
     android:orientation="vertical">
-    <ImageButton
+    <!--<ImageButton
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="1"
@@ -35,6 +35,11 @@
         android:scaleType="fitXY"
         android:src="@drawable/shoulder"
         android:id="@+id/btn_shoulder"
-        android:onClick="startShoulderExercises"/>
+        android:onClick="startShoulderExercises"/>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/armRecycler">
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

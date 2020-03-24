@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.workouts.menu.ExtraMenu"
     android:orientation="vertical">
-    <ImageButton
+    <!--<ImageButton
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -45,7 +45,12 @@
         android:scaleType="fitXY"
         android:background="#00FFFFFF"
         android:contentDescription="@string/meditation"
-        android:onClick="startMeditationExercises"/>
+        android:onClick="startMeditationExercises"/>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/extraRecycler">
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </LinearLayout>
