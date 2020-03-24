@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    fun startArmMenu(view: View) {
+    /*fun startArmMenu(view: View) {
         val intent = Intent(this, ArmMenu::class.java)
         startActivity(intent)
     }
@@ -48,5 +48,5 @@ class MainActivity : AppCompatActivity() {
     fun startExtraMenu(view: View) {
         val intent = Intent(this, ExtraMenu::class.java)
         startActivity(intent)
-    }
+    }*/
 }
