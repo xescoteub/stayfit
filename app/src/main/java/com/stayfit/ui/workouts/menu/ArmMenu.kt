@@ -7,15 +7,13 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stayfit.R
-import com.stayfit.ui.workouts.Category
-import com.stayfit.ui.workouts.CategoryAdapter
 import com.stayfit.ui.workouts.listexercises.BicepsExercises
 import com.stayfit.ui.workouts.listexercises.ShoulderExercises
 import com.stayfit.ui.workouts.listexercises.TricepsExercises
 import kotlinx.android.synthetic.main.activity_arm_menu.*
 
 class ArmMenu : AppCompatActivity() {
-    lateinit var armList: ArrayList<Category>
+    lateinit var armList: ArrayList<ArmCategory>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_arm_menu)
@@ -24,16 +22,16 @@ class ArmMenu : AppCompatActivity() {
         showList()
     }
     private fun addCategories() {
-        armList.add(Category("BICEPS","", R.drawable.biceps) )
-        armList.add(Category("TRICEPS","", R.drawable.triceps) )
-        armList.add(Category("SHOULDER","", R.drawable.shoulder) )
+        armList.add(ArmCategory("BICEPS","", R.drawable.biceps) )
+        armList.add(ArmCategory("TRICEPS","", R.drawable.triceps) )
+        armList.add(ArmCategory("SHOULDER","", R.drawable.shoulder) )
     }
     private fun showList() {
         armRecycler.layoutManager = LinearLayoutManager(this)
-        armRecycler.addItemDecoration(DividerItemDecoration(this, 0))
-        armRecycler.adapter = CategoryAdapter(armList)
-        (armRecycler.adapter as CategoryAdapter).setOnItemClickListener(object :
-            CategoryAdapter.ClickListener {
+        armRecycler.addItemDecoration(DividerItemDecoration(this, 1))
+        armRecycler.adapter = ArmCategoryAdapter(armList)
+        (armRecycler.adapter as ArmCategoryAdapter).setOnItemClickListener(object :
+            ArmCategoryAdapter.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
                 if (position<armList.size){startConcreteExercise(armList[position].name)}  //position mas grande que la mida -> solucionar
             }

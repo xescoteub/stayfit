@@ -59,7 +59,7 @@ class WorkoutsFragment : Fragment() {
 
     private fun showList() {
         workoutRecycler.layoutManager = LinearLayoutManager(activity)
-        workoutRecycler.addItemDecoration(DividerItemDecoration(activity, 0))
+        workoutRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
         workoutRecycler.adapter = CategoryAdapter(categoriesList)
         (workoutRecycler.adapter as CategoryAdapter).setOnItemClickListener(object :
             CategoryAdapter.ClickListener {

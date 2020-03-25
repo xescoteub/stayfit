@@ -7,8 +7,6 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stayfit.R
-import com.stayfit.ui.workouts.Category
-import com.stayfit.ui.workouts.CategoryAdapter
 import com.stayfit.ui.workouts.listexercises.CardioExercises
 import com.stayfit.ui.workouts.listexercises.MeditationExercises
 import com.stayfit.ui.workouts.listexercises.StretchesExercises
@@ -16,7 +14,7 @@ import com.stayfit.ui.workouts.listexercises.YogaExercises
 import kotlinx.android.synthetic.main.activity_extra_menu.*
 
 class ExtraMenu : AppCompatActivity() {
-    lateinit var extraList: ArrayList<Category>
+    lateinit var extraList: ArrayList<ExtraCategory>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_extra_menu)
@@ -25,17 +23,17 @@ class ExtraMenu : AppCompatActivity() {
         showList()
     }
     private fun addCategories() {
-        extraList.add(Category("CARDIO","", R.drawable.cardio) )
-        extraList.add(Category("STRETCHES","", R.drawable.stretches) )
-        extraList.add(Category("YOGA","", R.drawable.yoga) )
-        extraList.add(Category("MEDITATION","", R.drawable.meditation) )
+        extraList.add(ExtraCategory("CARDIO","", R.drawable.cardio) )
+        extraList.add(ExtraCategory("STRETCHES","", R.drawable.stretches) )
+        extraList.add(ExtraCategory("YOGA","", R.drawable.yoga) )
+        extraList.add(ExtraCategory("MEDITATION","", R.drawable.meditation) )
     }
     private fun showList() {
         extraRecycler.layoutManager = LinearLayoutManager(this)
-        extraRecycler.addItemDecoration(DividerItemDecoration(this, 0))
-        extraRecycler.adapter = CategoryAdapter(extraList)
-        (extraRecycler.adapter as CategoryAdapter).setOnItemClickListener(object :
-            CategoryAdapter.ClickListener {
+        extraRecycler.addItemDecoration(DividerItemDecoration(this, 1))
+        extraRecycler.adapter = ExtraCategoryAdapter(extraList)
+        (extraRecycler.adapter as ExtraCategoryAdapter).setOnItemClickListener(object :
+            ExtraCategoryAdapter.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
                 if (position<extraList.size){startConcreteExercise(extraList[position].name)} //position mas grande que la mida -> solucionar
             }
