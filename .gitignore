@@ -5,11 +5,9 @@
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Gradle generated files
-
 # User-specific configurations
 *.iml
-/.idea/
+.idea/
 
 # OS-specific files
 .DS_Store
