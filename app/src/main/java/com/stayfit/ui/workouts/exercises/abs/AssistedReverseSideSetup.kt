@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.MediaController
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.VideoView
 import com.stayfit.R
 import kotlin.math.roundToInt
@@ -14,12 +15,13 @@ import kotlin.math.roundToInt
 class AssistedReverseSideSetup : AppCompatActivity() {
     var progressBar: ProgressBar? = null
     var myCountDownTimer: MyCountDownTimer? = null
+    var text_time: TextView? = null
     private var delay:Delay = Delay(3000, 1000)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assisted_reverse_side_setup)
         progressBar = findViewById<ProgressBar>(R.id.progressBar_assistedreversesidesetup)
-        //progressBar!!.getProgressDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+        text_time = findViewById<TextView>(R.id.txt_time)
         progressBar!!.getProgressDrawable().setColorFilter(Color.parseColor("#233475"), android.graphics.PorterDuff.Mode.SRC_IN);
         downProgressBar(15000) //10s
     }
@@ -27,6 +29,7 @@ class AssistedReverseSideSetup : AppCompatActivity() {
         myCountDownTimer = MyCountDownTimer(durada, 1000)
         progressBar!!.max=(durada / 1000).toInt()
         progressBar!!.progress=progressBar!!.max
+        text_time!!.setText(progressBar!!.progress.toString()+'"'+"/"+progressBar!!.max.toString()+'"')
         delay.start()
         myCountDownTimer!!.start()
     }
@@ -35,6 +38,7 @@ class AssistedReverseSideSetup : AppCompatActivity() {
         CountDownTimer(millisInFuture, countDownInterval) {
         override fun onTick(millisUntilFinished: Long) {
             progressBar!!.progress =  (millisUntilFinished / 1000).toInt()
+            text_time!!.setText(progressBar!!.progress.toString()+'"'+"/"+progressBar!!.max.toString()+'"')
         }
         override fun onFinish() {
             finish()
