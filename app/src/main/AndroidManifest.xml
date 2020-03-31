@@ -30,7 +30,6 @@
         <activity android:name=".ui.workouts.exercises.leg.StandingForwardBend" />
         <activity android:name=".ui.workouts.listexercises.LegExercises" />
         <activity android:name=".ui.workouts.listexercises.BicepsExercises" />
-        <activity android:name=".ui.activity.Calendar" />
         <activity android:name=".ui.workouts.menu.ExtraMenu" />
         <activity android:name=".ui.workouts.exercises.arm.biceps.BarbellCurl" />
         <activity android:name=".ui.workouts.menu.ArmMenu" />
