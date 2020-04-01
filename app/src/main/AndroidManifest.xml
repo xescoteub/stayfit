@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.workouts.exercises.extra.meditation.TheStimulatingBreath"></activity>
+        <activity
+            android:name=".ui.profile.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity android:name=".ui.workouts.exercises.extra.meditation.TheStimulatingBreath" />
         <activity android:name=".ui.workouts.listexercises.MeditationExercises" />
         <activity android:name=".ui.workouts.exercises.extra.yoga.Tadasana" />
         <activity android:name=".ui.workouts.listexercises.YogaExercises" />

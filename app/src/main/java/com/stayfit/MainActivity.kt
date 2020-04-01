@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.stayfit.ui.profile.SettingsActivity
 import com.stayfit.ui.workouts.listexercises.AbsExercises
 import com.stayfit.ui.workouts.listexercises.BackExercises
 import com.stayfit.ui.workouts.listexercises.ChestExercises
@@ -23,6 +24,11 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
+    }
+
+    fun settingsBtn_onClick(view: View) {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     /*fun startArmMenu(view: View) {
