@@ -16,6 +16,8 @@ import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : Fragment() {
     lateinit var blogList: ArrayList<Blog>
+    val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val blogsRef: DatabaseReference = database.getReference("blogs")
 
     companion object {
         fun newInstance() = FeedFragment()
@@ -36,36 +38,36 @@ class FeedFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(FeedViewModel::class.java)
+
+        println("blogsRef: $blogsRef")
+
         blogList = ArrayList()
         addCars()
         showList()
     }
 
     private fun addCars() {
-        blogList.add(Blog("Blog 1","Blog 1 description", R.drawable.blog_1) )
+        /*blogList.add(Blog("Blog 1","Blog 1 description", R.drawable.blog_1) )
         blogList.add(Blog("Blog 2","Blog 2 description", R.drawable.blog_2) )
         blogList.add(Blog("Blog 3","Blog 2 description", R.drawable.blog_3) )
         blogList.add(Blog("Blog 4","Blog 3 description", R.drawable.blog_4) )
-        blogList.add(Blog("Blog 5","Blog 4 description", R.drawable.blog_5) )
-
-        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-        val blogsRef: DatabaseReference = database.getReference("blogs")
-        println("blogsRef: $blogsRef")
-
-
+        blogList.add(Blog("Blog 5","Blog 4 description", R.drawable.blog_5) )*/
 
         // Read from the database
         blogsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                /*for (item in dataSnapshot.children) {
+                for (item in dataSnapshot.children) {
+                    var itemVal: Any? = item.getValue();
                     Log.d(TAG, "Item is: $item")
-                    Log.d(TAG, "Item val is: ${item.getValue()}")
-                }*/
+                    Log.d(TAG, "Item val is: ${itemVal}")
+                }
 
-                val children = dataSnapshot.children
+
+                /*val children = dataSnapshot.children
                 children.forEach {
                     println(it.toString())
-                }
+                    blogList.add(Blog("Blog 100","Blog 100 description", R.drawable.blog_1))
+                }*/
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 //val value = dataSnapshot.value as Map<*, *>?
