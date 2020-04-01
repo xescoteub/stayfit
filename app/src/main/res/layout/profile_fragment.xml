@@ -19,7 +19,7 @@
     <ImageButton
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/ic_settings_black_24dp"
+        app:srcCompat="@drawable/ic_settings_black_24dp"
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/change_passwd"
-        android:text="Change password"/>
+        android:text="@string/change_password"/>
 
     <ImageView
         android:id="@+id/icon_logout"
@@ -106,7 +106,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="30dp"
         android:layout_marginBottom="90dp"
-        android:src="@drawable/ic_subdirectory_arrow_right_black_24dp" />
+        app:srcCompat="@drawable/ic_subdirectory_arrow_right_black_24dp" />
 
     <TextView
         android:textStyle="bold"
