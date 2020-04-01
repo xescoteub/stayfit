@@ -9,22 +9,27 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import com.stayfit.R
+import com.stayfit.ui.workouts.exercises.ExerciseActivity
 import com.stayfit.ui.workouts.exercises.abs.AssistedReverseSideSetup
 
 class AbsExercises : AppCompatActivity() {
-
+    //create object of listview
+    var listView: ListView = findViewById<View>(R.id.abs_list) as ListView
+    //create ArrayList of String
+    var arrayList: ArrayList<String> = ArrayList()
+    //create ArrayList of String
+    var exerciseList: ArrayList<ExerciseActivity> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_abs_exercises)
         controlListView()
     }
     fun controlListView(){
-        //create object of listview
-        var listView: ListView = findViewById<View>(R.id.abs_list) as ListView
-        //create ArrayList of String
-        var arrayList: ArrayList<String> = ArrayList()
+
         //Add elements to arraylist
-        arrayList.add("Assisted Reverse Side Situp")
+        var assistedReverseSideSetup: ExerciseActivity = ExerciseActivity("Assisted Reverse Side Situp")
+        exerciseList.add(assistedReverseSideSetup)
+        arrayList.add(assistedReverseSideSetup.getExerciseName())
         arrayList.add("Bent Leg V-Up")
         arrayList.add("Alternating Toe Reach")
         arrayList.add("Leg Raise and Reach Clap")
@@ -44,16 +49,14 @@ class AbsExercises : AppCompatActivity() {
         //assign adapter to listview
         listView.setAdapter(arrayAdapter)
         //add listener to listview
-        listView.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(arrayList[i].toString()) })
+        listView.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) })
     }
-
-    fun startConcreteExercise(s: String){
-        if (s.equals("Assisted Reverse Side Situp")){startAssistedReverseSideSetup()}
-        else{
-            Toast.makeText(this, "Exercise $s will be available coming soon!", Toast.LENGTH_SHORT).show()}
-    }
-    fun startAssistedReverseSideSetup() {
-        val intent = Intent(this, AssistedReverseSideSetup::class.java)
+    fun startConcreteExercise(i: Int){
+        if (i<exerciseList.size){startExercise(exerciseList.get(i))}
+        else{ Toast.makeText(this, "Exercise ${arrayList.get(i)} will be available coming soon!", Toast.LENGTH_SHORT).show()} }
+    fun startExercise(exercise: ExerciseActivity) {
+        val intent = Intent(this, exercise.javaClass)
         startActivity(intent)
     }
+
 }
