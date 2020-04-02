@@ -3,14 +3,10 @@ package com.stayfit
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.stayfit.ui.login.LoginActivity
-import com.stayfit.ui.profile.ProfileFragment
 import com.stayfit.ui.profile.SettingsActivity
 import com.stayfit.ui.workouts.listexercises.AbsExercises
 import com.stayfit.ui.workouts.listexercises.BackExercises
@@ -34,22 +30,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
-    fun logOut_onClick(view: View) {
-
-        val alertdialog_logout = AlertDialog.Builder(this)
-        alertdialog_logout.setTitle("Salida")
-        alertdialog_logout.setMessage("Seguro desea salir?")
-        alertdialog_logout.setPositiveButton("Yes") { dialog, which ->
-            finish()
-        }
-        alertdialog_logout.setNegativeButton("No"){ dialog, which -> }
-
-        alertdialog_logout.show()
-
-        }
-
-
-
 
     /*fun startArmMenu(view: View) {
         val intent = Intent(this, ArmMenu::class.java)
