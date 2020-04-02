@@ -3,6 +3,7 @@ package com.stayfit
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -30,6 +31,20 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
+
+    fun logOut_onClick(view: View){
+
+        val alertdialog_logout = AlertDialog.Builder(this)
+        alertdialog_logout.setTitle("Salir")
+        alertdialog_logout.setMessage("Seguro que desea salir?")
+        alertdialog_logout.setPositiveButton("Yes") { dialog, which ->
+            finish()
+        }
+        alertdialog_logout.setNegativeButton("No") { dialog, which -> }
+        alertdialog_logout.show()
+    }
+
+
 
     /*fun startArmMenu(view: View) {
         val intent = Intent(this, ArmMenu::class.java)
