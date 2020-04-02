@@ -42,11 +42,11 @@ class FeedFragment : Fragment() {
         println("blogsRef: $blogsRef")
 
         blogList = ArrayList()
-        addCars()
+        addBlogs()
         showList()
     }
 
-    private fun addCars() {
+    private fun addBlogs() {
         /*blogList.add(Blog("Blog 1","Blog 1 description", R.drawable.blog_1) )
         blogList.add(Blog("Blog 2","Blog 2 description", R.drawable.blog_2) )
         blogList.add(Blog("Blog 3","Blog 2 description", R.drawable.blog_3) )

@@ -6,10 +6,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <CalendarView
+
+        <com.applandeo.materialcalendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--<CalendarView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </CalendarView>
+        </CalendarView>-->
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
