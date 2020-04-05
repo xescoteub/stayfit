@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workouts.exercises.ExerciseActivity">
+    tools:context=".ui.workouts.exercises.Exercise">
     <TextView
         android:id="@+id/txt_exercise"
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
         android:id="@+id/jason_exercise"/>
 
     <TextView
-        android:id="@+id/txt_time"
+        android:id="@+id/txt_time_exercise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/jason_exercise"

@@ -3,26 +3,34 @@ package com.stayfit.ui.workouts.exercises
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
 import com.stayfit.R
 
-class ExerciseActivity(var nom_exercise: String) : AppCompatActivity() {
+class ExerciseActivity: AppCompatActivity() {
     var progressBar: ProgressBar? = null
     var myCountDownTimer: MyCountDownTimer? = null
     var text_time: TextView? = null
+    var title:TextView? = null
     private var delay:Delay = Delay(3000, 1000)
+    var url_video: String = ""
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
-        progressBar = findViewById<ProgressBar>(R.id.progressBar_exercise)
-        text_time = findViewById<TextView>(R.id.txt_time)
-        progressBar!!.getProgressDrawable().setColorFilter(Color.parseColor("#233475"), android.graphics.PorterDuff.Mode.SRC_IN);
-        downProgressBar(15000) //10s
+        title = findViewById<TextView>(R.id.txt_exercise)
+        val intent:Intent = intent
+        managerParametersIntent(intent.getStringArrayListExtra("exercise_name"))
+
+
+
     }
     private fun downProgressBar(durada: Long){
         myCountDownTimer = MyCountDownTimer(durada, 1000)
@@ -50,10 +58,37 @@ class ExerciseActivity(var nom_exercise: String) : AppCompatActivity() {
         override fun onFinish() {
         }
     }
-
     fun openinYT(view: View) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url_video))
         startActivity(intent)
     }
-    public fun getExerciseName(): String{return nom_exercise}
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun managerParametersIntent(parameterIntent: ArrayList<String>){
+        val name_exercise: String = parameterIntent[0]
+        title!!.text = name_exercise
+        url_video = parameterIntent[1]
+
+        val progBar = findViewById<ProgressBar>(R.id.progressBar_exercise)
+        val txt_time = findViewById<TextView>(R.id.txt_time_exercise)
+
+        var time: Int = parameterIntent[2].toInt()
+        if (time==0){
+            txt_time.setText(parameterIntent[4]) // set description
+            txt_time.textSize = (14).toFloat()
+            txt_time.setTextColor(Color.BLACK)
+            progBar.visibility = View.GONE
+        }else{
+            progressBar = findViewById<ProgressBar>(R.id.progressBar_exercise)
+            text_time = findViewById<TextView>(R.id.txt_time_exercise)
+            progressBar!!.getProgressDrawable().setColorFilter(Color.parseColor("#233475"), android.graphics.PorterDuff.Mode.SRC_IN);
+            var t: Long = (time*1000).toLong() // convert seconds to ms
+            downProgressBar(t) //10s
+        }
+
+        var jason: String = parameterIntent[3]
+        if (!jason.equals("null")){
+            val js = findViewById<com.airbnb.lottie.LottieAnimationView>(R.id.jason_exercise)
+            js.setAnimation(jason)
+        }
+    }
 }
