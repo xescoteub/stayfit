@@ -89,6 +89,7 @@
         android:layout_height="wrap_content"/>
 
     <TextView
+        android:onClick="change_psswd_OnClick"
         android:textSize="15dp"
         android:textStyle="italic"
         android:textColor="@color/colorBlueMidnight"

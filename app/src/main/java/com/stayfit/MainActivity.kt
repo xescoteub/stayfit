@@ -43,6 +43,16 @@ class MainActivity : AppCompatActivity() {
         alertdialog_logout.setNegativeButton("No") { dialog, which -> }
         alertdialog_logout.show()
     }
+    fun change_psswd_OnClick(view: View){
+
+        val psswdDialog = AlertDialog.Builder(this)
+        psswdDialog.setView(R.layout.profile_change_psswd)
+        psswdDialog.setPositiveButton("Yes") { dialog, which ->
+            //Actualizar contraseña
+        }
+        psswdDialog.setNegativeButton("No") { dialog, which -> }
+        psswdDialog.show()
+    }
 
 
 
