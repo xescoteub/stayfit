@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
 import com.stayfit.ui.workouts.exercises.ExerciseActivity
-import com.stayfit.ui.workouts.exercises.abs.AssistedReverseSideSetup
 
 class AbsExercises : AppCompatActivity() {
     //create object of listview
@@ -32,14 +31,12 @@ class AbsExercises : AppCompatActivity() {
         var assistedReverseSideSetup: Exercise = Exercise("Assisted Reverse Side Situp", "https://www.youtube.com/watch?v=6DYCoKCHanI&feature=youtu.be", "0","null","How to: Start lying on left side, resting most of weight on left hip, with legs in the air at a 45-degree angle, and place left forearm on the floor for support. Bend knees as you bring them toward chest, and lift chest to meet them. Lower back to start. That’s one rep. We recommend to do 15 reps on each side.\n" +
                 "\n" +
                 "Good for: obliques and transverse abs")
-        exerciseList.add(assistedReverseSideSetup)
-        arrayList.add(assistedReverseSideSetup.getExerciseName())
+        addExercise(assistedReverseSideSetup)
 
         var bentLegVUp: Exercise = Exercise("Bent Leg V-Up","https://www.youtube.com/watch?v=Un7DaREYAWk&feature=youtu.be", "0", "null","How to: Start lying on back with legs in air and bent at 90-degrees (shins parallel to floor) and hands clasped over chest. In one movement, straighten legs and lift torso up, extending arms and trying to touch toes with hands. Lower back down to start. That’s one rep. We recommend to do 15 reps.\n" +
                 "\n" +
                 "Good for: six-pack abs and transverse abs")
-        exerciseList.add(bentLegVUp)
-        arrayList.add(bentLegVUp.getExerciseName())
+        addExercise(bentLegVUp)
 
         arrayList.add("Alternating Toe Reach")
         arrayList.add("Leg Raise and Reach Clap")
@@ -69,6 +66,10 @@ class AbsExercises : AppCompatActivity() {
         val intent = Intent(this, ExerciseActivity::class.java)
         intent.putExtra("exercise_name",exercise.getParametersList());
         startActivity(intent)
+    }
+    private fun addExercise(exercise: Exercise){
+        exerciseList.add(exercise)
+        arrayList.add(exercise.getExerciseName())
     }
 
 }

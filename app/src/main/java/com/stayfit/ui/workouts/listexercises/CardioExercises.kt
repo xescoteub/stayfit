@@ -9,22 +9,26 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import com.stayfit.R
-import com.stayfit.ui.workouts.exercises.extra.cardio.Runningstairs
+import com.stayfit.ui.workouts.exercises.Exercise
+import com.stayfit.ui.workouts.exercises.ExerciseActivity
 
 class CardioExercises : AppCompatActivity() {
-
+    //create object of listview
+    var listView: ListView ?= null
+    //create ArrayList of String
+    var arrayList: ArrayList<String> = ArrayList()
+    //create ArrayList of String
+    var exerciseList: ArrayList<Exercise> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cardio_exercises)
+        listView = findViewById<View>(R.id.cardio_list) as ListView
         controlListView()
     }
     fun controlListView(){
-        //create object of listview
-        var listView: ListView = findViewById<View>(R.id.cardio_list) as ListView
-        //create ArrayList of String
-        var arrayList: ArrayList<String> = ArrayList()
-        //Add elements to arraylist
-        arrayList.add("Running stairs")
+        var runningstairs: Exercise = Exercise("Running stairs", "https://www.youtube.com/watch?v=BvskUKjNAH8", "0", "null", "")
+        addExercise(runningstairs)
+
         arrayList.add("Burpees")
         arrayList.add("Jump rope double-unders")
         arrayList.add("Jump lunges")
@@ -37,18 +41,21 @@ class CardioExercises : AppCompatActivity() {
         //Create Adapter
         val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayList as List<Any>?)
         //assign adapter to listview
-        listView.setAdapter(arrayAdapter)
+        listView?.adapter = arrayAdapter
         //add listener to listview
-        listView.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(arrayList[i].toString()) })
+        listView?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) }
     }
-
-    fun startConcreteExercise(s: String){
-        if (s.equals("Running stairs")){startRunningstairs()}
-        else{
-            Toast.makeText(this, "Exercise $s will be available coming soon!", Toast.LENGTH_SHORT).show()}
+    fun startConcreteExercise(i: Int){
+        if (i<exerciseList.size){startExercise(exerciseList[i])}
+        else{ Toast.makeText(this, "Exercise ${arrayList[i]} will be available coming soon!", Toast.LENGTH_SHORT).show()}
     }
-    fun startRunningstairs() {
-        val intent = Intent(this, Runningstairs::class.java)
+    private fun startExercise(exercise: Exercise) {
+        val intent = Intent(this, ExerciseActivity::class.java)
+        intent.putExtra("exercise_name",exercise.getParametersList());
         startActivity(intent)
+    }
+    private fun addExercise(exercise: Exercise){
+        exerciseList.add(exercise)
+        arrayList.add(exercise.getExerciseName())
     }
 }

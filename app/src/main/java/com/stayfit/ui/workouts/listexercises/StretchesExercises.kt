@@ -9,22 +9,27 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import com.stayfit.R
-import com.stayfit.ui.workouts.exercises.extra.stretches.StandingHamstringStretch
+import com.stayfit.ui.workouts.exercises.Exercise
+import com.stayfit.ui.workouts.exercises.ExerciseActivity
 
 class StretchesExercises : AppCompatActivity() {
-
+    //create object of listview
+    var listView: ListView ?= null
+    //create ArrayList of String
+    var arrayList: ArrayList<String> = ArrayList()
+    //create ArrayList of String
+    var exerciseList: ArrayList<Exercise> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stretches_exercises)
+        listView = findViewById<View>(R.id.stretches_list) as ListView
         controlListView()
     }
     fun controlListView(){
-        //create object of listview
-        var listView: ListView = findViewById<View>(R.id.stretches_list) as ListView
-        //create ArrayList of String
-        var arrayList: ArrayList<String> = ArrayList()
         //Add elements to arraylist
-        arrayList.add("Standing Hamstring Stretch")
+        var standingHamstringStretch: Exercise = Exercise("Standing Hamstring Stretch", "https://www.youtube.com/watch?v=SAU77ionqJ4", "0", "null", "")
+        addExercise(standingHamstringStretch)
+
         arrayList.add("Piriformis Stretch")
         arrayList.add("Lunge With Spinal Twist")
         arrayList.add("Triceps Stretch")
@@ -48,18 +53,21 @@ class StretchesExercises : AppCompatActivity() {
         //Create Adapter
         val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayList as List<Any>?)
         //assign adapter to listview
-        listView.setAdapter(arrayAdapter)
+        listView?.adapter = arrayAdapter
         //add listener to listview
-        listView.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(arrayList[i].toString()) })
+        listView?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) }
     }
-
-    fun startConcreteExercise(s: String){
-        if (s.equals("Standing Hamstring Stretch")){startStandingHamstringStretch()}
-        else{
-            Toast.makeText(this, "Exercise $s will be available coming soon!", Toast.LENGTH_SHORT).show()}
+    fun startConcreteExercise(i: Int){
+        if (i<exerciseList.size){startExercise(exerciseList[i])}
+        else{ Toast.makeText(this, "Exercise ${arrayList[i]} will be available coming soon!", Toast.LENGTH_SHORT).show()}
     }
-    fun startStandingHamstringStretch() {
-        val intent = Intent(this, StandingHamstringStretch::class.java)
+    private fun startExercise(exercise: Exercise) {
+        val intent = Intent(this, ExerciseActivity::class.java)
+        intent.putExtra("exercise_name",exercise.getParametersList());
         startActivity(intent)
+    }
+    private fun addExercise(exercise: Exercise){
+        exerciseList.add(exercise)
+        arrayList.add(exercise.getExerciseName())
     }
 }

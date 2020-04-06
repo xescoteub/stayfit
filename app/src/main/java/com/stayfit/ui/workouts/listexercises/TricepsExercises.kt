@@ -9,22 +9,27 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import com.stayfit.R
-import com.stayfit.ui.workouts.exercises.arm.triceps.ClosegripBenchPress
+import com.stayfit.ui.workouts.exercises.Exercise
+import com.stayfit.ui.workouts.exercises.ExerciseActivity
 
 class TricepsExercises : AppCompatActivity() {
-
+    //create object of listview
+    var listView: ListView ?= null
+    //create ArrayList of String
+    var arrayList: ArrayList<String> = ArrayList()
+    //create ArrayList of String
+    var exerciseList: ArrayList<Exercise> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_triceps_exercises)
+        listView = findViewById<View>(R.id.triceps_list) as ListView
         controlListView()
     }
     fun controlListView(){
-        //create object of listview
-        var listView: ListView = findViewById<View>(R.id.triceps_list) as ListView
-        //create ArrayList of String
-        var arrayList: ArrayList<String> = ArrayList()
         //Add elements to arraylist
-        arrayList.add("Close-grip Bench Press")
+        var closegripBenchPress: Exercise = Exercise("Close-grip Bench Press", "https://www.youtube.com/watch?v=wxVRe9pmJdk", "0", "null", "")
+        addExercise(closegripBenchPress)
+
         arrayList.add("Rope Tricep Pushdown")
         arrayList.add("Tricep Dips")
         arrayList.add("Overhead Triceps Extension")
@@ -37,18 +42,21 @@ class TricepsExercises : AppCompatActivity() {
         //Create Adapter
         val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayList as List<Any>?)
         //assign adapter to listview
-        listView.setAdapter(arrayAdapter)
+        listView?.adapter = arrayAdapter
         //add listener to listview
-        listView.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(arrayList[i].toString()) })
+        listView?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) }
     }
-
-    fun startConcreteExercise(s: String){
-        if (s.equals("Close-grip Bench Press")){startClosegripBenchPress()}
-        else{
-            Toast.makeText(this, "Exercise $s will be available coming soon!", Toast.LENGTH_SHORT).show()}
+    fun startConcreteExercise(i: Int){
+        if (i<exerciseList.size){startExercise(exerciseList[i])}
+        else{ Toast.makeText(this, "Exercise ${arrayList[i]} will be available coming soon!", Toast.LENGTH_SHORT).show()}
     }
-    fun startClosegripBenchPress() {
-        val intent = Intent(this, ClosegripBenchPress::class.java)
+    private fun startExercise(exercise: Exercise) {
+        val intent = Intent(this, ExerciseActivity::class.java)
+        intent.putExtra("exercise_name",exercise.getParametersList());
         startActivity(intent)
+    }
+    private fun addExercise(exercise: Exercise){
+        exerciseList.add(exercise)
+        arrayList.add(exercise.getExerciseName())
     }
 }
