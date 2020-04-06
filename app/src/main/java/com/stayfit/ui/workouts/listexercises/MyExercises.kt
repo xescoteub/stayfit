@@ -60,6 +60,7 @@ class MyExercises : AppCompatActivity() {
             if (resultCode == 2){
                 var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST")
                 addExercise(Exercise( arrayList[0], arrayList[2],"0", "null", arrayList[1]))
+                controlListView()
             }
         }
     }
