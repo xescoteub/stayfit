@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.workouts.listexercises.FormExercise"
+    android:padding="16dp">
+    <EditText
+        android:id="@+id/input_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="Exercise Name"
+        android:inputType="textPersonName"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_description"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/input_name"
+        android:ems="10"
+        android:hint="Exercise Description"
+        android:inputType="textPersonName"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_video"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/input_description"
+        android:ems="10"
+        android:hint="Url (e.g.: https://www.youtube.com/)"
+        android:inputType="textPersonName"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="OK"
+        android:id="@+id/btn_ok"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="addNewExercise"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="Cancel"
+        android:id="@+id/btn_cancel"
+        android:layout_alignParentBottom="true"
+        android:onClick="returnMyExercises"/>
+
+</RelativeLayout>

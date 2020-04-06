@@ -9,6 +9,7 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
@@ -28,8 +29,6 @@ class ExerciseActivity: AppCompatActivity() {
         title = findViewById<TextView>(R.id.txt_exercise)
         val intent:Intent = intent
         managerParametersIntent(intent.getStringArrayListExtra("exercise_name"))
-
-
 
     }
     private fun downProgressBar(durada: Long){
@@ -59,8 +58,11 @@ class ExerciseActivity: AppCompatActivity() {
         }
     }
     fun openinYT(view: View) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url_video))
-        startActivity(intent)
+        if (url_video.equals("null")){ Toast.makeText(this, "This exercise doesn't have an associated video.", Toast.LENGTH_SHORT).show()}
+        else{
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url_video))
+            startActivity(intent)
+        }
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun managerParametersIntent(parameterIntent: ArrayList<String>){

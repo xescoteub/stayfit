@@ -15,10 +15,7 @@ import com.stayfit.R
 import com.stayfit.ui.workouts.Category
 import com.stayfit.ui.workouts.CategoryAdapter
 import com.stayfit.ui.workouts.WorkoutsViewModel
-import com.stayfit.ui.workouts.listexercises.AbsExercises
-import com.stayfit.ui.workouts.listexercises.BackExercises
-import com.stayfit.ui.workouts.listexercises.ChestExercises
-import com.stayfit.ui.workouts.listexercises.LegExercises
+import com.stayfit.ui.workouts.listexercises.*
 import kotlinx.android.synthetic.main.workouts_fragment.*
 
 
@@ -78,6 +75,7 @@ class WorkoutsFragment : Fragment() {
         else if (s.equals("CHEST")){startChestExercises()}
         else if (s.equals("BACK")){startBackExercises()}
         else if (s.equals("EXTRA")){startExtraMenu()}
+        else if (s.equals("MY EXERCISES")){startMyExercisesMenu()}
         else{ Toast.makeText(activity, "Exercise $s will be available coming soon!", Toast.LENGTH_SHORT).show()}
     }
     fun startArmMenu() {
@@ -102,6 +100,10 @@ class WorkoutsFragment : Fragment() {
     }
     fun startExtraMenu() {
         val intent = Intent(activity, ExtraMenu::class.java)
+        startActivity(intent)
+    }
+    fun startMyExercisesMenu() {
+        val intent = Intent(activity, MyExercises::class.java)
         startActivity(intent)
     }
 }
