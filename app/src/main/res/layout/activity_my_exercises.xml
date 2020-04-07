@@ -7,12 +7,21 @@
     tools:context=".ui.workouts.listexercises.MyExercises">
     <ImageView
         android:id="@+id/ic_addExercise"
-        android:layout_width="70dp"
-        android:layout_height="76dp"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
         app:srcCompat="@drawable/ic_add_circle"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:onClick="newExercise"
+        />
+    <ImageView
+        android:id="@+id/ic_deleteExercise"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        app:srcCompat="@drawable/ic_delete"
+        android:layout_marginRight="2dp"
+        android:layout_toLeftOf="@+id/ic_addExercise"
+        android:onClick="deleteItem"
         />
     <ListView
         android:layout_width="match_parent"

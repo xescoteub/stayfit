@@ -1,10 +1,13 @@
 package com.stayfit.ui.workouts.listexercises
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
@@ -14,7 +17,9 @@ import com.google.gson.reflect.TypeToken
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
 import com.stayfit.ui.workouts.exercises.ExerciseActivity
+import java.lang.Exception
 import java.lang.reflect.Type
+
 
 class MyExercises : AppCompatActivity() {
     //create object of listview
@@ -26,19 +31,23 @@ class MyExercises : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_exercises)
-        //loadData()
         listView = findViewById<ListView>(R.id.my_exercises_list)
         controlListView()
     }
     fun controlListView(){
         //Add elements to arraylist
-        loadData()
+        try {
+            loadData()
+        }catch (e: Exception){
+
+        }
         //Create Adapter
         val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayList as List<Any>?)
         //assign adapter to listview
         listView?.adapter = arrayAdapter
         //add listener to listview
         listView?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) }
+
     }
     fun startConcreteExercise(i: Int){
         if (i<exerciseList.size){startExercise(exerciseList[i])}
@@ -95,6 +104,23 @@ class MyExercises : AppCompatActivity() {
             exerciseList = ArrayList()
         }
     }
+    fun deleteItem(view: View?) {
+        listView?.onItemClickListener = OnItemClickListener { a, v, position, id ->
+            val adb: AlertDialog.Builder = AlertDialog.Builder(this)
+            adb.setTitle("Delete?")
+            adb.setMessage("Are you sure you want to delete ${arrayList.get(position)}")
+            adb.setNegativeButton("Cancel", null)
+            adb.setPositiveButton(
+                "Ok"
+            ) { dialog, which ->
+                arrayList.removeAt(position)
+                exerciseList.removeAt(position)
+                saveData()
+                controlListView()
+            }
+            adb.show()
+        }
+    }
 
     /*
     private fun saveLists() {
@@ -135,3 +161,4 @@ class MyExercises : AppCompatActivity() {
         }
     }*/
 }
+
