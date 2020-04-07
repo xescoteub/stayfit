@@ -9,7 +9,7 @@
         android:id="@+id/ic_addExercise"
         android:layout_width="70dp"
         android:layout_height="76dp"
-        app:srcCompat="@drawable/ic_add"
+        app:srcCompat="@drawable/ic_add_box"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:onClick="newExercise"

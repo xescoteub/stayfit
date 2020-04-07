@@ -20,16 +20,14 @@ class FormExercise : AppCompatActivity() {
         var name: String = findViewById<EditText>(R.id.input_name).text.toString()
         var description: String = findViewById<EditText>(R.id.input_description).text.toString()
         var video: String = findViewById<EditText>(R.id.input_video).text.toString()
-        if (name == null){
+        if (name.equals("")){
             Toast.makeText(this, "You have forgotten to put exercise name.", Toast.LENGTH_SHORT).show()}
         else{
             val intent = Intent()
             var arrayList: ArrayList<String> = ArrayList()
             arrayList.add(name)
-            if (description!=null){ arrayList.add(description)}
-            else{arrayList.add("")}
-            if (video!=null){ arrayList.add(video)}
-            else{arrayList.add("null")}
+            arrayList.add(description)
+            arrayList.add(video)
             intent.putExtra("LIST",arrayList)
             setResult(2,intent)
             finish()

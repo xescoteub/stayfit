@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import android.webkit.URLUtil
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -58,7 +59,7 @@ class ExerciseActivity: AppCompatActivity() {
         }
     }
     fun openinYT(view: View) {
-        if (url_video.equals("null")){ Toast.makeText(this, "This exercise doesn't have an associated video.", Toast.LENGTH_SHORT).show()}
+        if (!URLUtil.isValidUrl(url_video)){ Toast.makeText(this, "This exercise doesn't have an associated video.", Toast.LENGTH_SHORT).show()}
         else{
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url_video))
             startActivity(intent)
