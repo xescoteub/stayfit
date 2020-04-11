@@ -108,7 +108,7 @@ class MyExercises : AppCompatActivity() {
         listView?.onItemClickListener = OnItemClickListener { a, v, position, id ->
             val adb: AlertDialog.Builder = AlertDialog.Builder(this)
             adb.setTitle("Delete?")
-            adb.setMessage("Are you sure you want to delete ${arrayList.get(position)}")
+            adb.setMessage("Are you sure you want to delete ${arrayList.get(position)}?")
             adb.setNegativeButton("Cancel", null)
             adb.setPositiveButton(
                 "Ok"

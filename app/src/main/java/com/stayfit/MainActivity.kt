@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.stayfit.ui.myroutines.FormRoutine
 import com.stayfit.ui.profile.SettingsActivity
 import com.stayfit.ui.workouts.listexercises.AbsExercises
 import com.stayfit.ui.workouts.listexercises.BackExercises
@@ -53,31 +54,9 @@ class MainActivity : AppCompatActivity() {
         psswdDialog.setNegativeButton("No") { dialog, which -> }
         psswdDialog.show()
     }
-
-
-
-    /*fun startArmMenu(view: View) {
-        val intent = Intent(this, ArmMenu::class.java)
-        startActivity(intent)
-    }
-    fun startLegExercises(view: View) {
-        val intent = Intent(this, LegExercises::class.java)
-        startActivity(intent)
-    }
-    fun startAbsExercises(view: View) {
-        val intent = Intent(this, AbsExercises::class.java)
-        startActivity(intent)
-    }
-    fun startChestExercises(view: View) {
-        val intent = Intent(this, ChestExercises::class.java)
-        startActivity(intent)
-    }
-    fun startBackExercises(view: View) {
-        val intent = Intent(this, BackExercises::class.java)
-        startActivity(intent)
-    }
-    fun startExtraMenu(view: View) {
-        val intent = Intent(this, ExtraMenu::class.java)
+    /*
+    fun newRoutineM(view: View) {
+        val intent = Intent(this, FormRoutine::class.java)
         startActivity(intent)
     }*/
 }

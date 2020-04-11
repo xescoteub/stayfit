@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.myroutines.FormRoutine"
+    android:padding="16dp">
+    <EditText
+        android:id="@+id/input_name_r"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="Routine Name"
+        android:inputType="textPersonName"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_description_r"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/input_name_r"
+        android:ems="10"
+        android:hint="Routine Description"
+        android:inputType="textPersonName"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="OK"
+        android:id="@+id/btn_ok_r"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="addNewRoutine"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="Cancel"
+        android:id="@+id/btn_cancel_r"
+        android:layout_alignParentBottom="true"
+        android:onClick="returnMyRoutines"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_description_r"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/txt_background_routine"
+        android:text="Background: "
+        android:layout_margin="20dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select an image"
+        android:layout_below="@+id/input_description_r"
+        android:layout_toRightOf="@+id/txt_background_routine"
+        android:id="@+id/btn_select_image"
+        android:onClick="selectImage"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take a photo"
+        android:layout_below="@id/input_description_r"
+        android:layout_toRightOf="@+id/btn_select_image"
+        android:id="@+id/btn_take_photo"/>
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:srcCompat="@drawable/blog_5"
+        android:layout_below="@+id/txt_background_routine"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/img_selected"/>
+
+</RelativeLayout>

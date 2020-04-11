@@ -1,16 +1,27 @@
 package com.stayfit.ui.myroutines
 
+import android.app.AlertDialog
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.stayfit.R
 import kotlinx.android.synthetic.main.fragment_my_routines.*
+import java.lang.reflect.Type
+
 
 class MyRoutinesFragment: Fragment() {
     lateinit var routinesList: ArrayList<Routine>
@@ -19,25 +30,35 @@ class MyRoutinesFragment: Fragment() {
     }
     private val TAG = "MyRoutinesFragment"
     private lateinit var viewModel: MyRoutinesViewModel
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        var view:View = inflater.inflate(R.layout.fragment_my_routines, container, false)
         Log.d(TAG, "onCreateView: MyRoutinesFragment created...")
-        return inflater.inflate(R.layout.fragment_my_routines, container, false)
+
+        var button: ImageView = view.findViewById(R.id.ic_deleteRoutine)
+        button.setOnClickListener { deleteRoutine() }
+
+        var buttonAdd: ImageView = view.findViewById(R.id.ic_addRoutine)
+        buttonAdd.setOnClickListener { newRoutine(view) }
+
+        return view
     }
+    /*
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var button_delete: ImageButton = getView()!!.findViewById(R.id.ic_deleteRoutine)
+    } */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MyRoutinesViewModel::class.java)
         routinesList = ArrayList()
-        addRoutines("Rutina de pechito")
         showList()
     }
-    private fun addRoutines(nameRutine: String) {
-        routinesList.add(Routine(nameRutine,"", R.drawable.blog_5) )
-    }
     private fun showList() {
+        try {
+            loadData()
+        }catch (e: Exception){
+        }
         myroutinesRecycler.layoutManager = LinearLayoutManager(activity)
         myroutinesRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
         myroutinesRecycler.adapter = RoutineAdapter(routinesList)
@@ -53,4 +74,64 @@ class MyRoutinesFragment: Fragment() {
 
     fun startConcreteRoutine(s: String){
     }
+    private fun saveData(){
+        var sharedPreferences: SharedPreferences = this.activity!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        var gson: Gson = Gson()
+        var jsonRoutines: String = gson.toJson(routinesList)
+        editor.putString("routines list", jsonRoutines)
+        editor.apply()
+    }
+    private fun loadData(){
+        var sharedPreferences: SharedPreferences = this.activity!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var gson: Gson = Gson()
+        var jsonRoutines: String = sharedPreferences.getString("routines list", null)
+        val typeRoutine: Type = object : TypeToken<ArrayList<Routine?>?>() {}.type
+        routinesList = gson.fromJson(jsonRoutines,typeRoutine)
+        if (routinesList == null) {
+            routinesList = ArrayList()
+        }
+    }
+    private fun deleteRoutine() {
+        myroutinesRecycler.adapter = RoutineAdapter(routinesList)
+        (myroutinesRecycler.adapter as RoutineAdapter).setOnItemClickListener(object :
+            RoutineAdapter.ClickListener {
+            override fun onItemClick(position: Int, v: View?) {
+                val adb: AlertDialog.Builder = AlertDialog.Builder(activity)
+                adb.setTitle("Delete?")
+                adb.setMessage("Are you sure you want to delete ${routinesList.get(position).name}?")
+                adb.setNegativeButton("Cancel", null)
+                adb.setPositiveButton("Ok") { dialog, which ->
+                    routinesList.removeAt(position)
+                    saveData()
+                    showList()
+                }
+                adb.show()
+            }
+            override fun onItemLongClick(position: Int, v: View?) {
+
+            }
+        })
+    }
+    private fun addRoutine(r: Routine){
+        routinesList.add(r)
+        saveData()
+    }
+
+    private fun newRoutine(view: View) {
+        val intent = Intent(activity, FormRoutine::class.java)
+        startActivityForResult(intent, 3);// Activity is started with requestCode 2
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { // https://developer.android.com/training/basics/intents/result  https://stackoverflow.com/questions/19666572/how-to-call-a-method-in-another-activity-from-activity
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 3) {
+            if (resultCode == 3){
+                var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST ROUTINE")
+                addRoutine(Routine( arrayList[0], arrayList[1],arrayList[2].toInt()))
+                showList()
+            }
+        }
+    }
+
+
 }

@@ -15,11 +15,17 @@
 
     <ImageView
         android:id="@+id/ic_addRoutine"
-        android:layout_width="70dp"
-        android:layout_height="76dp"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
         app:srcCompat="@drawable/ic_add_box"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        />
+        android:layout_marginRight="20dp"/>
+    <ImageView
+        android:id="@+id/ic_deleteRoutine"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        app:srcCompat="@drawable/ic_delete"
+        android:layout_marginRight="2dp"
+        android:layout_toLeftOf="@+id/ic_addRoutine"/>
 
 </RelativeLayout>
