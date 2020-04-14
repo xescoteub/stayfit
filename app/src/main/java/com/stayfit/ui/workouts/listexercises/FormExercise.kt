@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputLayout
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
+import kotlinx.android.synthetic.main.activity_form_exercise.*
 
 class FormExercise : AppCompatActivity() {
 
@@ -17,11 +19,13 @@ class FormExercise : AppCompatActivity() {
     }
 
     fun addNewExercise(view: View) {
-        var name: String = findViewById<EditText>(R.id.input_name).text.toString()
-        var description: String = findViewById<EditText>(R.id.input_description).text.toString()
-        var video: String = findViewById<EditText>(R.id.input_video).text.toString()
-        if (name.equals("")){
-            Toast.makeText(this, "You have forgotten to put exercise name.", Toast.LENGTH_SHORT).show()}
+        val textInputLayoutName = findViewById<TextInputLayout>(R.id.input_name)
+        val name: String = textInputLayoutName.editText!!.text.toString()
+        val textInputLayoutDescription = findViewById<TextInputLayout>(R.id.input_description)
+        val description: String = textInputLayoutDescription.editText!!.text.toString()
+        val textInputLayoutVideo = findViewById<TextInputLayout>(R.id.input_video)
+        val video: String = textInputLayoutVideo.editText!!.text.toString()
+        if (name.equals("")){ input_name.error = resources.getString(R.string.invalid_name)}
         else{
             val intent = Intent()
             var arrayList: ArrayList<String> = ArrayList()

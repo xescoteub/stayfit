@@ -70,4 +70,6 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 
+    <string name="invalid_name">You have forgotten to put a name.</string>
+
 </resources>

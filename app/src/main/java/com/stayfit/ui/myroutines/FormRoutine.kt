@@ -1,16 +1,16 @@
 package com.stayfit.ui.myroutines
 
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.stayfit.R
+import kotlinx.android.synthetic.main.activity_form_routine.*
 
 
 class FormRoutine : AppCompatActivity() {
@@ -22,10 +22,11 @@ class FormRoutine : AppCompatActivity() {
     }
 
     fun addNewRoutine(view: View) {
-        var name: String = findViewById<EditText>(R.id.input_name_r).text.toString()
-        var description: String = findViewById<EditText>(R.id.input_description_r).text.toString()
-        if (name.equals("")){
-            Toast.makeText(this, "You have forgotten to put exercise name.", Toast.LENGTH_SHORT).show()}
+        val textInputLayoutName = findViewById<TextInputLayout>(R.id.input_name_r)
+        val name: String = textInputLayoutName.editText!!.text.toString()
+        val textInputLayoutDescription = findViewById<TextInputLayout>(R.id.input_description_r)
+        val description: String = textInputLayoutDescription.editText!!.text.toString()
+        if (name.equals("")){ input_name_r.error = resources.getString(R.string.invalid_name)}
         else{
             val intent = Intent()
             var arrayList: ArrayList<String> = ArrayList()
