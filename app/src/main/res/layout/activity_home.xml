@@ -18,24 +18,23 @@
         android:layout_weight="1"
         android:gravity="center|top">
 
-        <RelativeLayout
-            android:id="@+id/lv_start"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@drawable/oval_button">
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/lv_start"-->
+<!--            android:layout_width="150dp"-->
+<!--            android:layout_height="150dp"-->
+<!--            android:background="@drawable/oval_button">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/start"
-                android:textSize="18sp"
-                android:textColor="@color/colorWhite"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:textStyle="bold"/>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:text="@string/start"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textColor="@color/colorWhite"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:gravity="center"-->
+<!--                android:textStyle="bold"/>-->
 
-
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
     </LinearLayout>
 

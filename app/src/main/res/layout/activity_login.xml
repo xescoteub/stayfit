@@ -23,11 +23,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/colorBlueMidnight"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/usernameEt"
+        app:layout_constraintStart_toStartOf="@+id/tv_username"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameEt"
+        android:id="@+id/tv_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -52,14 +52,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordEt"
+        android:id="@+id/tv_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:hintTextAppearance="@style/TextAppearance.AppCompat"
-        app:layout_constraintEnd_toEndOf="@+id/usernameEt"
-        app:layout_constraintStart_toStartOf="@+id/usernameEt"
-        app:layout_constraintTop_toBottomOf="@+id/usernameEt">
+        app:layout_constraintEnd_toEndOf="@+id/tv_username"
+        app:layout_constraintStart_toStartOf="@+id/tv_username"
+        app:layout_constraintTop_toBottomOf="@+id/tv_username">
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/EditText.Login"
@@ -81,8 +81,8 @@
         android:textColor="@color/colorGrey"
         app:layout_constraintEnd_toStartOf="@+id/forgotPasswordTv"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/passwordEt"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEt" />
+        app:layout_constraintStart_toStartOf="@+id/tv_password"
+        app:layout_constraintTop_toBottomOf="@+id/tv_password" />
 
     <TextView
         android:id="@+id/forgotPasswordTv"
@@ -92,7 +92,7 @@
         android:text="@string/forgot_password"
         android:textColor="@color/colorPurple"
         app:layout_constraintBaseline_toBaselineOf="@+id/rememberMeBtn"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEt"
+        app:layout_constraintEnd_toEndOf="@+id/tv_password"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/rememberMeBtn" />
 
