@@ -1,10 +1,12 @@
 package com.stayfit.ui.feed
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.stayfit.R
 import kotlinx.android.synthetic.main.feed_fragment.*
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 class FeedFragment : Fragment() {
@@ -52,10 +56,11 @@ class FeedFragment : Fragment() {
         blogList.add(Blog("Blog 2","Blog 2 description", R.drawable.blog_2) )
         blogList.add(Blog("Blog 3","Blog 2 description", R.drawable.blog_3) )
         blogList.add(Blog("Blog 4","Blog 3 description", R.drawable.blog_4) )
-        blogList.add(Blog("Blog 5","Blog 4 description", R.drawable.blog_5) )*/
+        blogList.add(Blog("Blog 5","Blog 4 description", R.drawable.blog_5) )
 
         // Read from the database
-        blogsRef.addValueEventListener(object : ValueEventListener {
+        /*blogsRef.addValueEventListener(object : ValueEventListener {
+            @RequiresApi(Build.VERSION_CODES.KITKAT)
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (item in dataSnapshot.children) {
                     var itemVal: Any? = item.getValue();
@@ -80,7 +85,7 @@ class FeedFragment : Fragment() {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
-        })
+        })*/
     }
 
 
