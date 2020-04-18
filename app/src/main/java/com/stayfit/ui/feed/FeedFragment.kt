@@ -14,13 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.stayfit.R
 import kotlinx.android.synthetic.main.feed_fragment.*
-import org.json.JSONArray
-import org.json.JSONObject
-
 
 class FeedFragment : Fragment() {
     lateinit var blogList: ArrayList<Blog>
+
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+
     val blogsRef: DatabaseReference = database.getReference("blogs")
 
     companion object {
@@ -47,48 +46,49 @@ class FeedFragment : Fragment() {
 
         blogList = ArrayList()
         addBlogs()
-        showList()
     }
 
+    /**
+     * Get blogs list from database
+     */
     private fun addBlogs()
     {
-        blogList.add(Blog("Blog 1","Blog 1 description", R.drawable.blog_1) )
-        blogList.add(Blog("Blog 2","Blog 2 description", R.drawable.blog_2) )
-        blogList.add(Blog("Blog 3","Blog 2 description", R.drawable.blog_3) )
-        blogList.add(Blog("Blog 4","Blog 3 description", R.drawable.blog_4) )
-        blogList.add(Blog("Blog 5","Blog 4 description", R.drawable.blog_5) )
+        blogList.add(Blog("Local blog 1","Local blog 1 description", R.drawable.blog_1) )
 
         // Read from the database
-        /*blogsRef.addValueEventListener(object : ValueEventListener {
+        blogsRef.addValueEventListener(object : ValueEventListener {
             @RequiresApi(Build.VERSION_CODES.KITKAT)
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (item in dataSnapshot.children) {
-                    var itemVal: Any? = item.getValue();
-                    Log.d(TAG, "Item is: $item")
-                    Log.d(TAG, "Item val is: ${itemVal}")
+
+                val map = dataSnapshot.getValue()
+                Log.d(TAG, "map: ${map}")
+
+                dataSnapshot.children.forEach {
+                    var blogObj = it.getValue() as HashMap<*, *>
+                    var blog = Blog()
+
+                    with(blog) {
+                        name            = blogObj["name"].toString()
+                        description     = blogObj["description"].toString()
+                        photo           = R.drawable.blog_1
+                    }
+                    Log.d(TAG, "> blog: ${blog}")
+                    blogList.add(blog)
+
+                    showList();
                 }
-
-
-                /*val children = dataSnapshot.children
-                children.forEach {
-                    println(it.toString())
-                    blogList.add(Blog("Blog 100","Blog 100 description", R.drawable.blog_1))
-                }*/
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                //val value = dataSnapshot.value as Map<*, *>?
-
-                //Log.d(TAG, "Value is: $value")
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
-        })*/
+        })
     }
 
-
+    /**
+     * Display list of blogs
+     */
     private fun showList() {
         blogRecycler.layoutManager = LinearLayoutManager(activity)
         blogRecycler.addItemDecoration(DividerItemDecoration(activity, 1))

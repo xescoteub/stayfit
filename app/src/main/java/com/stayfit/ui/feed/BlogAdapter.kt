@@ -41,7 +41,6 @@ class BlogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var blogDesc  = itemView.cardescription
     var blogPhoto = itemView.carlogo
 
-
     /*fun initialize(item: Blog, action:OnBlogItemClickListner) {
         blogName.text = item.name
         blogDesc.text = item.description
