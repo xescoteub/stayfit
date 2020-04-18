@@ -51,7 +51,7 @@ class ActivityFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ActivityViewModel::class.java)
         // TODO: Use the ViewModel
     }
-    
+
     fun addEvent(year:Int,month:Int,dayOfMonth:Int,routine:Routine){
         val dateEvent:String = dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
         events.put(routine,dateEvent)
