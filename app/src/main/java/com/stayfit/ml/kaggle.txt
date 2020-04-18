@@ -1,0 +1,4 @@
+https://www.kaggle.com/srlmayor/weight-training-workouts-cleaning-and-eda
+
+Workout supplements and nutrition products:
+https://www.kaggle.com/afsaja/workout-supplements-and-nutrition-products

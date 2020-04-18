@@ -38,9 +38,9 @@ class CategoryAdapter(var items: ArrayList<Category>) : RecyclerView.Adapter<Cat
 }*/
 class CategoryAdapter(var items: ArrayList<Category>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
-        var categoryName  = itemView.carname
-        var categoryDesc  = itemView.cardescription
-        var categoryPhoto = itemView.carlogo
+        var categoryName  = itemView.blogName
+        var categoryDesc  = itemView.blogDescription
+        var categoryPhoto = itemView.blogImage
         override fun onClick(v: View?) {
             clickListener?.onItemClick(adapterPosition, v)
         }
@@ -88,9 +88,9 @@ class CategoryAdapter(var items: ArrayList<Category>) : RecyclerView.Adapter<Cat
  *
  */
 /*class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
-    var categoryName  = itemView.carname
-    var categoryDesc  = itemView.cardescription
-    var categoryPhoto = itemView.carlogo
+    var categoryName  = itemView.blogName
+    var categoryDesc  = itemView.blogDescription
+    var categoryPhoto = itemView.blogImage
     fun ViewHolder(itemView: View) {
         super(itemView)
         itemView.setOnClickListener(this)

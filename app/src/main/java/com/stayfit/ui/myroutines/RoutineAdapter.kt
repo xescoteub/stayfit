@@ -19,9 +19,9 @@ import java.net.URLConnection
 
 class RoutineAdapter(var items: ArrayList<Routine>) : RecyclerView.Adapter<RoutineAdapter.RoutineViewHolder>() {
     class RoutineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
-        var routineName  = itemView.carname
-        var routineDesc  = itemView.cardescription
-        var routinePhoto = itemView.carlogo
+        var routineName  = itemView.blogName
+        var routineDesc  = itemView.blogDescription
+        var routinePhoto = itemView.blogImage
         override fun onClick(v: View?) {
             clickListener?.onItemClick(adapterPosition, v)
         }

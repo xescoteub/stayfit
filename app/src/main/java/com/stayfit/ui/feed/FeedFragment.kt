@@ -53,8 +53,6 @@ class FeedFragment : Fragment() {
      */
     private fun addBlogs()
     {
-        blogList.add(Blog("Local blog 1","Local blog 1 description", R.drawable.blog_1) )
-
         // Read from the database
         blogsRef.addValueEventListener(object : ValueEventListener {
             @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -70,7 +68,7 @@ class FeedFragment : Fragment() {
                     with(blog) {
                         name            = blogObj["name"].toString()
                         description     = blogObj["description"].toString()
-                        photo           = R.drawable.blog_1
+                        photo           = blogObj["banner_image"].toString()
                     }
                     Log.d(TAG, "> blog: ${blog}")
                     blogList.add(blog)
