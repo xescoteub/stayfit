@@ -117,6 +117,7 @@
         android:layout_alignParentRight="true"
         android:id="@+id/btn_take_photo"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:onClick="startCamera"/>
 
 </RelativeLayout>

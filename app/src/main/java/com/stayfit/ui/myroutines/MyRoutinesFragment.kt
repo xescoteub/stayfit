@@ -5,13 +5,14 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Parcelable
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stayfit.R
+import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
 import java.lang.reflect.Type
 
@@ -65,14 +67,17 @@ class MyRoutinesFragment: Fragment() {
         (myroutinesRecycler.adapter as RoutineAdapter).setOnItemClickListener(object :
             RoutineAdapter.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
-                startConcreteRoutine(routinesList[position].name)
+                startConcreteRoutine(routinesList[position])
             }
             override fun onItemLongClick(position: Int, v: View?) {
             }
         })
     }
 
-    fun startConcreteRoutine(s: String){
+    fun startConcreteRoutine(r: Routine){
+        val intent = Intent(activity, RoutineActivity::class.java)
+        intent.putParcelableArrayListExtra("routine_list",r.getExercisesList());
+        startActivity(intent)
     }
     private fun saveData(){
         var sharedPreferences: SharedPreferences = this.activity!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
@@ -127,7 +132,9 @@ class MyRoutinesFragment: Fragment() {
         if (requestCode == 3) {
             if (resultCode == 3){
                 var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST ROUTINE")
-                addRoutine(Routine( arrayList[0], arrayList[1],arrayList[2].toInt()))
+                if (!arrayList[2].equals("null")){addRoutine(Routine( arrayList[0], arrayList[1], MediaStore.Images.Media.getBitmap(activity!!.contentResolver, arrayList[2].toUri()), ArrayList()))}
+                else{addRoutine(Routine( arrayList[0], arrayList[1], null, ArrayList()))}
+
                 showList()
             }
         }
