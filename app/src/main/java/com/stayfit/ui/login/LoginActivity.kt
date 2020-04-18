@@ -17,13 +17,10 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 import com.stayfit.config.AppPrefs
-import com.stayfit.state.LoginState
-import com.stayfit.state.ScreenState
 import com.stayfit.ui.onboarding.OnBoardingActivity
 import com.stayfit.ui.signup.SignUpActivity
 import kotlinx.android.synthetic.main.activity_login.tv_password
 import kotlinx.android.synthetic.main.activity_login.tv_username
-import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -33,9 +30,15 @@ class LoginActivity : AppCompatActivity() {
 
     private val TAG = "LoginActivity"
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /**
+         * Get current firebase auth instance
+         */
         auth = FirebaseAuth.getInstance()
 
         // Check if the app is launched before
@@ -43,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, OnBoardingActivity::class.java))
             finish()
         }
+
         setContentView(R.layout.activity_login)
 
         loginBtn.setOnClickListener {
@@ -53,16 +57,16 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
+        forgotPasswordTv.setOnClickListener {
+            startActivity(Intent(this, ResetPasswordActivity::class.java))
+        }
+
         init()
-//        interactions()
     }
 
-    /*public override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
-    }*/
-
+    /**
+     *
+     */
     private fun init() {
         toolbar(toolBar)
         val currentUser = auth.currentUser
@@ -72,13 +76,15 @@ class LoginActivity : AppCompatActivity() {
                 this,
                 LoginViewModel.LoginViewModelFactory(LoginInteractor())
         )[LoginViewModel::class.java]
-//        viewModel.loginState.observe(::getLifecycle, ::updateUi)
 
         signUpTv.apply {
             text = Html.fromHtml("$text <font color='#6c63ff'>SignUp</font>")
         }
     }
 
+    /**
+     * Try to login in into app and display corresponding toast message
+     */
     private fun doLogin()
     {
         if (tv_username.editText?.text.toString().isEmpty()) {
@@ -114,6 +120,9 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Updates ui after login transaction is completed
+     */
     private fun updateUI(currentUser: FirebaseUser?)
     {
         if (currentUser != null) {
@@ -133,34 +142,4 @@ class LoginActivity : AppCompatActivity() {
             ).show()
         }
     }
-
-//    private fun interactions() {
-//        loginBtn.setOnClickListener {
-//            viewModel.onLoginBtnClicked(
-//                tv_username.editText?.text.toString(),
-//                tv_password.editText?.text.toString()
-//            )
-//        }
-//    }
-
-//    private fun updateUi(screenState: ScreenState<LoginState>?) {
-//        when (screenState) {
-//            ScreenState.Loading -> loading.show()
-//            is ScreenState.Render -> processLoginState(screenState.renderState)
-//        }
-//    }
-
-//    private fun processLoginState(renderState: LoginState) {
-//        loading.hide()
-//        when (renderState) {
-//            LoginState.SUCCESS -> {
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
-//            }
-//            LoginState.WRONG_USERNAME ->
-//                tv_username.error = resources.getString(R.string.invalid_username)
-//            LoginState.WRONG_PASSWORD ->
-//                tv_password.error = resources.getString(R.string.invalid_password)
-//        }
-//    }
 }

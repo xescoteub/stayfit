@@ -62,6 +62,9 @@
     <string name="change_password">Change password</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Reset password view -->
+    <string name="reset_password">Reset password</string>
+
     <!-- Home view -->
     <string name="start">START</string>
 
