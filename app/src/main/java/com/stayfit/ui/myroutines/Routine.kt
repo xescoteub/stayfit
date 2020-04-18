@@ -14,4 +14,7 @@ data class Routine(var name: String, var description: String, var photo: Bitmap?
         return arrayExercises
     }
     fun addExercise(ex: Exercise){arrayExercises.add(ex)}
+    fun getNameRoutine(): String{
+        return name
+    }
 }

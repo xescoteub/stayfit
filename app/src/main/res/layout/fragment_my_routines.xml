@@ -12,7 +12,13 @@
         android:id="@+id/myroutinesRecycler"
         android:layout_below="@+id/ic_addRoutine">
     </androidx.recyclerview.widget.RecyclerView>
-
+    <ImageView
+        android:id="@+id/ic_addToCalendar"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        app:srcCompat="@drawable/ic_assignment_purple"
+        android:layout_marginRight="2dp"
+        android:layout_toLeftOf="@+id/ic_deleteRoutine"/>
     <ImageView
         android:id="@+id/ic_addRoutine"
         android:layout_width="50dp"

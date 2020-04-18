@@ -43,8 +43,16 @@ class MyRoutinesFragment: Fragment() {
         var buttonAdd: ImageView = view.findViewById(R.id.ic_addRoutine)
         buttonAdd.setOnClickListener { newRoutine(view) }
 
+        var buttonCalendar: ImageView = view.findViewById(R.id.ic_addToCalendar)
+        buttonCalendar.setOnClickListener { calendarEvent() }
+
         return view
     }
+
+    private fun calendarEvent() {
+        TODO("Mark Rivera")
+    }
+
     /*
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -138,6 +146,15 @@ class MyRoutinesFragment: Fragment() {
                 showList()
             }
         }
+    }
+    fun findRoutineByName(name: String): Routine{
+        var routine:Routine ?= null
+        for (r in routinesList){
+            if (name.equals(r.getNameRoutine())){
+                routine = r
+            }
+        }
+        return routine!!
     }
 
 
