@@ -72,6 +72,7 @@ class MyRoutinesFragment: Fragment(){
                 adb.setNegativeButton("Cancel", null)
                 adb.setPositiveButton("Ok") { dialog, which ->
                     calendarEvents?.addEvent(year.toString(),month.toString() ,day.toString(),routinesList.get(position))
+                    Toast.makeText(activity,"Event added",Toast.LENGTH_SHORT).show()
                 }
                 adb.setTitle("Select a day to set the event")
                 adb.setView(mView)
