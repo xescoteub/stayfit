@@ -11,22 +11,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stayfit.R
+import com.stayfit.ui.activity.ActivityFragment
 import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
+import kotlinx.android.synthetic.main.routine_change_time.*
 import java.lang.reflect.Type
 
 
-class MyRoutinesFragment: Fragment() {
+class MyRoutinesFragment: Fragment(){
     lateinit var routinesList: ArrayList<Routine>
+    var routineSelected:Routine ?= null
+    var calendarEvents:ActivityFragment ?= null
+
     companion object {
         fun newInstance() = MyRoutinesFragment()
     }
@@ -50,7 +58,33 @@ class MyRoutinesFragment: Fragment() {
     }
 
     private fun calendarEvent() {
-        TODO("Mark Rivera")
+        myroutinesRecycler.adapter = RoutineAdapter(routinesList)
+        (myroutinesRecycler.adapter as RoutineAdapter).setOnItemClickListener(object :
+            RoutineAdapter.ClickListener {
+            override fun onItemClick(position: Int, v: View?) {
+                val adb: AlertDialog.Builder = AlertDialog.Builder(activity)
+
+                val mView:View = getLayoutInflater().inflate(R.layout.layout_dialog_calendar,null)
+                val day: EditText = mView.findViewById(R.id.edit_day)
+                val month: EditText = mView.findViewById(R.id.edit_month)
+                val year: EditText = mView.findViewById(R.id.edit_year)
+
+                adb.setNegativeButton("Cancel", null)
+                adb.setPositiveButton("Ok") { dialog, which ->
+                    calendarEvents?.addEvent(year.toString(),month.toString() ,day.toString(),routinesList.get(position))
+                }
+                adb.setTitle("Select a day to set the event")
+                adb.setView(mView)
+                val dialog:AlertDialog =adb.create()
+                dialog.show()
+            }
+
+            override fun onItemLongClick(position: Int, v: View?) {
+
+            }
+        })
+
+
     }
 
     /*
@@ -156,6 +190,7 @@ class MyRoutinesFragment: Fragment() {
         }
         return routine!!
     }
+
 
 
 }

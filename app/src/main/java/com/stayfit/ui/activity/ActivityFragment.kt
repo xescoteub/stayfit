@@ -52,8 +52,8 @@ class ActivityFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    fun addEvent(year:Int,month:Int,dayOfMonth:Int,routine:Routine){
-        val dateEvent:String = dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
+    fun addEvent(year:String,month:String,dayOfMonth:String,routine:Routine){
+        val dateEvent:String = dayOfMonth + "-" + "0" + month + "-" + year + " EVENTS :"
         events.put(routine,dateEvent)
     }
 }
