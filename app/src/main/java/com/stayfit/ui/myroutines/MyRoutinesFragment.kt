@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.routine_change_time.*
 import java.lang.reflect.Type
 
 
-class MyRoutinesFragment: Fragment(){
+class   MyRoutinesFragment: Fragment(){
     lateinit var routinesList: ArrayList<Routine>
     var routineSelected:Routine ?= null
     var calendarEvents:ActivityFragment ?= null

@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }
-
+/*
     fun logOut_onClick(view: View){
 
         val alertdialog_logout = AlertDialog.Builder(this)
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
         psswdDialog.setNegativeButton("No") { dialog, which -> }
         psswdDialog.show()
-    }
+    }*/
     /*
     fun newRoutineM(view: View) {
         val intent = Intent(this, FormRoutine::class.java)
