@@ -6,25 +6,27 @@ import android.text.Html
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.stayfit.*
-
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.toolbar.*
-
+import com.stayfit.MainActivity
+import com.stayfit.R
 import com.stayfit.config.AppPrefs
+import com.stayfit.toolbar
 import com.stayfit.ui.onboarding.OnBoardingActivity
 import com.stayfit.ui.signup.SignUpActivity
+import kotlinx.android.synthetic.main.activity_login.signUpTv
 import kotlinx.android.synthetic.main.activity_login.tv_password
 import kotlinx.android.synthetic.main.activity_login.tv_username
+import kotlinx.android.synthetic.main.activity_signin.forgotPasswordTv
+import kotlinx.android.synthetic.main.activity_signin.loginBtn
+import kotlinx.android.synthetic.main.toolbar.*
+
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var auth : FirebaseAuth
+    private lateinit var mAuth : FirebaseAuth
 
     private lateinit var viewModel : LoginViewModel
 
@@ -39,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         /**
          * Get current firebase auth instance
          */
-        auth = FirebaseAuth.getInstance()
+        mAuth = FirebaseAuth.getInstance()
 
         // Check if the app is launched before
         if (AppPrefs(this).isFirstTimeLaunch()) {
@@ -47,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_signin)
 
         loginBtn.setOnClickListener {
             doLogin()
@@ -69,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
      */
     private fun init() {
         toolbar(toolBar)
-        val currentUser = auth.currentUser
+        val currentUser = mAuth.currentUser
         updateUI(currentUser)
 
         viewModel = ViewModelProviders.of(
@@ -105,11 +107,11 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        auth.signInWithEmailAndPassword(tv_username.editText?.text.toString(), tv_password.editText?.text.toString())
+        mAuth.signInWithEmailAndPassword(tv_username.editText?.text.toString(), tv_password.editText?.text.toString())
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmailAndPassword")
-                    val user = auth.currentUser
+                    val user = mAuth.currentUser
                     updateUI(user)
                 } else {
                     Log.w(TAG, "signInWithEmailAndPassword:failure", task.exception)
