@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.myroutines.RoutineActivity"></activity>
+        <activity android:name=".ui.profile.DarkTheme"></activity>
+        <activity android:name=".ui.myroutines.RoutineActivity" />
         <activity android:name=".ui.myroutines.FormRoutine" />
         <activity android:name=".ui.workouts.listexercises.FormExercise" />
         <activity android:name=".ui.workouts.listexercises.MyExercises" />
@@ -38,9 +39,8 @@
         <activity android:name=".ui.workouts.listexercises.BicepsExercises" />
         <activity android:name=".ui.workouts.menu.ExtraMenu" />
         <activity android:name=".ui.workouts.menu.ArmMenu" />
-        <activity android:name=".ui.signup.SignUpActivity"/>
-        <activity android:name=".ui.login.ResetPasswordActivity"/>
-
+        <activity android:name=".ui.signup.SignUpActivity" />
+        <activity android:name=".ui.login.ResetPasswordActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:screenOrientation="fullSensor">

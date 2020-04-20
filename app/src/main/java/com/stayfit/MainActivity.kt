@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.stayfit.ui.myroutines.FormRoutine
+import com.stayfit.ui.profile.DarkTheme
 import com.stayfit.ui.profile.SettingsActivity
 import com.stayfit.ui.workouts.listexercises.AbsExercises
 import com.stayfit.ui.workouts.listexercises.BackExercises
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun settingsBtn_onClick(view: View) {
-        val intent = Intent(this, SettingsActivity::class.java)
+        val intent = Intent(this, DarkTheme::class.java)
         startActivity(intent)
     }
 /*
