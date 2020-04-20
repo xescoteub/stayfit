@@ -12,10 +12,12 @@
     <color name="gradEnd">#67EFC8</color>
     <color name="transparent">#00000000</color>
 
+    <color name="colorTextInputBackground">#F7F7F7</color>
+
     <!-- Bottom navigation -->
     <color name="disabled">#858585</color>
     <color name="home">#FF0000</color>
-    <color name="discover">#F000F0</color>
-    <color name="search">#00FF00</color>
+    <color name="activity">#F000F0</color>
+    <color name="routines">#00FF00</color>
     <color name="settings">#0000FF</color>
 </resources>
