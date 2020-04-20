@@ -1,6 +1,7 @@
 package com.stayfit.ui.profile
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,6 +26,10 @@ class ProfileFragment : Fragment() {
         var instabutton: ImageView = view.findViewById(R.id.instaButton)
         instabutton.setOnClickListener { change_psswd_OnClick() }
 
+        var editbutton: ImageView = view.findViewById(R.id.editButton)
+        editbutton.setOnClickListener { changeto_edit_data(view) }
+
+
         return view
     }
 
@@ -32,6 +37,10 @@ class ProfileFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+    private fun changeto_edit_data(view: View) {
+        val intent = Intent(activity, EditData::class.java)
+        startActivityForResult(intent, 3);// Activity is started with requestCode 2
     }
 
     fun change_psswd_OnClick(){
@@ -44,6 +53,8 @@ class ProfileFragment : Fragment() {
         psswdDialog.setNegativeButton("No") { dialog, which -> }
         psswdDialog.show()
     }
+
+
 
 
 
