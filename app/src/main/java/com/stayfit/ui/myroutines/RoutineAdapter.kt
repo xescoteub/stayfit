@@ -3,6 +3,7 @@ package com.stayfit.ui.myroutines
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,12 +65,37 @@ class RoutineAdapter(var items: ArrayList<Routine>) : RecyclerView.Adapter<Routi
         holder.routineDesc?.text = items.get(position).description
         //holder.routinePhoto.setImageResource(items.get(position).photo)
        // holder.routinePhoto.setImageBitmap(items.get(position).photo)
-        if (items.get(position).photo!=null) {
+        val url = items.get(position).photo
+        if (!url.equals("null")) {
             //holder.routinePhoto.setImageBitmap(items.get(position).photo)
-            holder.routinePhoto.setImageResource(R.drawable.blog_1)
+            //holder.routinePhoto.setImageResource(R.drawable.blog_1)
+            if(getImageBitmap(url)!=null){
+                holder.routinePhoto.setImageBitmap(getImageBitmap(url))
+            } else{
+                holder.routinePhoto.setImageResource(R.drawable.blog_1)
+            }
         }else{
             holder.routinePhoto.setImageResource(R.drawable.blog_5)
         }
 
+    }
+    /**
+     * Get bitmap from URL
+     */
+    private fun getImageBitmap(url: String): Bitmap? {
+        var bm: Bitmap? = null
+        try {
+            val aURL = URL(url)
+            val conn: URLConnection = aURL.openConnection()
+            conn.connect()
+            val `is`: InputStream = conn.getInputStream()
+            val bis = BufferedInputStream(`is`)
+            bm = BitmapFactory.decodeStream(bis)
+            bis.close()
+            `is`.close()
+        } catch (e: IOException) {
+            Log.e("BlogAdapter", "Error getting bitmap", e)
+        }
+        return bm
     }
 }

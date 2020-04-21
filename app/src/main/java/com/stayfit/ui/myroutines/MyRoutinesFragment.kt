@@ -133,7 +133,7 @@ class   MyRoutinesFragment: Fragment(){
     private fun loadData(){
         var sharedPreferences: SharedPreferences = this.activity!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
         var gson: Gson = Gson()
-        var jsonRoutines: String = sharedPreferences.getString("routines list", null)
+        var jsonRoutines: String? = sharedPreferences.getString("routines list", null)
         val typeRoutine: Type = object : TypeToken<ArrayList<Routine?>?>() {}.type
         routinesList = gson.fromJson(jsonRoutines,typeRoutine)
         if (routinesList == null) {
@@ -175,9 +175,7 @@ class   MyRoutinesFragment: Fragment(){
         if (requestCode == 3) {
             if (resultCode == 3){
                 var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST ROUTINE")
-                if (!arrayList[2].equals("null")){addRoutine(Routine( arrayList[0], arrayList[1], MediaStore.Images.Media.getBitmap(activity!!.contentResolver, arrayList[2].toUri()), ArrayList()))}
-                else{addRoutine(Routine( arrayList[0], arrayList[1], null, ArrayList()))}
-
+                addRoutine(Routine( arrayList[0], arrayList[1], arrayList[2], ArrayList()))
                 showList()
             }
         }

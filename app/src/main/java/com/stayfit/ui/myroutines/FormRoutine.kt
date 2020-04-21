@@ -90,7 +90,7 @@ class FormRoutine : AppCompatActivity() {
             photo = uri.toString()
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data!!.extras.get("data") as Bitmap
+            val imageBitmap = data!!.extras!!.get("data") as Bitmap
             imageView.setImageBitmap(imageBitmap)
         }
     }
