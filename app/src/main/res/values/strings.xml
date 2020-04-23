@@ -45,6 +45,13 @@
     <string name="no_account">Don\’t have an account?</string>
     <string name="text_signup_social_media">Or Sign up using social media</string>
 
+    <!-- Home screen -->
+    <string name="Done">Done</string>
+    <string name="wellDone">Well Done!</string>
+    <string name="congratulations">Congratulation you are done with today workout</string>
+
+
+
     <string name="arm">arm</string>
     <string name="leg">leg</string>
     <string name="abs">abs</string>
