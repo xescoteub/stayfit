@@ -1,8 +1,8 @@
-package com.stayfit.ui.feed
+package com.stayfit.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 
-class FeedViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }

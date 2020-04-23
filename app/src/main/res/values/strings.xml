@@ -46,6 +46,10 @@
     <string name="text_signup_social_media">Or Sign up using social media</string>
 
     <!-- Home screen -->
+    <string name="blogs">Blogs</string>
+    <string name="start">Start</string>
+
+    <!-- Daily exercises page -->
     <string name="Done">Done</string>
     <string name="wellDone">Well Done!</string>
     <string name="congratulations">Congratulation you are done with today workout</string>
@@ -73,9 +77,6 @@
 
     <!-- Reset password view -->
     <string name="reset_password">Reset password</string>
-
-    <!-- Home view -->
-    <string name="start">START</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
