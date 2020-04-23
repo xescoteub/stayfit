@@ -32,13 +32,13 @@ class FeedActivity : AppCompatActivity() {
         println("blogsRef: $blogsRef")
 
         blogList = ArrayList()
-        addBlogs()
+        fetchBlogs()
     }
 
     /**
      * Get blogs list from database
      */
-    private fun addBlogs()
+    private fun fetchBlogs()
     {
         // Read from the database
         blogsRef.addValueEventListener(object : ValueEventListener {
