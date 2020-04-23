@@ -16,11 +16,7 @@ import com.stayfit.config.AppPrefs
 import com.stayfit.toolbar
 import com.stayfit.ui.onboarding.OnBoardingActivity
 import com.stayfit.ui.signup.SignUpActivity
-import kotlinx.android.synthetic.main.activity_login.signUpTv
-import kotlinx.android.synthetic.main.activity_login.tv_password
-import kotlinx.android.synthetic.main.activity_login.tv_username
-import kotlinx.android.synthetic.main.activity_signin.forgotPasswordTv
-import kotlinx.android.synthetic.main.activity_signin.loginBtn
+import kotlinx.android.synthetic.main.activity_signin.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 
