@@ -8,23 +8,35 @@
     <string name="title_workouts">Workouts</string>
     <string name="title_profile">Profile</string>
 
-    <!-- Onboarding screen 1 -->
+    <!-- ====================================================================== -->
+    <!-- On-boarding(walk through) screens                                      -->
+    <!-- ====================================================================== -->
+    <!-- On-boarding screen 1 -->
     <string name="onboarding_slide1_title">Welcome to StayFit</string>
     <string name="onboarding_slide1_desc">StayFit is an effortless way to track all your physical activities including sleep, heart rate and calories burned.</string>
 
-    <!-- Onboarding screen 2 -->
+    <!-- On-boarding screen 2 -->
     <string name="onboarding_slide2_title">Personalized</string>
     <string name="onboarding_slide2_desc">StayFit creates personalized routines based on your data to help you get in shape and improve your health</string>
 
-    <!-- Onboarding screen 3 -->
+    <!-- On-boarding screen 3 -->
     <string name="onboarding_slide3_title">Scheduled</string>
     <string name="onboarding_slide3_desc">Set reminders to develop a good habit</string>
 
+    <!-- ====================================================================== -->
+    <!-- Daily exercise activity                                                -->
+    <!-- ====================================================================== -->
     <string name="next">Next</string>
     <string name="skip">Skip</string>
+    <string name="take_rest">Take rest</string>
     <string name="get_started">Get started</string>
+    <string name="Done">Done</string>
+    <string name="wellDone">Well Done!</string>
+    <string name="congratulations">Congratulation you are done with today workout</string>
 
-    <!-- Sign In -->
+    <!-- ====================================================================== -->
+    <!-- Sign in activity                                                       -->
+    <!-- ====================================================================== -->
     <string name="title_activity_sign_in">Sign in</string>
     <string name="sign_in">Sign In</string>
     <string name="username">Username</string>
@@ -40,20 +52,18 @@
     <string name="invalid_password">Invalid password</string>
     <string name="login_welcome_txt">Hello there !\nWelcome Back</string>
 
-    <!-- Sign Up -->
+    <!-- ====================================================================== -->
+    <!-- Signup activity                                                        -->
+    <!-- ====================================================================== -->
     <string name="sign_up">Sign up</string>
     <string name="no_account">Don\’t have an account?</string>
     <string name="text_signup_social_media">Or Sign up using social media</string>
 
-    <!-- Home screen -->
+    <!-- ====================================================================== -->
+    <!-- Home activity                                                          -->
+    <!-- ====================================================================== -->
     <string name="blogs">Blogs</string>
     <string name="start">Start</string>
-
-    <!-- Daily exercises page -->
-    <string name="Done">Done</string>
-    <string name="wellDone">Well Done!</string>
-    <string name="congratulations">Congratulation you are done with today workout</string>
-
 
 
     <string name="arm">arm</string>

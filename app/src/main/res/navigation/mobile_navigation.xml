@@ -13,7 +13,7 @@
 
     <!--<fragment
         android:id="@+id/navigation_feed"
-        android:name="com.stayfit.ui.feed.FeedFragment"
+        android:name="com.stayfit.ui.home.feed.FeedFragment"
         android:label="Feed"
         tools:layout="@layout/feed_fragment" />-->
 

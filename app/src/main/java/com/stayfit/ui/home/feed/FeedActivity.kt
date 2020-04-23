@@ -1,4 +1,4 @@
-package com.stayfit.ui.feed
+package com.stayfit.ui.home.feed
 
 import android.os.Build
 import android.os.Bundle

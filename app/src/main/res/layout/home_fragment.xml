@@ -17,7 +17,7 @@
         tools:ignore="MissingConstraints">
 
         <Button
-            android:id="@+id/startButton"
+            android:id="@+id/startExercicesButton"
             style="@style/SolidButtonStyle"
             android:layout_width="342dp"
             android:layout_height="wrap_content"
