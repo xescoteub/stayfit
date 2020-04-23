@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/indicator"
+            android:id="@+id/exerciseIndicator"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#F6F6F6"
