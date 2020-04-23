@@ -286,6 +286,9 @@ class DailyExercisesActivity : AppCompatActivity() {
         // Set exercise image
         imageView!!.setImageBitmap(getImageBitmap(url))
 
+        // Set exercise description header
+        txt_header!!.text = exercisesList[position].desc;
+        println("txt_header: " + exercisesList[position].desc)
 
         /*id      = model_data!![position].id
         imgPath = model_data!![position].image + ".png"
