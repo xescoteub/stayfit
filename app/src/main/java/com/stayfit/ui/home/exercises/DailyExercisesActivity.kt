@@ -18,24 +18,24 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
-import com.stayfit.ui.home.feed.Blog
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DailyExercisesActivity : AppCompatActivity() {
 
     private val TAG = "DailyExercisesActivity"
 
+    // Access a Cloud Firestore instance from your Activity
+    val db = FirebaseFirestore.getInstance();
+
     lateinit var exercisesList: ArrayList<Exercise>
-
-    val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-
-    val exercisesRef: DatabaseReference = database.getReference("exercises")
 
     /**
      * The list of exercises
@@ -124,7 +124,7 @@ class DailyExercisesActivity : AppCompatActivity() {
         init()
 
         // Fetch exercises list
-        fetchExercises();
+        fetchExercises()
 
         milliseconds = pref.getInt("seconds", 10000)
 
@@ -193,38 +193,35 @@ class DailyExercisesActivity : AppCompatActivity() {
         current_date = day.toString() + "/" + (month + 1) + "/" + year
     }
 
+    /**
+     *
+     */
     private fun fetchExercises()
     {
-        // Read from the database
-        exercisesRef.addValueEventListener(object : ValueEventListener {
-            @RequiresApi(Build.VERSION_CODES.KITKAT)
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+        db.collection("exercises")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
 
-                val map = dataSnapshot.getValue()
-                Log.d(TAG, "map: ${map}")
-
-                dataSnapshot.children.forEach {
-                    var exerciseObj = it.getValue() as HashMap<*, *>
-                    var exercise = Exercise()
+                    val exerciseObj = document.data as HashMap<*, *>
+                    val exercise = Exercise()
 
                     with(exercise) {
                         name    = exerciseObj["name"].toString()
                         desc    = exerciseObj["desc"].toString()
-                        image   = exerciseObj["image"].toString()
+                        images  = exerciseObj["images"] as ArrayList<String>?
                     }
-                    Log.d(TAG, "exercise: ${exercise}")
+                    Log.d(TAG, "exercise: $exercise")
                     exercisesList.add(exercise)
                 }
 
                 // Display first exercise form list
                 displayData(currentExercise)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
             }
-        });
     }
 
     /**
@@ -271,7 +268,7 @@ class DailyExercisesActivity : AppCompatActivity() {
 
 
     /**
-     *
+     * Display running exercise data
      */
     private fun displayData(position: Int)
     {
@@ -280,11 +277,11 @@ class DailyExercisesActivity : AppCompatActivity() {
         // It could be nullable, make it null safe adding ?
         //holder.blogName?.text = items.get(position).name
         //holder.blogDesc?.text = items.get(position).description
-        val url = exercisesList[position].image;
-        Log.d(TAG, "url $url")
+        val images = exercisesList[position].images;
+        Log.d(TAG, "images $images")
 
         // Set exercise image
-        imageView!!.setImageBitmap(getImageBitmap(url))
+        imageView!!.setImageBitmap(getImageBitmap(images!![0]))
 
         // Set exercise description header
         txt_header!!.text = exercisesList[position].desc;
