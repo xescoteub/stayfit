@@ -2,6 +2,7 @@ package com.stayfit.ui.home.exercises
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -20,7 +21,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.firestore.FirebaseFirestore
+import com.stayfit.MainActivity
 import com.stayfit.R
+import kotlinx.android.synthetic.main.activity_daily_exercices.*
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -38,30 +41,24 @@ class DailyExercisesActivity : AppCompatActivity() {
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance();
 
-    lateinit var exercisesList: ArrayList<Exercise>
-
     /**
      * The list of exercises
      */
-    //var model_data: List<ExerciseModel>? = null
+    lateinit var exercisesList: ArrayList<Exercise>
 
     // ====================================================
     //
     // ====================================================
     var lv_View: LinearLayout? = null
 
-    var final_View: LinearLayout? = null
+    var final_exercices_view: LinearLayout? = null
 
     // ====================================================
     //
     // ====================================================
     var btn_home: TextView? = null
 
-    var skip: String? = null
-
     var take_rest: String? = null
-
-    var done: String? = null
 
     /**
      * The currently running exercise image
@@ -86,11 +83,9 @@ class DailyExercisesActivity : AppCompatActivity() {
     // ====================================================
     // Texts
     // ====================================================
-    var txt_header: TextView? = null
+    private var textHeader: TextView? = null
 
-    var txt_done: TextView? = null
-
-    var txt_sec: TextView? = null
+    var textSecondsCounter: TextView? = null
 
     // ====================================================
     // The progress indicator
@@ -99,8 +94,6 @@ class DailyExercisesActivity : AppCompatActivity() {
     // ====================================================
     // Labels
     // ====================================================
-    var lv_done: RelativeLayout? = null
-
     var lv_timer: RelativeLayout? = null
 
 
@@ -113,14 +106,13 @@ class DailyExercisesActivity : AppCompatActivity() {
 
     var restTimer: CountDownTimer? = null
 
-    var current_date: String? = null
-
-
     /**
      * The current exercise from list
      */
     var currentExercise = 0
 
+    // TODO: explain
+    var isClick = false
 
     /**
      *
@@ -135,9 +127,9 @@ class DailyExercisesActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
 
+        // Creates ThreadPolicy instances.
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
-
 
         // Initialize exercises array list
         exercisesList = ArrayList()
@@ -154,67 +146,84 @@ class DailyExercisesActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
                 countDownTimer!!.start()
-
             }
         }.start()
 
         /**
-         * Display the countdown timer
+         *
          */
-        lv_done!!.setOnClickListener { v: View? ->
-            setTimerLayout()
+        done_button.setOnClickListener {
+            if (currentExercise < exercisesList.size - 1) {
+                if (!isClick) {
+                    isClick = true
 
-            onDoneClicked()
+                    /**
+                     * Displays timer countdown layout
+                     */
+                    showTimerLayout()
+                    
+                    Log.e("id==", "" + currentExercise)
+                    
+                    doneClicked()
+                } else {
+                    isClick = false
+                    skipClicked()
+                }
+            } else {
+                lv_View!!.visibility = View.GONE
+                final_exercices_view!!.visibility = View.VISIBLE
+
+                /**
+                 * Go to home view
+                 */
+                btn_home!!.setOnClickListener {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+            }
         }
     }
 
     /**
      *
      */
+    @SuppressLint("SetTextI18n")
     private fun init()
     {
-        //model_data      = ArrayList()
-        //get_ref_data    = ArrayList()
-
+        // Toolbar config
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
 
         supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setTitle(resources.getString(R.string.app_name))
-        toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
+        supportActionBar!!.title = resources.getString(R.string.app_name)
 
-        lv_View             = findViewById(R.id.lv_view)
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
-        final_View          = findViewById(R.id.fianl_view)
+        lv_View                 = findViewById(R.id.lv_view)
 
-        btn_home            = findViewById(R.id.btn_home)
+        final_exercices_view    = findViewById(R.id.exercises_final_view)
 
-        imageView           = findViewById(R.id.workoutImageView)
+        btn_home                = findViewById(R.id.button_go_home)
 
-        indicatorLayout     = findViewById(R.id.exerciseIndicator)
+        imageView               = findViewById(R.id.workout_image_view)
 
-        txt_header          = findViewById(R.id.header)
+        indicatorLayout         = findViewById(R.id.exerciseIndicator)
 
-        txt_done            = findViewById(R.id.text_done)
+        textHeader              = findViewById(R.id.header)
 
-        txt_sec             = findViewById(R.id.sec)
+        // =====================================================
+        // Timer container
+        // =====================================================
+        lv_timer                = findViewById(R.id.timer_container)
 
-        lv_done             = findViewById(R.id.done)
+        textSecondsCounter      = findViewById(R.id.timer_seconds)
 
-        lv_timer            = findViewById(R.id.timer)
+        take_rest               = resources.getString(R.string.take_rest)
 
-        skip                = resources.getString(R.string.skip)
-        take_rest           = resources.getString(R.string.take_rest)
-        done                = resources.getString(R.string.Done)
-
-        txt_done!!.setText(done)
-        val c = Calendar.getInstance()
-        val day = c[Calendar.DAY_OF_MONTH]
-        val month = c[Calendar.MONTH]
-        val year = c[Calendar.YEAR]
-        current_date = day.toString() + "/" + (month + 1) + "/" + year
+        done_button.text        = resources.getString(R.string.Done)
     }
 
     /**
@@ -247,18 +256,19 @@ class DailyExercisesActivity : AppCompatActivity() {
                 // Display first exercise form list
                 displayData(currentExercise)
 
-                createTextPosition()
+                createExercisesProgressLayout()
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
-
-
+    
+    /**
+     * 
+     */
     @SuppressLint("SetTextI18n")
-    private fun createTextPosition()
+    private fun createExercisesProgressLayout()
     {
-        Log.d(TAG, "createTextPosition $exercisesList")
         Log.d(TAG, "exercisesList indices ${exercisesList.indices}")
 
         // Iteration without extra object allocations
@@ -271,27 +281,25 @@ class DailyExercisesActivity : AppCompatActivity() {
             rowTextView!!.setTextColor(Color.BLACK)
 
             val lp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
-
             lp.weight = 1f
+
             rowTextView!!.layoutParams = lp
             rowTextView!!.setPadding(0, 0, 15, 0)
             rowTextView!!.textSize = 12f
 
             if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-                rowTextView!!.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_grey))
+                rowTextView!!.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_flat))
             } else {
-                rowTextView!!.background = resources.getDrawable(R.drawable.ic_circle_background_grey)
+                rowTextView!!.background = resources.getDrawable(R.drawable.ic_circle_background_flat)
             }
             indicatorLayout!!.addView(rowTextView)
             myTextViews[idx] = rowTextView
-
         }
 
         if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-            myTextViews[currentExercise]
-                ?.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_green))
+            myTextViews[currentExercise]?.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_filled))
         } else {
-            myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_green)
+            myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_filled)
         }
         myTextViews[currentExercise]!!.setTextColor(Color.WHITE)
     }
@@ -299,45 +307,91 @@ class DailyExercisesActivity : AppCompatActivity() {
     /**
      *
      */
-    private fun setTimerLayout()
+    private fun showTimerLayout()
     {
         Log.d(TAG, "setLayout")
-        txt_header!!.text = take_rest
-        txt_done!!.text = skip
+        textHeader!!.text = take_rest
+        done_button.text =  resources.getString(R.string.skip)
+
         countDownTimer!!.cancel()
+
         imageView!!.visibility = View.GONE
         lv_timer!!.visibility = View.VISIBLE
     }
 
-    private fun onDoneClicked() {
-        Log.d(TAG, "onDoneClicked")
-
+    /**
+     *
+     */
+    private fun doneClicked()
+    {
         restTimer = object : CountDownTimer(milliseconds.toLong(), 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                Log.d(TAG, "onTick")
-
-                txt_sec!!.text = "" + millisUntilFinished / 1000
-
-                Log.d(TAG, "onTick: ${txt_sec}")
-
+                textSecondsCounter!!.text = "" + millisUntilFinished / 1000
             }
 
             override fun onFinish() {
-                Log.d(TAG, "onFinish")
-
+                isClick = false
                 restTimer!!.cancel()
                 imageView!!.visibility = View.VISIBLE
-                txt_done!!.text = done
+
+                done_button.text = resources.getString(R.string.Done)
+
                 lv_timer!!.visibility = View.GONE
 
-                countDownTimer!!.start()
-                //ref_pos = 0
-                restTimer!!.cancel()
+                if (currentExercise < exercisesList.size) {
+                    currentExercise += 1
+
+                    displayData(currentExercise)
+
+                    for (i in myTextViews.indices) {
+                        if (currentExercise == i) {
+                            if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
+                                myTextViews[currentExercise]?.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_filled))
+                            } else {
+                                myTextViews[currentExercise]?.setBackground(resources.getDrawable(R.drawable.ic_circle_background_filled))
+                            }
+                            myTextViews[i]!!.setTextColor(Color.WHITE)
+                        }
+                    }
+                    countDownTimer!!.start()
+                    restTimer!!.cancel()
+                }
             }
-        }
+        }.start()
     }
 
+    /**
+     *
+     */
+    private fun skipClicked()
+    {
+        restTimer!!.cancel()
+        imageView!!.visibility = View.VISIBLE
+
+        done_button.text = resources.getString(R.string.Done)
+
+        lv_timer!!.visibility = View.GONE
+
+        if (currentExercise < exercisesList.size) {
+            currentExercise += 1
+
+            displayData(currentExercise)
+
+            for (i in myTextViews.indices) {
+                if (currentExercise == i) {
+                    if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
+                        myTextViews[currentExercise]?.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_filled))
+                    } else {
+                        myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_filled)
+                    }
+                    myTextViews[i]!!.setTextColor(Color.WHITE)
+                }
+            }
+            countDownTimer!!.start()
+            restTimer!!.cancel()
+        }
+    }
 
     /**
      * Display running exercise data
@@ -353,12 +407,7 @@ class DailyExercisesActivity : AppCompatActivity() {
         imageView!!.setImageBitmap(getImageBitmap(images!![0]))
 
         // Set exercise description header
-        txt_header!!.text = exercisesList[position].desc;
-        println("txt_header: " + exercisesList[position].desc)
-
-        /*id      = model_data!![position].id
-        imgPath = model_data!![position].image + ".png"
-        ref_id  = model_data!![position].ref_i*/
+        textHeader!!.text = exercisesList[position].desc;
     }
 
     /**

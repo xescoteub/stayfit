@@ -3,13 +3,18 @@ package com.stayfit.ui.home.feed
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.stayfit.R
 import kotlinx.android.synthetic.main.activity_feed.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class FeedActivity : AppCompatActivity() {
 
@@ -29,9 +34,21 @@ class FeedActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_feed);
 
-        println("blogsRef: $blogsRef")
+        // Toolbar config
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
+        Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
+
+        supportActionBar!!.setHomeButtonEnabled(true)
+        supportActionBar!!.title = resources.getString(R.string.app_name)
+
+        toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
+
+        // Create list to hold blogs
         blogList = ArrayList()
+
+        // Fetch blogs list
         fetchBlogs()
     }
 
@@ -49,8 +66,8 @@ class FeedActivity : AppCompatActivity() {
                 Log.d(TAG, "map: ${map}")
 
                 dataSnapshot.children.forEach {
-                    var blogObj = it.getValue() as HashMap<*, *>
-                    var blog = Blog()
+                    val blogObj = it.getValue() as HashMap<*, *>
+                    val blog = Blog()
 
                     with(blog) {
                         name            = blogObj["name"].toString()

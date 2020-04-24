@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,11 +17,9 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <LinearLayout
         android:id="@+id/lv_view"
@@ -50,7 +47,6 @@
             android:id="@+id/exerciseIndicator"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#F6F6F6"
             android:visibility="visible"
             android:orientation="horizontal"
             android:gravity="center"
@@ -58,14 +54,11 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp">
 
-
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -76,60 +69,54 @@
                     android:layout_height="match_parent"
                     android:layout_above="@+id/done">
 
-
                     <ImageView
-                        android:id="@+id/workoutImageView"
+                        android:id="@+id/workout_image_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true" />
 
                     <RelativeLayout
-                        android:id="@+id/timer"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:id="@+id/timer_container"
+                        android:layout_width="94dp"
+                        android:layout_height="88dp"
                         android:layout_centerInParent="true"
                         android:background="@drawable/doted_oval"
                         android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/sec"
+                            android:id="@+id/timer_seconds"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="80sp"
+                            android:textSize="50sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
 
                 </RelativeLayout>
 
-
                 <RelativeLayout
                     android:id="@+id/done"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="#F2851C"
-                    android:layout_above="@+id/bottom">
-
-                    <TextView
-                        android:id="@+id/text_done"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/Done"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/bottom"
-                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_alignParentBottom="true">
+
+                    <Button
+                        android:id="@+id/done_button"
+                        style="@style/SolidButtonStyle"
+                        android:layout_width="342dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="37dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="-26dp"
+                        android:text="@string/Done"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
+
             </RelativeLayout>
 
         </LinearLayout>
@@ -137,19 +124,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/fianl_view"
+        android:id="@+id/exercises_final_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/final_oval"
@@ -176,7 +159,7 @@
                 android:gravity="center"
                 android:text="@string/wellDone"
                 android:textColor="@color/colorPrimary"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -192,36 +175,32 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/congratulations"
-                android:textColor="@color/colorGrey"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@drawable/rect_buuton"
             android:gravity="center">
 
-            <TextView
-                android:id="@+id/btn_home"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Go Home"
-                android:textAllCaps="true"
+            <Button
+                android:id="@+id/button_go_home"
+                style="@style/SolidButtonStyle"
+                android:layout_width="342dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="37dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="-26dp"
+                android:text="Go home"
                 android:textColor="@color/colorWhite"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
-
-
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </LinearLayout>
