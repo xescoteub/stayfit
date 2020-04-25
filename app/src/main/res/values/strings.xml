@@ -62,8 +62,12 @@
     <!-- ====================================================================== -->
     <!-- Home activity                                                          -->
     <!-- ====================================================================== -->
-    <string name="blogs">Blogs</string>
+    <string name="home_subtitle">Be healthier everyday</string>
+    <string name="home_exercises_title">Daily workout</string>
+    <string name="home_exercises_subtitle">Start your daily exercises workout</string>
     <string name="start">Start</string>
+    <string name="blogs">Blogs</string>
+    <string name="analytics">Analytics</string>
 
 
     <string name="arm">arm</string>

@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:text="Be healthier everyday"
+            android:text="@string/home_subtitle"
             android:textColor="#FFF"
             android:textSize="18sp" />
 
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Daily workout"
+            android:text="@string/home_exercises_title"
             android:textColor="#424B67"
             android:textSize="20sp" />
 
@@ -73,7 +73,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="50dp"
             android:lineSpacingExtra="6dp"
-            android:text="Start your daily workout"
+            android:text="@string/home_exercises_subtitle"
             android:textAlignment="center"
             android:textColor="#424B67"
             android:textSize="14sp" />
@@ -83,10 +83,9 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="25dp"
-            android:background="@color/colorPrimary"
-            android:text="Start"
+            android:text="@string/start"
             android:textColor="#FFF"
             style="@style/SolidButtonStyle" />
 
@@ -97,9 +96,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/bg_bottom"
-        app:behavior_peekHeight="110dp"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        android:layout_marginBottom="40dp">
+        app:behavior_peekHeight="100dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
             android:background="@drawable/bg_bottom"
@@ -107,7 +105,6 @@
             android:layout_height="140dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="20dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -126,6 +123,7 @@
                 android:weightSum="3"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -140,14 +138,14 @@
                     <ImageView
                         android:id="@+id/blogsButton"
                         android:src="@drawable/ill_ambulance"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
 
                     <TextView
                         android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Blogs"
+                        android:text="@string/blogs"
                         android:textColor="#424B67"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -161,14 +159,14 @@
 
                     <ImageView
                         android:src="@drawable/ill_ambulance"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
 
                     <TextView
                         android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Blogs"
+                        android:text="@string/analytics"
                         android:textColor="#424B67"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -182,8 +180,8 @@
 
                     <ImageView
                         android:src="@drawable/ill_ambulance"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" />
 
                     <TextView
                         android:layout_marginTop="4dp"
