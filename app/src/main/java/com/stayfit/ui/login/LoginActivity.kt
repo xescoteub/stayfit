@@ -47,14 +47,23 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_signin)
 
+        /**
+         * Calls login action
+         */
         loginBtn.setOnClickListener {
             doLogin()
         }
 
+        /**
+         * Starts sign up activity
+         */
         signUpTv.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
+        /**
+         * Starts reset password activity
+         */
         forgotPasswordTv.setOnClickListener {
             startActivity(Intent(this, ResetPasswordActivity::class.java))
         }
@@ -63,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     *
+     * Initializes activity
      */
     private fun init() {
         toolbar(toolBar)

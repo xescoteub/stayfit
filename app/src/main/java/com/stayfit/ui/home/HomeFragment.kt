@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         /**
          * Start daily exercises activity when start button is clicked
          */
-        startExercicesButton.setOnClickListener {
+        startExercisesButton.setOnClickListener {
             val intent = Intent(activity, DailyExercisesActivity::class.java)
             startActivity(intent)
         }

@@ -36,7 +36,8 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@android:color/white"
                 android:textAllCaps="false"
-        />
+                style="@style/SolidButtonStyle"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
