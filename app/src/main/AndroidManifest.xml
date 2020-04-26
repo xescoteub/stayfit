@@ -39,9 +39,12 @@
         <activity android:name=".ui.workouts.listexercises.LegExercises" />
         <activity android:name=".ui.workouts.listexercises.BicepsExercises" />
         <activity android:name=".ui.workouts.menu.ExtraMenu" />
-        <activity android:name=".ui.workouts.menu.ArmMenu" /> <!-- ================================================================== -->
-        <!-- Login / register / reset password activities -->
+        <activity android:name=".ui.workouts.menu.ArmMenu" />
+
         <!-- ================================================================== -->
+        <!-- Login / register / reset password activities                       -->
+        <!-- ================================================================== -->
+
         <!-- Login activity -->
         <activity
             android:name=".ui.login.LoginActivity"
@@ -51,24 +54,37 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Sign up activity -->
-        <activity android:name=".ui.signup.SignUpActivity" /> <!-- Reset password activity -->
-        <activity android:name=".ui.login.ResetPasswordActivity" /> <!-- ================================================================== -->
-        <!-- On-boarding screens activity -->
+        </activity>
+
+        <!-- Sign up activity -->
+        <activity android:name=".ui.signup.SignUpActivity" />
+
+        <!-- Reset password activity -->
+        <activity android:name=".ui.login.ResetPasswordActivity" />
+
+        <!-- ================================================================== -->
+        <!-- On-boarding screens activity                                       -->
         <!-- ================================================================== -->
         <activity
             android:name=".ui.onboarding.OnBoardingActivity"
-            android:screenOrientation="fullSensor" /> <!-- ================================================================== -->
-        <!-- Main activity -->
+            android:screenOrientation="fullSensor" />
+
         <!-- ================================================================== -->
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="fullSensor" /> <!-- ================================================================== -->
-        <!-- Home child activities -->
+        <!-- Main activity                                                      -->
+        <!-- ================================================================== -->
+        <activity android:name=".MainActivity" android:screenOrientation="fullSensor" />
+
+        <!-- ================================================================== -->
+        <!-- Home child activities                                              -->
         <!-- ================================================================== -->
         <!-- Feed activity -->
-        <activity android:name=".ui.home.feed.FeedActivity" /> <!-- Daily exercises activity -->
-        <activity android:name=".ui.home.exercises.DailyExercisesActivity" />
+        <activity android:name="com.stayfit.ui.home.feed.FeedActivity" />
+
+        <!-- Analytics activity -->
+        <activity android:name="com.stayfit.ui.home.analytics.AnalyticsActivity" />
+
+        <!-- Daily exercises activity -->
+        <activity android:name="com.stayfit.ui.home.exercises.DailyExercisesActivity" />
     </application>
 
 </manifest>

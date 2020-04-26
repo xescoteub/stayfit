@@ -227,7 +227,7 @@ class DailyExercisesActivity : AppCompatActivity() {
     }
 
     /**
-     *
+     * Fetch exercises list
      */
     private fun fetchExercises()
     {

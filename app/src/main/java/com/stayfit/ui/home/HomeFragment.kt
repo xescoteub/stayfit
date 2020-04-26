@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.stayfit.R
+import com.stayfit.ui.home.analytics.AnalyticsActivity
 import com.stayfit.ui.home.exercises.DailyExercisesActivity
 import com.stayfit.ui.home.feed.FeedActivity
 import kotlinx.android.synthetic.main.home_fragment.*
@@ -43,6 +44,14 @@ class HomeFragment : Fragment() {
          */
         blogsButton.setOnClickListener {
             val intent = Intent(activity, FeedActivity::class.java)
+            startActivity(intent)
+        }
+
+        /**
+         * Start analytics activity when analytics button is clicked
+         */
+        analyticsButton.setOnClickListener {
+            val intent = Intent(activity, AnalyticsActivity::class.java)
             startActivity(intent)
         }
     }

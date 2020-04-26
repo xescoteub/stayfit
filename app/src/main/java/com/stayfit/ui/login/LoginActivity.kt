@@ -68,6 +68,9 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, ResetPasswordActivity::class.java))
         }
 
+        /**
+         * Initialize activity
+         */
         init()
     }
 
