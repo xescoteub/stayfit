@@ -20,8 +20,6 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private val TAG = "AnalyticsActivity"
 
-    lateinit var linearLayout: LinearLayout
-
     /**
      *
      */
@@ -30,7 +28,9 @@ class AnalyticsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_analytics);
 
+        // ====================================================================
         // Toolbar config
+        // ====================================================================
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -45,14 +45,12 @@ class AnalyticsActivity : AppCompatActivity() {
         // Calories bottom sheet
         // ====================================================================
 
-        //get the bottom sheet view
-        //linearLayout = findViewById(R.id.bottom_sheet)
-
-        //Init the bottom sheet view
-        //val bottomSheetBehavior = BottomSheetBehavior.from(linearLayout)
-
+        // Init the bottom sheet view
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetCalories)
 
+        /**
+         * Toggles calories bottom sheet
+         */
         caloriesCard.setOnClickListener {
             if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -60,14 +58,6 @@ class AnalyticsActivity : AppCompatActivity() {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
-
-        /**
-         *
-         */
-        /*caloriesCard.setOnClickListener {
-            /*bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED*/
-            Log.d(TAG, "caloriesCard >> clicked")
-        }*/
 
         // ====================================================================
         // Charts

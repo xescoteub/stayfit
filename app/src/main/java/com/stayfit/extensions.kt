@@ -27,7 +27,7 @@ fun AppCompatActivity.toolbar(toolbar: Toolbar, titleStr: String = "") {
     setSupportActionBar(toolbar)
     supportActionBar?.title = titleStr
     toolbar.apply {
-        setNavigationIcon(R.drawable.ic_arrow_back_grey_24dp)
+        setNavigationIcon(R.drawable.ic_arrow_back_dark)
         setNavigationOnClickListener { finish() }
     }
 }

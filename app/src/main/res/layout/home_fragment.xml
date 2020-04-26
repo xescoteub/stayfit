@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlueMidnight"
+    android:background="@color/colorLightGrey"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -22,7 +22,6 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:text="@string/app_name"
-            android:textColor="#FFF"
             android:textSize="26sp" />
 
         <TextView
@@ -32,7 +31,6 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:text="@string/home_subtitle"
-            android:textColor="#FFF"
             android:textSize="18sp" />
 
     </LinearLayout>

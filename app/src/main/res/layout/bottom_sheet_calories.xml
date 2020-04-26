@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottomSheetCalories"
     android:layout_width="match_parent"
-    android:layout_height="450dp"
+    android:layout_height="350dp"
     android:orientation="vertical"
     app:behavior_hideable="false"
     app:behavior_peekHeight="0dp"
@@ -15,33 +15,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome Back"
+        android:text="Calories"
         android:textColor="@android:color/black"
-        android:textSize="30dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login to your account"
+        android:text="Lorem ipsum"
         android:textColor="@android:color/darker_gray"
-        android:textSize="25dp"
         android:gravity="center"
-        android:layout_marginBottom="20dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Mobile"
-        android:layout_marginBottom="20dp"
-        android:padding="12.5dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:padding="12.5dp"
         android:layout_marginBottom="20dp"/>
 
 </LinearLayout>
