@@ -26,8 +26,8 @@ class ProfileFragment : Fragment() {
         var instabutton: ImageView = view.findViewById(R.id.instaButton)
         instabutton.setOnClickListener { change_psswd_OnClick() }
 
-        /*var editbutton: ImageView = view.findViewById(R.id.editButton)
-        editbutton.setOnClickListener { changeto_edit_data(view) }*/
+        var editbutton: ImageView = view.findViewById(R.id.editButton)
+        editbutton.setOnClickListener { changeto_edit_data(view) }
 
 
         return view
@@ -38,10 +38,10 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         // TODO: Use the ViewModel
     }
-    /*private fun changeto_edit_data(view: View) {
-        val intent = Intent(activity, EditData::class.java)
+    private fun changeto_edit_data(view: View) {
+        val intent = Intent(activity, ProfileEditData::class.java)
         startActivityForResult(intent, 3);// Activity is started with requestCode 2
-    }*/
+    }
 
     fun change_psswd_OnClick(){
 
