@@ -82,6 +82,9 @@ dependencies {
     // Circular progress indicator widget
     implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.3.0'
 
+    // Waveview kit
+    implementation 'com.yangping:ypwaveview:1.0.3'
+
     // Lottie is a mobile library for Android and iOS that parses Adobe After Effects
     // animations exported as json and renders them natively on mobile!
     def lottieVersion = "3.4.0"

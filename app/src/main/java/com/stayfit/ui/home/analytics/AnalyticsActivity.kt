@@ -62,11 +62,11 @@ class AnalyticsActivity : AppCompatActivity() {
         // ====================================================================
         // Charts
         // ====================================================================
-        val circularProgress = findViewById<CircularProgressIndicator>(R.id.circular_progress)
-        circularProgress.setProgress(5000.0, 10000.0);
+        val stepsChart = findViewById<CircularProgressIndicator>(R.id.stepsChart)
+        stepsChart.setProgress(5321.0, 10000.0);
 
-        val circularProgress2 = findViewById<CircularProgressIndicator>(R.id.circular_progress2)
-        circularProgress2.setProgress(345.0, 1000.0);
+        val caloriesChart = findViewById<CircularProgressIndicator>(R.id.caloriesChart)
+        caloriesChart.setProgress(345.0, 1000.0);
 
         //setBarChart()
     }

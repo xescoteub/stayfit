@@ -60,8 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                android:text="Walk"
-                android:textStyle="bold" />
+                android:text="Walk" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,14 +69,14 @@
                 android:orientation="vertical">
 
                 <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-                    android:id="@+id/circular_progress"
+                    android:id="@+id/stepsChart"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    app:direction="clockwise"
-                    app:dotColor="@color/colorPrimary"
+                    app:direction="counterclockwise"
+                    app:dotColor="@color/colorWhite"
                     app:dotWidth="10dp"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
@@ -90,7 +89,7 @@
         <!-- Sleep widget                                       -->
         <!-- ================================================== -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/caloriesCard"
+            android:id="@+id/sleepCard"
             android:layout_width="180dp"
             android:layout_height="87dp"
             android:layout_marginTop="20dp"
@@ -101,7 +100,6 @@
             android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/caloriesCard2"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardSleep">
@@ -115,19 +113,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Sleep"
-                    android:textStyle="bold" />
+                    android:text="Sleep" />
 
                 <View android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_margin="15dp"
                     app:srcCompat="@drawable/ic_moon_regular" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="7.4 h"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
@@ -141,9 +152,9 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/heartCard"
             android:focusable="true"
             android:clickable="true"
-            android:id="@+id/caloriesCard2"
             android:layout_width="180dp"
             android:layout_height="0dp"
             android:layout_margin="20dp"
@@ -155,7 +166,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/caloriesCard">
+            app:layout_constraintTop_toBottomOf="@+id/sleepCard">
 
             <LinearLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -167,16 +178,15 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:text="Heart"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold" />
+                    android:textColor="@color/colorWhite" />
 
                 <View android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_margin="15dp"
                     app:srcCompat="@drawable/ic_heartbeat_solid" />
 
@@ -187,6 +197,12 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/seekBar1" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -201,10 +217,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
-
-        <!-- ================================================== -->
-        <!-- Water widget                                       -->
-        <!-- ================================================== -->
 
         <!-- ================================================== -->
         <!-- Water widget                                       -->
@@ -227,18 +239,18 @@
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintVertical_bias="0.965">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/gymTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Gym"
-                    android:textStyle="bold" />
+                    android:text="Gym" />
 
                 <View
                     android:layout_width="0dp"
@@ -246,10 +258,25 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_margin="15dp"
-                    app:srcCompat="@drawable/ic_bolt_solid" />
+                    app:srcCompat="@drawable/ic_timer" />
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="0 min"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -264,7 +291,7 @@
             android:focusable="true"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/cardRight2"
+            app:layout_constraintBottom_toTopOf="@+id/caloriesCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gymCard"
             app:layout_constraintHorizontal_bias="0.478"
@@ -281,8 +308,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Water"
-                    android:textStyle="bold" />
+                    android:text="Water" />
 
                 <View
                     android:layout_width="0dp"
@@ -290,25 +316,53 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_margin="15dp"
-                    app:srcCompat="@drawable/ic_bolt_solid" />
+                    app:srcCompat="@drawable/ic_drop" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="158dp"
-                android:layout_height="115dp"
+                android:layout_height="108dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:weightSum="6">
 
+                <!--<com.yangp.ypwaveview.YPWaveView
+                    android:id="@+id/waterChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:animatorEnable="false"
+                    app:behideColor="#4e99e6"
+                    app:frontColor="#B2EBF2"
+                    app:max="1000"
+                    app:progress="765"
+                    app:shapeType="circle"
+                    app:strong="100"
+                    app:textColor="@color/colorWhite"
+                    app:borderColor="@color/colorGrey"
+                    app:textHidden="false" />-->
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="23dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:text="2 l"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardRight2"
+            android:id="@+id/caloriesCard"
             android:layout_width="180dp"
             android:layout_height="236dp"
             android:layout_margin="20dp"
@@ -335,42 +389,39 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Calories"
-                    android:textStyle="bold" />
+                    android:text="Calories" />
 
                 <View android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_margin="15dp"
                     app:srcCompat="@drawable/ic_bolt_solid" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="158dp"
-                android:layout_height="157dp"
+                android:layout_height="128dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical"
                 android:weightSum="6">
 
                 <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-                    android:id="@+id/circular_progress2"
+                    android:id="@+id/caloriesChart"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    app:direction="clockwise"
-                    app:dotColor="@color/colorPrimary"
-                    app:dotWidth="10dp"
+                    app:direction="counterclockwise"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
                     app:progressColor="@color/colorPrimary" />
-
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
