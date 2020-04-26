@@ -170,27 +170,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:src="@drawable/ill_ambulance"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp" />
-
-                    <TextView
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Blogs"
-                        android:textColor="#424B67"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
             </LinearLayout>
 
         </LinearLayout>
