@@ -49,16 +49,16 @@ class DailyExercisesActivity : AppCompatActivity() {
     // ====================================================
     //
     // ====================================================
-    var lv_View: LinearLayout? = null
+    private var mainView: LinearLayout? = null
 
-    var final_exercices_view: LinearLayout? = null
+    private var finalExercisesView: LinearLayout? = null
 
     // ====================================================
     //
     // ====================================================
-    var btn_home: TextView? = null
+    private var buttonHome: TextView? = null
 
-    var take_rest: String? = null
+    private var take_rest: String? = null
 
     /**
      * The currently running exercise image
@@ -74,8 +74,6 @@ class DailyExercisesActivity : AppCompatActivity() {
     var indicatorLayout: LinearLayout? = null
 
     var rowTextView: TextView? = null
-
-    var rootPos = 0
 
     lateinit var myTextViews: Array<TextView?>
 
@@ -112,7 +110,7 @@ class DailyExercisesActivity : AppCompatActivity() {
     var currentExercise = 0
 
     // TODO: explain
-    var isClick = false
+    var isDoneClicked : Boolean= false
 
     /**
      *
@@ -154,8 +152,8 @@ class DailyExercisesActivity : AppCompatActivity() {
          */
         done_button.setOnClickListener {
             if (currentExercise < exercisesList.size - 1) {
-                if (!isClick) {
-                    isClick = true
+                if (!isDoneClicked) {
+                    isDoneClicked = true
 
                     /**
                      * Displays timer countdown layout
@@ -166,17 +164,17 @@ class DailyExercisesActivity : AppCompatActivity() {
                     
                     doneClicked()
                 } else {
-                    isClick = false
+                    isDoneClicked = false
                     skipClicked()
                 }
             } else {
-                lv_View!!.visibility = View.GONE
-                final_exercices_view!!.visibility = View.VISIBLE
+                mainView!!.visibility = View.GONE
+                finalExercisesView!!.visibility = View.VISIBLE
 
                 /**
                  * Go to home view
                  */
-                btn_home!!.setOnClickListener {
+                buttonHome!!.setOnClickListener {
                     startActivity(Intent(this, MainActivity::class.java))
                 }
             }
@@ -202,11 +200,11 @@ class DailyExercisesActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        lv_View                 = findViewById(R.id.lv_view)
+        mainView                 = findViewById(R.id.lv_view)
 
-        final_exercices_view    = findViewById(R.id.exercises_final_view)
+        finalExercisesView    = findViewById(R.id.exercises_final_view)
 
-        btn_home                = findViewById(R.id.button_go_home)
+        buttonHome                = findViewById(R.id.button_go_home)
 
         imageView               = findViewById(R.id.workout_image_view)
 
@@ -275,7 +273,6 @@ class DailyExercisesActivity : AppCompatActivity() {
         for (idx in exercisesList.indices) {
 
             rowTextView = TextView(this)
-            rootPos = idx
             rowTextView!!.text = "" + (idx + 1)
             rowTextView!!.gravity = Gravity.CENTER
             rowTextView!!.setTextColor(Color.BLACK)
@@ -331,7 +328,7 @@ class DailyExercisesActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                isClick = false
+                isDoneClicked = false
                 restTimer!!.cancel()
                 imageView!!.visibility = View.VISIBLE
 
