@@ -30,14 +30,16 @@
             android:layout_height="160dp"
             android:layout_gravity="center"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="30dp"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_onboarding3" />
 
         <TextView
-            android:id="@+id/login_welcome_msg"
-            style="@style/LabelStyle"
-            android:layout_marginTop="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:textSize="30sp"
             android:text="@string/login" />
 
         <androidx.cardview.widget.CardView
@@ -115,7 +117,7 @@
             android:layout_marginRight="24dp"
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/forgot_password"
-            android:textColor="@color/colorPurple"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintBaseline_toBaselineOf="@+id/rememberMeBtn"
             app:layout_constraintEnd_toEndOf="@+id/tv_password"
             app:layout_constraintHorizontal_bias="0.5"

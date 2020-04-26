@@ -8,34 +8,6 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:textSize="26sp" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:text="@string/home_subtitle"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="320dp"
@@ -87,6 +59,34 @@
             android:textColor="#FFF"
             style="@style/SolidButtonStyle" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="@string/app_name"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="@string/home_subtitle"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -108,14 +108,64 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    app:layout_anchorGravity="top|center"
+                    app:srcCompat="@drawable/swipe_bar" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:text="Quick access"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Water" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:layout_marginLeft="135dp"
+                    app:layout_anchor="@+id/bottom_sheet"
+                    app:layout_anchorGravity="top|center"
+                    app:srcCompat="@drawable/swipe_bar" />
+            </LinearLayout>-->
+
+            <!--<TextView
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quick access"
                 android:textColor="#424B67"
-                android:textSize="14sp" />
+                android:textSize="14sp" >
+            </TextView>-->
 
             <LinearLayout
                 android:weightSum="3"
@@ -135,7 +185,7 @@
 
                     <ImageView
                         android:id="@+id/blogsButton"
-                        android:src="@drawable/ill_ambulance"
+                        android:src="@drawable/news"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
 
@@ -157,7 +207,7 @@
 
                     <ImageView
                         android:id="@+id/analyticsButton"
-                        android:src="@drawable/ill_ambulance"
+                        android:src="@drawable/ic_chart_area_solid"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
 
