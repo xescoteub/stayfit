@@ -98,17 +98,18 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/img_selected"
         android:layout_marginTop="20dp"/>
+
     <ImageView
+        android:id="@+id/btn_select_image"
         android:layout_width="50dp"
         android:layout_height="56dp"
-        android:text="Select an image"
         android:layout_below="@+id/input_description_r"
-        android:layout_toLeftOf="@id/btn_take_photo"
-        android:id="@+id/btn_select_image"
-        android:onClick="selectImage"
-        app:srcCompat="@drawable/ic_insert_photo"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_toLeftOf="@id/btn_take_photo"
+        android:onClick="selectImage"
+        android:text="Select an image"
+        app:srcCompat="@drawable/ic_insert_photo" />
     <ImageView
         android:layout_width="50dp"
         android:layout_height="56dp"

@@ -12,6 +12,9 @@ import android.widget.ImageView
 import com.stayfit.R
 
 class ProfileFragment : Fragment() {
+    var userPhoto: ImageView? = null
+    var km_recorred: Int = 0
+    var times_loged: Int = 0
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -24,7 +27,10 @@ class ProfileFragment : Fragment() {
         var view:View = inflater.inflate(R.layout.profile_fragment, container, false)
 
         var instabutton: ImageView = view.findViewById(R.id.instaButton)
-        instabutton.setOnClickListener { change_psswd_OnClick() }
+        instabutton.setOnClickListener { goto_insta() }
+
+        var youtubebutton: ImageView = view.findViewById(R.id.youtubeButton)
+        youtubebutton.setOnClickListener { goto_youtube() }
 
         var editbutton: ImageView = view.findViewById(R.id.editButton)
         editbutton.setOnClickListener { changeto_edit_data(view) }
@@ -52,6 +58,13 @@ class ProfileFragment : Fragment() {
         }
         psswdDialog.setNegativeButton("No") { dialog, which -> }
         psswdDialog.show()
+    }
+
+    fun goto_insta(){
+
+    }
+    fun goto_youtube(){
+
     }
 
 
