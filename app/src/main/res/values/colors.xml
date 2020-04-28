@@ -3,10 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDarker">#3700B3</color>
     <color name="colorPrimaryLight">#3700B3</color>
+    <color name="colorAccent">#BB86FC</color>
 
     <color name="colorBlack">#000000</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#4CAF50</color>
     <color name="colorPurple">#6c63ff</color>
     <color name="colorIndigo">#303F9F</color>
     <color name="colorBlueMidnight">#003366</color>

@@ -77,8 +77,8 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Initializes activity
      */
-    private fun init() {
-        toolbar(toolBar)
+    private fun init()
+    {
         val currentUser = mAuth.currentUser
         updateUI(currentUser)
 
@@ -103,12 +103,16 @@ class LoginActivity : AppCompatActivity() {
             tv_username.error = "Please enter valid email"
             tv_username.requestFocus()
             return
+        } else {
+            tv_username.error = ""
         }
 
         if (tv_password.editText?.text.toString().isEmpty()) {
             tv_password.error = "Please enter password"
             tv_password.requestFocus()
             return
+        } else {
+            tv_password.error = ""
         }
 
         mAuth.signInWithEmailAndPassword(tv_username.editText?.text.toString(), tv_password.editText?.text.toString())
