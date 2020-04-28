@@ -31,7 +31,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -202,10 +201,10 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.jjoe64.graphview.GraphView
+                <!--<com.jjoe64.graphview.GraphView
                     android:id="@+id/heartChart"
                     android:layout_width="match_parent"
-                    android:layout_height="100dip" />
+                    android:layout_height="100dip" />-->
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -108,6 +108,10 @@ class AnalyticsActivity : AppCompatActivity() {
         caloriesChart.setProgress(345.0, 1000.0);
 
 
+        // ====================================================================
+        // Heart chart
+        // ====================================================================
+        /*
         val graph = findViewById<View>(R.id.heartChart) as GraphView
         val series = LineGraphSeries<DataPoint>()
 
@@ -121,5 +125,6 @@ class AnalyticsActivity : AppCompatActivity() {
             series.appendData(DataPoint(x,y), true, 500)
         }
         graph.addSeries(series)
+        */
     }
 }

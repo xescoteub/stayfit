@@ -7,25 +7,31 @@
     android:background="@color/colorLightGrey"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:text="@string/app_name"
-        android:textSize="26sp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/app_name"
+            android:textSize="26sp" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:text="@string/home_subtitle"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/home_subtitle"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
     <!-- ================================================== -->
     <!-- Start daily workout widget                         -->
@@ -40,11 +46,7 @@
         android:background="@drawable/home_rounded_card"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:elevation="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        android:elevation="1dp">
 
         <ImageView
             android:layout_width="108dp"
