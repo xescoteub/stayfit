@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bottomSheetCalories"
+    android:id="@+id/bottomSheetSleep"
     android:layout_width="match_parent"
     android:layout_height="350dp"
     android:orientation="vertical"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/titleCaloriesWidget"
+            android:text="@string/titleSleepWidget"
             android:textStyle="bold" />
 
     </RelativeLayout>
@@ -45,11 +45,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Average burned calories today"
+        android:text="@string/subTitleBottomSheetSleep"
         android:textColor="@android:color/darker_gray"
         android:gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:layout_width="158dp"
@@ -59,15 +58,6 @@
         android:orientation="vertical"
         android:weightSum="6">
 
-        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-            android:id="@+id/caloriesChart"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            app:direction="counterclockwise"
-            app:drawDot="true"
-            app:enableProgressAnimation="true"
-            app:progressColor="@color/colorPrimary" />
+
     </LinearLayout>
 </LinearLayout>

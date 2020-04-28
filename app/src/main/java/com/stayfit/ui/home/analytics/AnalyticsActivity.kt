@@ -1,16 +1,19 @@
 package com.stayfit.ui.home.analytics
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import com.stayfit.R
 import kotlinx.android.synthetic.main.activity_analytics.*
 import kotlinx.android.synthetic.main.bottom_sheet_calories.*
+import kotlinx.android.synthetic.main.bottom_sheet_heart.*
+import kotlinx.android.synthetic.main.bottom_sheet_sleep.*
 import java.util.*
 
 /**
@@ -42,20 +45,56 @@ class AnalyticsActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
 
         // ====================================================================
+        // Sleep bottom sheet
+        // ====================================================================
+
+        // Init the bottom sheet view
+        val sleepBottomSheetBehavior = BottomSheetBehavior.from(bottomSheetSleep)
+
+        /**
+         * Toggles sleep bottom sheet
+         */
+        sleepCard.setOnClickListener {
+            if (sleepBottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                sleepBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                sleepBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        // ====================================================================
         // Calories bottom sheet
         // ====================================================================
 
         // Init the bottom sheet view
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetCalories)
+        val caloriesBottomSheetBehavior = BottomSheetBehavior.from(bottomSheetCalories)
 
         /**
          * Toggles calories bottom sheet
          */
         caloriesCard.setOnClickListener {
-            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            if (caloriesBottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                caloriesBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             } else {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                caloriesBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        // ====================================================================
+        // Heart bottom sheet
+        // ====================================================================
+
+        // Init the bottom sheet view
+        val heartBottomSheetBehavior = BottomSheetBehavior.from(bottomSheetHeart)
+
+        /**
+         * Toggles heart bottom sheet
+         */
+        heartCard.setOnClickListener {
+            if (heartBottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                heartBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                heartBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 
@@ -68,35 +107,19 @@ class AnalyticsActivity : AppCompatActivity() {
         val caloriesChart = findViewById<CircularProgressIndicator>(R.id.caloriesChart)
         caloriesChart.setProgress(345.0, 1000.0);
 
-        //setBarChart()
-    }
 
-    private fun setBarChart() {
-        /*val entries = ArrayList<BarEntry>()
-        entries.add(BarEntry(8f, 0))
-        entries.add(BarEntry(2f, 1))
-        entries.add(BarEntry(5f, 2))
-        entries.add(BarEntry(20f, 3))
-        entries.add(BarEntry(15f, 4))
-        entries.add(BarEntry(19f, 5))
+        val graph = findViewById<View>(R.id.heartChart) as GraphView
+        val series = LineGraphSeries<DataPoint>()
 
-        val barDataSet = BarDataSet(entries, "Cells")
+        var x = -0.5
+        var y = 0.0;
 
-        val labels = ArrayList<String>()
-        labels.add("18-Jan")
-        labels.add("19-Jan")
-        labels.add("20-Jan")
-        labels.add("21-Jan")
-        labels.add("22-Jan")
-        labels.add("23-Jan")
-        val data = BarData(labels, barDataSet)
-        //barChart.data = data // set the data and list of lables into chart
-
-        //barChart.setDescription("Set Bar Chart Description")  // set the description
-
-        //barDataSet.setColors(ColorTemplate.COLORFUL_COLORS)
-        barDataSet.color = resources.getColor(R.color.colorIndigo)
-
-        //barChart.animateY(5000)*/
+        for (i in 0..500)
+        {
+            x += 0.1
+            y = Math.sin(x)
+            series.appendData(DataPoint(x,y), true, 500)
+        }
+        graph.addSeries(series)
     }
 }

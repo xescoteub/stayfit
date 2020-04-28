@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheetHeart"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    android:padding="5dp"
+    android:background="@drawable/shape_bottom_sheet_card">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="3dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            app:layout_anchorGravity="top|center"
+            app:srcCompat="@drawable/swipe_bar" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:text="@string/titleHeartWidget"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subTitleBottomSheetHeart"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/rounded_corner_rectangle">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:text="Average heart rate"
+                android:textColor="@color/colorWhite" />
+
+            <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                android:id="@+id/caloriesChart"
+                android:layout_width="48dp"
+                android:layout_height="46dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="19dp"
+                android:layout_marginBottom="7dp"
+                app:direction="counterclockwise"
+                app:dotWidth="3dp"
+                app:drawDot="true"
+                app:textSize="10sp"
+                app:progressBackgroundStrokeWidth="5dp"
+                app:progressStrokeWidth="5dp"
+                app:enableProgressAnimation="true"
+                app:progressColor="@color/colorWhite" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>

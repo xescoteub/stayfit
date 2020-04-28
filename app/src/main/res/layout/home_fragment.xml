@@ -7,6 +7,9 @@
     android:background="@color/colorLightGrey"
     tools:context=".MainActivity">
 
+    <!-- ================================================== -->
+    <!-- Start daily workout widget                         -->
+    <!-- ================================================== -->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -17,6 +20,7 @@
         android:background="@drawable/home_rounded_card"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,6 +93,9 @@
 
     </LinearLayout>
 
+    <!-- ================================================== -->
+    <!-- Quick actions bottom sheet                         -->
+    <!-- ================================================== -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
@@ -136,36 +143,6 @@
                     android:textStyle="bold" />
 
             </RelativeLayout>
-            <!--<LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Water" />
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="3dp"
-                    android:layout_marginLeft="135dp"
-                    app:layout_anchor="@+id/bottom_sheet"
-                    app:layout_anchorGravity="top|center"
-                    app:srcCompat="@drawable/swipe_bar" />
-            </LinearLayout>-->
-
-            <!--<TextView
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quick access"
-                android:textColor="#424B67"
-                android:textSize="14sp" >
-            </TextView>-->
 
             <LinearLayout
                 android:weightSum="3"

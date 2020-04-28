@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,37 +28,13 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         navView.setupWithNavController(navController)
+
+        // Change status bar color
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorIndigo)
     }
 
     fun settingsBtn_onClick(view: View) {
         val intent = Intent(this, DarkTheme::class.java)
         startActivity(intent)
     }
-/*
-    fun logOut_onClick(view: View){
-
-        val alertdialog_logout = AlertDialog.Builder(this)
-        alertdialog_logout.setTitle("Salir")
-        alertdialog_logout.setMessage("Seguro que desea salir?")
-        alertdialog_logout.setPositiveButton("Yes") { dialog, which ->
-            finish()
-        }
-        alertdialog_logout.setNegativeButton("No") { dialog, which -> }
-        alertdialog_logout.show()
-    }
-    fun change_psswd_OnClick(view: View){
-
-        val psswdDialog = AlertDialog.Builder(this)
-        psswdDialog.setView(R.layout.profile_change_psswd)
-        psswdDialog.setPositiveButton("Yes") { dialog, which ->
-            //Actualizar contraseña
-        }
-        psswdDialog.setNegativeButton("No") { dialog, which -> }
-        psswdDialog.show()
-    }*/
-    /*
-    fun newRoutineM(view: View) {
-        val intent = Intent(this, FormRoutine::class.java)
-        startActivity(intent)
-    }*/
 }

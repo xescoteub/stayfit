@@ -24,17 +24,6 @@
     <string name="onboarding_slide3_desc">Set reminders to develop a good habit</string>
 
     <!-- ====================================================================== -->
-    <!-- Daily exercise activity                                                -->
-    <!-- ====================================================================== -->
-    <string name="next">Next</string>
-    <string name="skip">Skip</string>
-    <string name="take_rest">Take rest</string>
-    <string name="get_started">Get started</string>
-    <string name="Done">Done</string>
-    <string name="wellDone">Well Done!</string>
-    <string name="congratulations">Congratulation you are done with today workout</string>
-
-    <!-- ====================================================================== -->
     <!-- Sign in activity                                                       -->
     <!-- ====================================================================== -->
     <string name="title_activity_sign_in">Sign in</string>
@@ -68,6 +57,30 @@
     <string name="start">Start</string>
     <string name="blogs">Blogs</string>
     <string name="analytics">Analytics</string>
+
+    <!-- ====================================================================== -->
+    <!-- Daily exercise activity                                                -->
+    <!-- ====================================================================== -->
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="take_rest">Take rest</string>
+    <string name="get_started">Get started</string>
+    <string name="Done">Done</string>
+    <string name="wellDone">Well Done!</string>
+    <string name="congratulations">Congratulation you are done with today workout</string>
+
+    <!-- ====================================================================== -->
+    <!-- Analytics activity bottom sheets                                       -->
+    <!-- ====================================================================== -->
+    <string name="titleWalkWidget">Walk</string>
+    <string name="titleGymWidget">Walk</string>
+    <string name="titleSleepWidget">Sleep</string>
+    <string name="titleWaterWidget">Water</string>
+    <string name="titleHeartWidget">Heart</string>
+    <string name="titleCaloriesWidget">Calories</string>
+
+    <string name="subTitleBottomSheetSleep">Average sleep hours today</string>
+    <string name="subTitleBottomSheetHeart">Heart BPM rate</string>
 
 
     <string name="arm">arm</string>

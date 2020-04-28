@@ -15,6 +15,9 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.analytics.AnalyticsActivity">
 
+        <!-- ================================================== -->
+        <!-- App toolbar                                        -->
+        <!-- ================================================== -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="0dp"
@@ -48,6 +51,7 @@
             android:layout_marginEnd="4dp"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +81,7 @@
                     android:layout_marginBottom="8dp"
                     app:direction="counterclockwise"
                     app:dotColor="@color/colorWhite"
-                    app:dotWidth="10dp"
+                    app:dotWidth="5dp"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
                     app:progressColor="@color/colorPrimary" />
@@ -113,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Sleep" />
+                    android:text="@string/titleSleepWidget" />
 
                 <View android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -151,6 +155,9 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!-- ================================================== -->
+        <!-- Heart widget                                       -->
+        <!-- ================================================== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/heartCard"
             android:focusable="true"
@@ -160,6 +167,7 @@
             android:layout_margin="20dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:cardBackgroundColor="@color/colorPrimary"
@@ -194,19 +202,18 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="164dp"
+                android:layout_margin="10dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/chart1"
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/heartChart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/seekBar1" />
+                    android:layout_height="100dip" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
 
         <!-- ================================================== -->
         <!-- Guideline split screen in two                      -->
@@ -219,9 +226,8 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <!-- ================================================== -->
-        <!-- Water widget                                       -->
+        <!-- Gym widget                                         -->
         <!-- ================================================== -->
-
         <androidx.cardview.widget.CardView
             android:id="@+id/gymCard"
             android:layout_width="186dp"
@@ -229,6 +235,7 @@
             android:layout_margin="20dp"
             android:layout_marginTop="72dp"
             android:layout_marginEnd="16dp"
+            android:foreground="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             app:cardCornerRadius="20dp"
@@ -281,6 +288,9 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!-- ================================================== -->
+        <!-- Water widget                                       -->
+        <!-- ================================================== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardRight"
             android:layout_width="180dp"
@@ -289,14 +299,13 @@
             android:layout_marginEnd="16dp"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toTopOf="@+id/caloriesCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gymCard"
-            app:layout_constraintHorizontal_bias="0.478"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintVertical_bias="0.965">
+            app:layout_constraintStart_toStartOf="@+id/guideline">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -308,7 +317,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Water" />
+                    android:text="@string/titleWaterWidget" />
 
                 <View
                     android:layout_width="0dp"
@@ -361,6 +370,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- ================================================== -->
+        <!-- Calories widget                                    -->
+        <!-- ================================================== -->
         <androidx.cardview.widget.CardView
             android:id="@+id/caloriesCard"
             android:layout_width="180dp"
@@ -374,6 +386,7 @@
             android:focusable="true"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.478"
@@ -389,7 +402,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Calories" />
+                    android:text="@string/titleCaloriesWidget" />
 
                 <View android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -426,6 +439,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- ================================================== -->
+    <!-- Include widget bottom sheets                       -->
+    <!-- ================================================== -->
+    <include layout="@layout/bottom_sheet_sleep" />
+    <include layout="@layout/bottom_sheet_heart" />
     <include layout="@layout/bottom_sheet_calories" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
