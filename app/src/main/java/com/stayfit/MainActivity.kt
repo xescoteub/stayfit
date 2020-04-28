@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         // Change status bar color
-        window.statusBarColor = ContextCompat.getColor(this, R.color.colorIndigo)
+        //window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDarker)
     }
 
     fun settingsBtn_onClick(view: View) {

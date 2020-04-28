@@ -86,10 +86,6 @@ class LoginActivity : AppCompatActivity() {
                 this,
                 LoginViewModel.LoginViewModelFactory(LoginInteractor())
         )[LoginViewModel::class.java]
-
-        /*signUpTv.apply {
-            text = Html.fromHtml("$text <font color='#6c63ff'>SignUp</font>")
-        }*/
     }
 
     /**

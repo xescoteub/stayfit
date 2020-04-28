@@ -31,11 +31,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorLightGrey"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:navigationIcon="@drawable/ic_arrow_back_dark"
-                app:subtitleTextColor="@color/colorBlack"
-                app:titleTextColor="@color/colorBlack" />
+                android:background="@color/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -84,7 +81,7 @@
                     app:dotWidth="5dp"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
-                    app:progressColor="@color/colorPrimary" />
+                    app:progressColor="@color/colorPrimaryDarker" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -170,7 +167,6 @@
             android:foreground="?attr/selectableItemBackground"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
@@ -185,8 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="Heart"
-                    android:textColor="@color/colorWhite" />
+                    android:text="Heart" />
 
                 <View android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -432,7 +427,7 @@
                     app:direction="counterclockwise"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
-                    app:progressColor="@color/colorPrimary" />
+                    app:progressColor="@color/colorPrimaryDarker" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
