@@ -7,15 +7,21 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
 import com.stayfit.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import kotlinx.android.synthetic.main.activity_sign_up.tv_password
+import kotlinx.android.synthetic.main.activity_sign_up.tv_username
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-
     private val TAG = "SignUpActivity"
+    
+    private lateinit var mAuth: FirebaseAuth
+
+    // Access a Cloud Firestore instance from your Activity
+    val db = FirebaseFirestore.getInstance();
 
     /**
      *
@@ -24,7 +30,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        auth = FirebaseAuth.getInstance()
+        mAuth = FirebaseAuth.getInstance()
 
         btn_sign_up.setOnClickListener {
             signUpUser()
@@ -36,8 +42,7 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun signUpUser()
     {
-        val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
+        val user = mAuth.currentUser
 
         if (tv_username.text.toString().isEmpty()) {
             tv_username.error = "Please enter email"
@@ -57,12 +62,13 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
 
-        auth.createUserWithEmailAndPassword(tv_username.text.toString(), tv_password.text.toString())
+        mAuth.createUserWithEmailAndPassword(tv_username.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     user?.sendEmailVerification()
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                writeNewUser()
                                 Log.d(TAG, "Email sent.")
                                 Toast.makeText(this, "Registered successfully. Please verify your email address.",
                                     Toast.LENGTH_SHORT).show()
@@ -75,5 +81,22 @@ class SignUpActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    /**
+     * Inserts a new entry in users db
+     */
+    private fun writeNewUser()
+    {
+        try {
+            val data = HashMap<String, Any>()
+            data["user_email"] = tv_username.text.toString()
+
+            db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
+                    exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
+            }
+        } catch (e:Exception) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
     }
 }

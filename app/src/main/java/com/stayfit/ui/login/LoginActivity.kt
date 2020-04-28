@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.MainActivity
 import com.stayfit.R
 import com.stayfit.config.AppPrefs
@@ -20,11 +20,14 @@ import kotlinx.android.synthetic.main.activity_signin.*
 
 class LoginActivity : AppCompatActivity() {
 
+    private val TAG = "LoginActivity"
+
     private lateinit var mAuth : FirebaseAuth
 
     private lateinit var viewModel : LoginViewModel
 
-    private val TAG = "LoginActivity"
+    // Access a Cloud Firestore instance from your Activity
+    val db = FirebaseFirestore.getInstance();
 
     /**
      *
@@ -118,6 +121,9 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmailAndPassword")
                     val user = mAuth.currentUser
+
+                    writeNewUser()
+
                     updateUI(user)
                 } else {
                     Log.w(TAG, "signInWithEmailAndPassword:failure", task.exception)
@@ -151,14 +157,20 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun writeNewUser(
-        databaseReference: DatabaseReference,
-        userId: String?,
-        name: String?,
-        email: String?,
-        accountType: Int
-    ) {
-        val user = User(name, email, accountType)
-        databaseReference.child("users").child(userId!!).setValue(user)
-    }*/
+    /**
+     * Inserts a new entry in users db
+     */
+    private fun writeNewUser()
+    {
+        try {
+            val data = HashMap<String, Any>()
+            data["user_email"] = tv_username.editText?.text.toString()
+
+            db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
+                    exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
+            }
+        } catch (e:Exception) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
 }

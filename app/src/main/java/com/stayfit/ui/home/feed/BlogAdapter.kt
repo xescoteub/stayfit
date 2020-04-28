@@ -50,7 +50,8 @@ class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHol
     /**
      * Get bitmap from URL
      */
-    private fun getImageBitmap(url: String): Bitmap? {
+    private fun getImageBitmap(url: String): Bitmap?
+    {
         var bm: Bitmap? = null
         try {
             val aURL = URL(url)
@@ -78,7 +79,8 @@ class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHol
 /**
  *
  */
-class BlogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class BlogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+{
     var blogName  = itemView.blogName
     var blogDesc  = itemView.blogDescription
     var blogPhoto = itemView.blogImage
