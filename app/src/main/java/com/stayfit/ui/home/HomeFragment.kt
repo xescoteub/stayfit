@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.stayfit.R
 import com.stayfit.ui.home.analytics.AnalyticsActivity
 import com.stayfit.ui.home.exercises.DailyExercisesActivity
-import com.stayfit.ui.home.feed.FeedActivity
+import com.stayfit.ui.home.feed.BlogsActivity
 import kotlinx.android.synthetic.main.home_fragment.*
 
 /**
@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
          * Start feed activity when blogs button is clicked
          */
         blogsButton.setOnClickListener {
-            val intent = Intent(activity, FeedActivity::class.java)
+            val intent = Intent(activity, BlogsActivity::class.java)
             startActivity(intent)
         }
 

@@ -2,7 +2,6 @@ package com.stayfit.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -10,14 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
 import com.stayfit.MainActivity
 import com.stayfit.R
 import com.stayfit.config.AppPrefs
-import com.stayfit.toolbar
 import com.stayfit.ui.onboarding.OnBoardingActivity
 import com.stayfit.ui.signup.SignUpActivity
 import kotlinx.android.synthetic.main.activity_signin.*
-import kotlinx.android.synthetic.main.toolbar.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -152,4 +150,15 @@ class LoginActivity : AppCompatActivity() {
             ).show()
         }
     }
+
+    /*private fun writeNewUser(
+        databaseReference: DatabaseReference,
+        userId: String?,
+        name: String?,
+        email: String?,
+        accountType: Int
+    ) {
+        val user = User(name, email, accountType)
+        databaseReference.child("users").child(userId!!).setValue(user)
+    }*/
 }

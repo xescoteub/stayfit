@@ -78,7 +78,7 @@
         <!-- Home child activities                                              -->
         <!-- ================================================================== -->
         <!-- Feed activity -->
-        <activity android:name="com.stayfit.ui.home.feed.FeedActivity" />
+        <activity android:name="com.stayfit.ui.home.feed.BlogsActivity" />
 
         <!-- Analytics activity -->
         <activity android:name="com.stayfit.ui.home.analytics.AnalyticsActivity" />

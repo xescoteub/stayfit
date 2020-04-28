@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stayfit.R
-import kotlinx.android.synthetic.main.feed_recycler_item.view.*
+import kotlinx.android.synthetic.main.blog_recycler_item.view.*
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -26,7 +26,7 @@ class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHol
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlogViewHolder
     {
-        return BlogViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.feed_recycler_item, parent,false ))
+        return BlogViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.blog_recycler_item, parent,false ))
     }
 
     /**

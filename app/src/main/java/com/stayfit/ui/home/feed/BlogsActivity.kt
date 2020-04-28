@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.stayfit.R
-import kotlinx.android.synthetic.main.activity_feed.*
+import kotlinx.android.synthetic.main.activity_blogs.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class FeedActivity : AppCompatActivity() {
+class BlogsActivity : AppCompatActivity() {
 
     private val TAG = "FeedActivity"
 
@@ -32,7 +32,7 @@ class FeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_feed);
+        setContentView(R.layout.activity_blogs);
 
         // Toolbar config
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
