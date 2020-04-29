@@ -1,6 +1,5 @@
 package com.stayfit.ui.myroutines
 
-import android.accounts.Account
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -20,7 +19,6 @@ import com.stayfit.MainActivity
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
 import com.stayfit.ui.workouts.exercises.ExerciseActivity
-import com.stayfit.ui.workouts.menu.WorkoutsFragment
 import java.lang.Exception
 import java.lang.reflect.Type
 
@@ -36,15 +34,16 @@ class RoutineActivity : AppCompatActivity() {
         setContentView(R.layout.activity_routine)
         listView = findViewById<ListView>(R.id.routine_list)
         val intent: Intent = this.intent
-        //managerParametersIntent(intent.getParcelableArrayListExtra<Parcelable>("routine_list"))
-        //controlListView()
+        val hashMap = intent.getSerializableExtra("routine_map") as HashMap<String, ArrayList<ArrayList<String>>>
+        managerParametersIntent(hashMap["exercises"]!!)
+        controlListView()
     }
     @RequiresApi(Build.VERSION_CODES.O)
-    fun managerParametersIntent(parameterIntent: ArrayList<Parcelable>){
-        if (parameterIntent.size>0){
-        for (parcelable in parameterIntent) {
-            arrayList.add(parcelable as Exercise)
-            //arrayNames.add((parcelable as Exercise).getExerciseName())
+    fun managerParametersIntent(exercises: ArrayList<ArrayList<String>>){
+        if (exercises.size>0){
+        for (parametersExercise in exercises) {
+            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+            arrayNames.add(parametersExercise[0])
         }}
     }
 
@@ -64,6 +63,7 @@ class RoutineActivity : AppCompatActivity() {
     private fun startExercise(exercise: Exercise) {
         val intent = Intent(this, ExerciseActivity::class.java)
         intent.putExtra("exercise_name",exercise.getParametersList());
+        //Toast.makeText(this, "Exercise ${exercise.getExerciseName()} will be available coming soon!", Toast.LENGTH_SHORT).show()
         startActivity(intent)
     }
 
@@ -100,7 +100,6 @@ class RoutineActivity : AppCompatActivity() {
         timeDialog.setNegativeButton("Cancel") { dialog, which -> }
         timeDialog.show()
     }
-
     private fun saveData(){
         var sharedPreferences: SharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -114,8 +113,8 @@ class RoutineActivity : AppCompatActivity() {
     private fun loadData(){
         var sharedPreferences: SharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
         var gson: Gson = Gson()
-        var jsonNames: String = sharedPreferences.getString("exercise name list", null)
-        var jsonExercise: String = sharedPreferences.getString("exercise list",null)
+        var jsonNames: String? = sharedPreferences.getString("exercise name list", null)
+        var jsonExercise: String? = sharedPreferences.getString("exercise list",null)
         val typeName: Type = object : TypeToken<ArrayList<String?>?>() {}.type
         val typeExercise: Type = object : TypeToken<ArrayList<Exercise?>?>() {}.type
         arrayNames = gson.fromJson(jsonNames, typeName)

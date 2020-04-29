@@ -83,7 +83,7 @@ class ExerciseActivity: AppCompatActivity() {
         }else{
             progressBar = findViewById<ProgressBar>(R.id.progressBar_exercise)
             text_time = findViewById<TextView>(R.id.txt_time_exercise)
-            progressBar!!.getProgressDrawable().setColorFilter(Color.parseColor("#233475"), android.graphics.PorterDuff.Mode.SRC_IN);
+            progressBar!!.getProgressDrawable().setColorFilter(Color.parseColor("#6c63ff"), android.graphics.PorterDuff.Mode.SRC_IN);
             var t: Long = (time*1000).toLong() // convert seconds to ms
             downProgressBar(t) //10s
         }

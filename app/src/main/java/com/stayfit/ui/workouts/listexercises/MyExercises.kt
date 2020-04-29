@@ -91,8 +91,8 @@ class MyExercises : AppCompatActivity() {
     private fun loadData(){
         var sharedPreferences:SharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
         var gson: Gson = Gson()
-        var jsonNames: String = sharedPreferences.getString("exercise name list", null)
-        var jsonExercise: String = sharedPreferences.getString("exercise list",null)
+        var jsonNames: String? = sharedPreferences.getString("exercise name list", null)
+        var jsonExercise: String? = sharedPreferences.getString("exercise list",null)
         val typeName:Type = object : TypeToken<ArrayList<String?>?>() {}.type
         val typeExercise:Type = object : TypeToken<ArrayList<Exercise?>?>() {}.type
         arrayList = gson.fromJson(jsonNames, typeName)

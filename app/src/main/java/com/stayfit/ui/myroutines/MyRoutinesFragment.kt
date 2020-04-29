@@ -5,8 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Parcelable
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +12,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +22,6 @@ import com.stayfit.R
 import com.stayfit.ui.activity.ActivityFragment
 import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
-import kotlinx.android.synthetic.main.routine_change_time.*
 import java.lang.reflect.Type
 
 
@@ -119,11 +114,11 @@ class   MyRoutinesFragment: Fragment(){
 
     fun startConcreteRoutine(r: Routine){
         val intent = Intent(activity, RoutineActivity::class.java)
-        intent.putParcelableArrayListExtra("routine_list",r.getExercisesList());
+        intent.putExtra("routine_map",r.getExercisesList());
         startActivity(intent)
     }
     private fun saveData(){
-        var sharedPreferences: SharedPreferences = this.activity!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sharedPreferences.edit()
         var gson: Gson = Gson()
         var jsonRoutines: String = gson.toJson(routinesList)
@@ -131,7 +126,7 @@ class   MyRoutinesFragment: Fragment(){
         editor.apply()
     }
     private fun loadData(){
-        var sharedPreferences: SharedPreferences = this.activity!!.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
         var gson: Gson = Gson()
         var jsonRoutines: String? = sharedPreferences.getString("routines list", null)
         val typeRoutine: Type = object : TypeToken<ArrayList<Routine?>?>() {}.type
@@ -175,7 +170,17 @@ class   MyRoutinesFragment: Fragment(){
         if (requestCode == 3) {
             if (resultCode == 3){
                 var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST ROUTINE")
-                addRoutine(Routine( arrayList[0], arrayList[1], arrayList[2], ArrayList()))
+                val list_ex: ArrayList<ArrayList<String>> = ArrayList()
+                var parametersExercise: ArrayList<String> = ArrayList()
+                parametersExercise.add("funciona?")
+                parametersExercise.add("")
+                parametersExercise.add("30")
+                parametersExercise.add("null")
+                parametersExercise.add("")
+                list_ex.add(parametersExercise)
+                var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>> = HashMap()
+                hashMapExercises.put("exercises",list_ex)
+                addRoutine(Routine( arrayList[0], arrayList[1], arrayList[2], hashMapExercises))
                 showList()
             }
         }
