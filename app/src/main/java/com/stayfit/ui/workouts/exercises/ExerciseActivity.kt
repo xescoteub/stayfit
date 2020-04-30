@@ -1,5 +1,6 @@
 package com.stayfit.ui.workouts.exercises
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -12,9 +13,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isInvisible
 import com.stayfit.R
+import com.stayfit.ui.myroutines.MyRoutinesFragment
+
 
 class ExerciseActivity: AppCompatActivity() {
     var progressBar: ProgressBar? = null
@@ -93,5 +96,37 @@ class ExerciseActivity: AppCompatActivity() {
             val js = findViewById<com.airbnb.lottie.LottieAnimationView>(R.id.jason_exercise)
             js.setAnimation(jason)
         }
+    }
+
+    fun addToRoutine(view: View) {
+        //var routinesFragment = supportFragmentManager.findFragmentById(R.id.navigation_myroutines) as MyRoutinesFragment
+        // setup the alert builder
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Choose a routine")
+        builder.setIcon(R.drawable.ic_assignment_purple)
+        // add a list
+        //val routines = routinesFragment.getRoutinesNamesList()
+        /*
+        val rs: Array<CharSequence> = routines.toArray(arrayOfNulls<CharSequence>(routines.size))
+        builder.setItems(rs,
+            DialogInterface.OnClickListener { dialog, which ->
+                // Do anything you want here
+
+            })
+
+         */
+        val animals = arrayOf("LegRoutine", "Biceps and Triceps", "Calisthenic's routine", "Cardio", "Shoulder")
+        builder.setItems(animals) { dialog, which ->
+            when (which) {
+                0 -> { /* horse */ }
+                1 -> { /* cow   */ }
+                2 -> { /* camel */ }
+                3 -> { /* sheep */ }
+                4 -> { /* goat  */ }
+            }
+        }
+        // create and show the alert dialog
+        val dialog = builder.create()
+        dialog.show()
     }
 }

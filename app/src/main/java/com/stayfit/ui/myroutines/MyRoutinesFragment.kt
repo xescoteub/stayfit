@@ -195,6 +195,12 @@ class   MyRoutinesFragment: Fragment(){
         return routine!!
     }
 
+    fun getRoutinesNamesList(): ArrayList<String>{
+        var namesRoutines: ArrayList<String> = ArrayList()
+        for (r in routinesList){ namesRoutines.add(r.getNameRoutine())}
+        return namesRoutines
+    }
+
 
 
 }
