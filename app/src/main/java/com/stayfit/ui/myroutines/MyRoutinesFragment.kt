@@ -99,6 +99,7 @@ class   MyRoutinesFragment: Fragment(){
             loadData()
         }catch (e: Exception){
         }
+        viewModel.setRoutines(getRoutinesNamesList())
         myroutinesRecycler.layoutManager = LinearLayoutManager(activity)
         myroutinesRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
         myroutinesRecycler.adapter = RoutineAdapter(routinesList)
