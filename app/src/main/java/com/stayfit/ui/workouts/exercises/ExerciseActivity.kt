@@ -15,8 +15,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.stayfit.R
 import com.stayfit.ui.myroutines.MyRoutinesFragment
+import com.stayfit.ui.myroutines.MyRoutinesViewModel
 
 
 class ExerciseActivity: AppCompatActivity() {
@@ -100,22 +103,23 @@ class ExerciseActivity: AppCompatActivity() {
 
     fun addToRoutine(view: View) {
         //var routinesFragment = supportFragmentManager.findFragmentById(R.id.navigation_myroutines) as MyRoutinesFragment
+
         // setup the alert builder
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Choose a routine")
         builder.setIcon(R.drawable.ic_assignment_purple)
         // add a list
         //val routines = routinesFragment.getRoutinesNamesList()
-        /*
+        val model = ViewModelProviders.of(this)[MyRoutinesViewModel::class.java]
+        val routines = model.getRoutines()
         val rs: Array<CharSequence> = routines.toArray(arrayOfNulls<CharSequence>(routines.size))
         builder.setItems(rs,
             DialogInterface.OnClickListener { dialog, which ->
-                // Do anything you want here
-
+                Toast.makeText(this,"Funciona",Toast.LENGTH_SHORT).show()
             })
 
-         */
-        val animals = arrayOf("LegRoutine", "Biceps and Triceps", "Calisthenic's routine", "Cardio", "Shoulder")
+
+        /*val animals = arrayOf("LegRoutine", "Biceps and Triceps", "Calisthenic's routine", "Cardio", "Shoulder")
         builder.setItems(animals) { dialog, which ->
             when (which) {
                 0 -> { /* horse */ }
@@ -124,7 +128,7 @@ class ExerciseActivity: AppCompatActivity() {
                 3 -> { /* sheep */ }
                 4 -> { /* goat  */ }
             }
-        }
+        }*/
         // create and show the alert dialog
         val dialog = builder.create()
         dialog.show()
