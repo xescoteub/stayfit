@@ -32,7 +32,7 @@ class ActivityFragment : Fragment() {
     private lateinit var viewModel: ActivityViewModel
     var theDate: TextView ?= null
     var mCalendarView:android.widget.CalendarView ?= null
-    lateinit var events:MutableMap<String,ArrayList<Routine>>
+    var events:MutableMap<String,ArrayList<Routine>> = mutableMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,25 +42,38 @@ class ActivityFragment : Fragment() {
 
         mCalendarView = view.findViewById(R.id.calendarView)
 
-        var date:String = SimpleDateFormat("dd-MM-yyy", Locale.getDefault()).format(Date())
+        var date:String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
         date = date + " EVENTS :"
         theDate=view.findViewById(R.id.datePicker)
         theDate!!.setText("" + date)
         if(!events.containsKey(date)){
             Toast.makeText(activity,"No events", Toast.LENGTH_SHORT).show()
         }else{
-
+            Toast.makeText(activity,"Events avaliable", Toast.LENGTH_SHORT).show()
             //showList(date)
         }
 
         mCalendarView!!.setOnDateChangeListener(CalendarView.OnDateChangeListener { calendarView, year, month, dayOfMonth ->
-            var date:String = dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
-            theDate=view.findViewById(R.id.datePicker)
-            theDate!!.setText("" + date)
-            if(!events.containsKey(date)){
-                Toast.makeText(activity,"No events", Toast.LENGTH_SHORT).show()
-            }else{
-               //showList(date)
+            if(dayOfMonth.toString().length==1){
+                var date:String = "0" + dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
+                theDate=view.findViewById(R.id.datePicker)
+                theDate!!.setText("" + date)
+                if(!events.containsKey(date)){
+                    Toast.makeText(activity,"No events", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(activity,"Events avaliable", Toast.LENGTH_SHORT).show()
+                    //showList(date)
+                }
+            }else {
+                var date: String = dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
+                theDate=view.findViewById(R.id.datePicker)
+                theDate!!.setText("" + date)
+                if(!events.containsKey(date)){
+                    Toast.makeText(activity,"No events", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(activity,"Events avaliable", Toast.LENGTH_SHORT).show()
+                    //showList(date)
+                }
             }
         })
 
@@ -70,18 +83,19 @@ class ActivityFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ActivityViewModel::class.java)
-        events = mutableMapOf()
+        //events = mutableMapOf()
         // TODO: Use the ViewModel
     }
 
     fun addEvent(year:String,month:String,dayOfMonth:String,routine:Routine){
-        val dateEvent:String = dayOfMonth + "-" + "0" + month + "-" + year + " EVENTS :"
+        //Que valores recive?
+        val dateEvent = "$dayOfMonth-$month-$year EVENTS :"
         if(!events.containsKey(dateEvent)){
-            events.put(dateEvent,arrayListOf(routine))
+            events[dateEvent] = arrayListOf(routine)
         }else{
             var list:ArrayList<Routine> = events[dateEvent]!!
             list.add(routine)
-            events.put(dateEvent,list)
+            events[dateEvent] = list
         }
 
     }
