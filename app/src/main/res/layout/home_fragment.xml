@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorLightGrey"
     tools:context=".MainActivity">
 
     <RelativeLayout
@@ -59,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/home_exercises_title"
-            android:textColor="#424B67"
             android:textSize="20sp" />
 
         <TextView
@@ -71,7 +69,6 @@
             android:lineSpacingExtra="6dp"
             android:text="@string/home_exercises_subtitle"
             android:textAlignment="center"
-            android:textColor="#424B67"
             android:textSize="14sp" />
 
         <Button
@@ -104,12 +101,12 @@
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/bg_bottom"
         app:behavior_peekHeight="100dp"
+        android:background="@drawable/bg_bottom"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
-            android:background="@drawable/bg_bottom"
+            android:background="?attr/cardColor"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_marginStart="0dp"
@@ -175,7 +172,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/blogs"
-                        android:textColor="#424B67"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -197,7 +193,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/analytics"
-                        android:textColor="#424B67"
                         android:textSize="12sp" />
                 </LinearLayout>
 

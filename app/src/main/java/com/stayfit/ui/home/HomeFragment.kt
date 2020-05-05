@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.stayfit.R
 import com.stayfit.ui.home.analytics.AnalyticsActivity
 import com.stayfit.ui.home.exercises.DailyExercisesActivity
-import com.stayfit.ui.home.feed.BlogsActivity
+import com.stayfit.ui.home.blogs.BlogsActivity
 import kotlinx.android.synthetic.main.home_fragment.*
 
 /**

@@ -1,4 +1,4 @@
-package com.stayfit.ui.home.feed
+package com.stayfit.ui.home.blogs
 
 /**
  *

@@ -1,4 +1,4 @@
-package com.stayfit.ui.home.feed
+package com.stayfit.ui.home.blogs
 
 import android.os.Build
 import android.os.Bundle
@@ -11,16 +11,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.stayfit.R
-import com.stayfit.config.BaseHTTPAction
-import kotlinx.android.synthetic.main.activity_feed.*
-import okhttp3.HttpUrl
+import kotlinx.android.synthetic.main.activity_blogs.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class FeedActivity : BaseHTTPAction() {
+class BlogsActivity : AppCompatActivity() {
 
-    private val TAG = "FeedActivity"
+    private val TAG = "BlogsActivity"
 
     lateinit var blogList: ArrayList<Blog>
 
@@ -28,16 +26,16 @@ class FeedActivity : BaseHTTPAction() {
 
     val blogsRef: DatabaseReference = database.getReference("blogs")
 
-    private val FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL = "$baseURL/getUserBlogs"
+    //private val FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL = "$baseURL/getUserBlogs"
 
     /**
      *
      */
-    override fun responseRunnable(responseStr: String?): Runnable? {
+    /*override fun responseRunnable(responseStr: String?): Runnable? {
         return Runnable {
             println("User blogs response: $responseStr")
         }
-    }
+    }*/
 
     /**
      *
@@ -45,7 +43,7 @@ class FeedActivity : BaseHTTPAction() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_feed);
+        setContentView(R.layout.activity_blogs);
 
         // Toolbar config
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -64,7 +62,7 @@ class FeedActivity : BaseHTTPAction() {
         // Fetch blogs list
         fetchBlogs()
 
-        getUserBlogs
+        //getUserBlogs
     }
 
     /**
@@ -112,11 +110,11 @@ class FeedActivity : BaseHTTPAction() {
         blogRecycler.adapter = BlogAdapter(blogList)
     }
 
-    private val getUserBlogs: Unit
+    /*private val getUserBlogs: Unit
         get() {
             Log.d(TAG, "getUserBlogs")
             val httpBuilder = HttpUrl.parse(FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL)!!.newBuilder()
             sendMessageToCloudFunction(httpBuilder)
         }
-
+    */
 }

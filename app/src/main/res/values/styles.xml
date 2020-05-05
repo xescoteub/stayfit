@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="cardColor">#FFF</item>
         <item name="android:statusBarColor">@color/colorPrimaryDarker</item>
     </style>
 
@@ -15,6 +16,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">#303030</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="cardColor">#222222</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDarker</item>
     </style>
 
     <style name="SolidButtonStyle" parent="Widget.AppCompat.Button.Borderless">
