@@ -10,13 +10,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
+import com.squareup.okhttp.HttpUrl
 import com.stayfit.R
+import com.stayfit.config.BaseHTTPAction
 import kotlinx.android.synthetic.main.activity_blogs.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class BlogsActivity : AppCompatActivity() {
+class BlogsActivity : BaseHTTPAction() {
 
     private val TAG = "BlogsActivity"
 
@@ -26,16 +28,7 @@ class BlogsActivity : AppCompatActivity() {
 
     val blogsRef: DatabaseReference = database.getReference("blogs")
 
-    //private val FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL = "$baseURL/getUserBlogs"
-
-    /**
-     *
-     */
-    /*override fun responseRunnable(responseStr: String?): Runnable? {
-        return Runnable {
-            println("User blogs response: $responseStr")
-        }
-    }*/
+    private val FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL = "$baseURL/getUserBlogs"
 
     /**
      *
@@ -62,7 +55,7 @@ class BlogsActivity : AppCompatActivity() {
         // Fetch blogs list
         fetchBlogs()
 
-        //getUserBlogs
+        getUserBlogs
     }
 
     /**
@@ -110,11 +103,23 @@ class BlogsActivity : AppCompatActivity() {
         blogRecycler.adapter = BlogAdapter(blogList)
     }
 
-    /*private val getUserBlogs: Unit
+    /**
+     *
+     */
+    private val getUserBlogs: Unit
         get() {
             Log.d(TAG, "getUserBlogs")
             val httpBuilder = HttpUrl.parse(FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL)!!.newBuilder()
             sendMessageToCloudFunction(httpBuilder)
         }
-    */
+
+    /**
+     *
+     */
+    override fun responseRunnable(responseStr: String?): Runnable? {
+        return Runnable {
+            println("User blogs response: $responseStr")
+        }
+    }
+
 }

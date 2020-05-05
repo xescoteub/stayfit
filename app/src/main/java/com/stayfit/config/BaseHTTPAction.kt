@@ -1,11 +1,9 @@
 package com.stayfit.config
 
-import android.content.Intent
-import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.*
+import com.squareup.okhttp.*
 import java.io.IOException
 
 abstract class BaseHTTPAction : AppCompatActivity() {
@@ -28,7 +26,7 @@ abstract class BaseHTTPAction : AppCompatActivity() {
         val httpClient = OkHttpClient()
         val request: Request = Request.Builder().url(httpBuilder.build()).build()
         httpClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call?, e: IOException?) {
+            override fun onFailure(request: Request?, e: IOException?) {
                 Log.e(
                     TAG,
                     "error response firebase cloud functions"
@@ -43,24 +41,26 @@ abstract class BaseHTTPAction : AppCompatActivity() {
             }
 
             @Throws(IOException::class)
-            override fun onResponse(call: Call?, response: Response) {
-                val responseBody: ResponseBody? = response.body()
+            override fun onResponse(response: Response?) {
+                val responseBody: ResponseBody? = response?.body()
                 var resp = ""
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, "action failed")
-                    resp = "Failed perform the action, please try again"
-                } else {
-                    try {
-                        if (responseBody != null) {
-                            resp = responseBody.string()
+                if (response != null) {
+                    if (!response.isSuccessful()) {
+                        Log.e(TAG, "action failed")
+                        resp = "Failed perform the action, please try again"
+                    } else {
+                        try {
+                            if (responseBody != null) {
+                                resp = responseBody.string()
+                            }
+                            Log.e(TAG, "Response $resp")
+                        } catch (e: IOException) {
+                            resp = "Problem in reading resposne"
+                            Log.e(
+                                TAG,
+                                "Problem in reading response $e"
+                            )
                         }
-                        Log.e(TAG, "Response $resp")
-                    } catch (e: IOException) {
-                        resp = "Problem in reading resposne"
-                        Log.e(
-                            TAG,
-                            "Problem in reading response $e"
-                        )
                     }
                 }
                 runOnUiThread(responseRunnable(resp))
