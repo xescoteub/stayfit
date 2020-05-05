@@ -34,8 +34,7 @@ class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHol
      */
     override fun onBindViewHolder(holder: BlogViewHolder, position: Int)
     {
-        val policy =
-            StrictMode.ThreadPolicy.Builder().permitAll().build()
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
         // It could be nullable, make it null safe adding ?

@@ -64,6 +64,10 @@ class SignUpActivity : AppCompatActivity() {
 
         mAuth.createUserWithEmailAndPassword(tv_username.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
+
+
+
+
                 if (task.isSuccessful) {
                     user?.sendEmailVerification()
                         ?.addOnCompleteListener { task ->

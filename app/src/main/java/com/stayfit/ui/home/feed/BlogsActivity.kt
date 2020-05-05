@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.stayfit.R
-import kotlinx.android.synthetic.main.activity_blogs.*
+import com.stayfit.config.BaseHTTPAction
+import kotlinx.android.synthetic.main.activity_feed.*
+import okhttp3.HttpUrl
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class BlogsActivity : AppCompatActivity() {
+class FeedActivity : BaseHTTPAction() {
 
     private val TAG = "FeedActivity"
 
@@ -26,13 +28,24 @@ class BlogsActivity : AppCompatActivity() {
 
     val blogsRef: DatabaseReference = database.getReference("blogs")
 
+    private val FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL = "$baseURL/getUserBlogs"
+
+    /**
+     *
+     */
+    override fun responseRunnable(responseStr: String?): Runnable? {
+        return Runnable {
+            println("User blogs response: $responseStr")
+        }
+    }
+
     /**
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_blogs);
+        setContentView(R.layout.activity_feed);
 
         // Toolbar config
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -50,6 +63,8 @@ class BlogsActivity : AppCompatActivity() {
 
         // Fetch blogs list
         fetchBlogs()
+
+        getUserBlogs
     }
 
     /**
@@ -96,4 +111,12 @@ class BlogsActivity : AppCompatActivity() {
         blogRecycler.addItemDecoration(DividerItemDecoration(this, 1))
         blogRecycler.adapter = BlogAdapter(blogList)
     }
+
+    private val getUserBlogs: Unit
+        get() {
+            Log.d(TAG, "getUserBlogs")
+            val httpBuilder = HttpUrl.parse(FIREBASE_CLOUD_FUNCTION_USER_BLOGS_URL)!!.newBuilder()
+            sendMessageToCloudFunction(httpBuilder)
+        }
+
 }

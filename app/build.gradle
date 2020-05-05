@@ -63,12 +63,13 @@ dependencies {
     // Google firebase
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.2'
+    implementation 'com.google.firebase:firebase-functions:19.0.2'
+
+    // HTTP client
+    implementation("com.squareup.okhttp3:okhttp:3.12.0")
 
     // Material calendar
     implementation 'com.applandeo:material-calendar-view:1.8.0-rc01'
-
-    // Chips navigation bar
-    //implementation 'com.ismaeldivita.chipnavigation:chip-navigation-bar:1.3.0'
 
     // Android library that provides an extension to ImageView that
     // creates an immersive experience by animating its drawable using the Ken Burns Effect.
