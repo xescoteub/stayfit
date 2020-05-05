@@ -4,21 +4,22 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.media.Image
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.stayfit.R
+import com.stayfit.toast
 import org.w3c.dom.Text
 
 class ProfileEditData : AppCompatActivity() {
-   // private lateinit var mAuth : FirebaseAuth
+    private lateinit var mAuth : FirebaseAuth
 
     val PICK_IMAGE = 1
     val REQUEST_IMAGE_CAPTURE = 3
@@ -26,21 +27,32 @@ class ProfileEditData : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.profile_edit_data)
 
-        //val user = mAuth.currentUser
+        Toast.makeText(this, "EDIT TEXT CREATED", Toast.LENGTH_SHORT).show()
 
-        var username : EditText = findViewById(R.id.edit_name)
-        username.setHint("Username")
-        var useremail : EditText = findViewById(R.id.edit_email)
-        useremail.setHint("Username@gmail.com")
+        mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
+
+
+        var email= user?.email
+        var useremail : EditText = findViewById<EditText>(R.id.edit_email)
+        useremail.setHint(email)
+
+        var userid = user?.displayName
+        var username: EditText = findViewById<EditText>(R.id.edit_name)
+        username.setHint(userid)
 
 
         var cancel : Button = findViewById<Button>(R.id.cancelButton)
         cancel.setOnClickListener{ onBackPressed() }
 
         var save : Button = findViewById<Button>(R.id.saveButton)
-        save.setOnClickListener{ saveProfileChanges() }
+        save.setOnClickListener{
+            saveProfileChanges()
+            onBackPressed()
+        }
 
         var psswd: TextView = findViewById<TextView>(R.id.change_psswd)
         psswd.setOnClickListener{ change_psswd() }
@@ -52,18 +64,53 @@ class ProfileEditData : AppCompatActivity() {
     }
 
     fun change_psswd() {
+        //muestra un dialog para cambiar la contraseña
+        var psswd: EditText = findViewById(R.id.editTextPsswd)
+        var psswd_repeat: EditText = findViewById(R.id.editTextRepeat)
+
+        mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
+
+
 
         val psswdDialog = AlertDialog.Builder(this)
         psswdDialog.setView(R.layout.profile_change_psswd)
         psswdDialog.setTitle("Change Password")
         psswdDialog.setPositiveButton("Yes") { dialog, which ->
-            //Actualizar contraseña
+
+            if(psswd.text.equals(psswd_repeat.text)){
+                //Actualizar contraseña
+                /*
+
+                mAuth = FirebaseAuth.getInstance()
+                var user = mAuth.currentUser
+
+                user.updatePassword(psswd.text).then(function() { //update succesful.
+                }).catch(function(error) { // An error happened.
+                })*/
+
+                //actualizar contraseña
+
+                user?.updatePassword(psswd.text.toString())
+                ?.addOnCompleteListener { task ->
+                  if (task.isSuccessful) {
+                   }
+               }
+
+                Toast.makeText(this, "The password have been changed", Toast.LENGTH_LONG).show()
+
+            }
+            else{
+                Toast.makeText(this, "The passwords are not equals", Toast.LENGTH_SHORT).show()
+            }
+
         }
         psswdDialog.setNegativeButton("No") { dialog, which -> }
         psswdDialog.show()
     }
 
     fun change_photo(){
+        //Cambia la foto de perfil
             val getIntent = Intent(Intent.ACTION_GET_CONTENT)
             getIntent.type = "image/*"
             val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -88,14 +135,68 @@ class ProfileEditData : AppCompatActivity() {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
             imageView.setImageBitmap(imageBitmap)
         }
+
+        /*
+        //Actualizar la imagen
+
+
+        user.updateProfile({ displayName: user.displayName , photoURL: data.getExtras.get("URI") }).then(function() {// Update successful.
+        }).catch(function(error) {// An error happened.
+        });
+        */
     }
 
     fun saveProfileChanges(){
 
-        onBackPressed()
+        val username : EditText = findViewById<EditText>(R.id.edit_name)
+        var email : EditText = findViewById<EditText>(R.id.edit_email)
+
+        mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
+
+
+
+
+        /* SI FALLA PROBAR A PONER "?" ANTES DEL PUNTO "user?.diisplayName"
+        //Actualiza los datos del usuario
+
+        var user = firebase.auth().currentUser;
+
+        user.updateProfile({ displayName: username.getText() , photoURL: user.photoUrl}).then(function() {// Update successful.
+        }).catch(function(error) {// An error happened.
+        });
+
+        user.updateEmail(email.getText()).then(function() { // Update successful.
+            }).catch(function(error) { // An error happened.
+            });
+
+            */
+
+
+          //actualizar username
+          val profileUpdates = UserProfileChangeRequest.Builder()
+              .setDisplayName(username.text.toString())
+                  .build()
+
+      user?.updateProfile(profileUpdates)
+      ?.addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+              Log.i("username ","username updated")
+          }else{
+              Log.i("username","username not updated")
+          }
+      }
+
+        //actualizar email
+
+        /*user?.updateEmail(email.text.toString())
+     ?.addOnCompleteListener { task ->
+         if (task.isSuccessful) {
+           Log.i("username","email updated")
+         }
+     }*/
+
     }
-
-
 
 
 }

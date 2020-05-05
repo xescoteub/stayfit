@@ -1,12 +1,14 @@
 package com.stayfit.ui.signup
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
 import com.stayfit.ui.login.LoginActivity
@@ -44,6 +46,7 @@ class SignUpActivity : AppCompatActivity() {
     {
         val user = mAuth.currentUser
 
+
         if (tv_username.text.toString().isEmpty()) {
             tv_username.error = "Please enter email"
             tv_username.requestFocus()
@@ -76,6 +79,29 @@ class SignUpActivity : AppCompatActivity() {
                                 Log.d(TAG, "Email sent.")
                                 Toast.makeText(this, "Registered successfully. Please verify your email address.",
                                     Toast.LENGTH_SHORT).show()
+
+                                //asignar nombre de usuario y foto
+                                // direccion de la imagen predeterminada: https://image.flaticon.com/icons/png/512/17/17004.png
+                                val email_ = user?.email
+                                if( email_ != null){
+
+                                    val username = email_.substringBefore('@')
+
+                                    val profileUpdates = UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username)
+                                        .setPhotoUri(Uri.parse("https://image.flaticon.com/icons/png/512/17/17004.png"))
+                                        .build()
+
+                                    user?.updateProfile(profileUpdates)
+                                        ?.addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                Log.d(TAG, "User profile updated.")
+                                            }
+                                        }
+
+                                }
+
+
                             }
                         }
                     startActivity(Intent(this, LoginActivity::class.java))

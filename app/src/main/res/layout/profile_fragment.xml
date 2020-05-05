@@ -2,14 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e9e9e9"
     style="@style/Theme.AppCompat.Light.NoActionBar">
 
     <RelativeLayout
         android:id="@+id/rellay1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="@drawable/grad">
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="30dp"
+        android:paddingBottom="70dp"
+        android:background="@color/colorPurple">
 
         <RelativeLayout
             android:id="@+id/userimage"
@@ -18,16 +22,18 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/circle_border">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_margin="9dp"
-                android:adjustViewBounds="true"
                 android:background="@drawable/circle"
                 android:src="@drawable/ic_person"/>
         </RelativeLayout>
 
+
         <TextView
+            android:id="@+id/profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userimage"
@@ -35,6 +41,7 @@
             android:layout_marginTop="15dp"
             android:background="#00000000"
             android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorWhite"
             android:text="UserName"
             android:textStyle="bold"
             android:textSize="25dp"/>
@@ -54,15 +61,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="-40dp"
         android:layout_below="@+id/rellay1">
 
         <RelativeLayout
-            android:padding="10dp"
+            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/grad_linlay"
+            android:background="@color/colorWhite"
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingTop="5dp">
@@ -77,31 +87,29 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
                     android:background="#00000000"
                     android:textStyle="bold"
-                    android:text="0 Km"
+                    android:text="Km Runned"
                     android:textSize="18dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:background="#00000000"
                     android:textStyle="bold"
-                    android:text="Runed"
+                    android:text="23.9"
+                    android:textColor="@color/colorPurple"
                     android:textSize="18dp"/>
 
             </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
-            android:padding="10dp"
+            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/grad_linlay2"
+            android:background="@color/colorWhite"
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingTop="5dp">
@@ -116,19 +124,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
                     android:background="#00000000"
                     android:textStyle="bold"
-                    android:text="0"
+                    android:text="Times Loged"
                     android:textSize="18dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:background="#00000000"
                     android:textStyle="bold"
-                    android:text="Times Loged"
+                    android:text="124"
+                    android:textColor="@color/colorPurple"
                     android:textSize="18dp"/>
 
             </LinearLayout>
@@ -142,6 +148,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:padding="20dp"
             android:id="@+id/linlay2"
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -151,83 +158,63 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="18dp"
                     android:text="Email" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_person"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:textSize="18dp"
-                    android:text="username@gmail.com" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/colorGrey" />
-
-
-
+                    android:text="Phone" />
             </LinearLayout>
+
+
             <LinearLayout
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:text="Bio" />
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="18dp"
-                    android:text="Barcelona" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/colorGrey" />
-
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:text="Password" />
+                    android:src="@drawable/ic_person"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:textSize="18dp"
                     android:text="***********" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/colorGrey" />
-
-
-
             </LinearLayout>
+
 
         </LinearLayout>
 
