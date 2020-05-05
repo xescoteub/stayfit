@@ -6,17 +6,18 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.okhttp.FormEncodingBuilder
+import com.squareup.okhttp.HttpUrl
 import com.stayfit.R
+import com.stayfit.config.BaseHTTPAction
 import com.stayfit.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.activity_sign_up.tv_password
-import kotlinx.android.synthetic.main.activity_sign_up.tv_username
 
-class SignUpActivity : AppCompatActivity() {
+
+class SignUpActivity : BaseHTTPAction() {
 
     private val TAG = "SignUpActivity"
     
@@ -24,6 +25,8 @@ class SignUpActivity : AppCompatActivity() {
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance();
+
+    private val FIREBASE_CLOUD_FUNCTION_ISERT_BLOG = "$baseURL/insertWelcomeBlog"
 
     /**
      *
@@ -76,6 +79,7 @@ class SignUpActivity : AppCompatActivity() {
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 writeNewUser()
+                                insertWelcomeBlog()
                                 Log.d(TAG, "Email sent.")
                                 Toast.makeText(this, "Registered successfully. Please verify your email address.",
                                     Toast.LENGTH_SHORT).show()
@@ -125,8 +129,30 @@ class SignUpActivity : AppCompatActivity() {
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
             }
+
         } catch (e:Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+
+    private fun insertWelcomeBlog()
+    {
+        val httpBuilder = HttpUrl.parse(FIREBASE_CLOUD_FUNCTION_ISERT_BLOG)!!.newBuilder()
+
+        val data = FormEncodingBuilder()
+            .add("user_id", mAuth.uid)
+            .build()
+
+        sendPostToCloudFunction(httpBuilder, data)
+        println(">>>>>>> Blog inserted!")
+    }
+
+    override fun responseRunnable(responseStr: String?): Runnable?
+    {
+        return Runnable {
+            println("Blog inserted : $responseStr")
         }
     }
 }
