@@ -1,25 +1,33 @@
-const functions = require("firebase-functions");
-
+const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-admin.initializeApp(functions.config().firebase);
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://stayfit-87c1a.firebaseio.com"
+});
+
 
 const cors = require('cors')({origin: true});
+
+var db = admin.firestore();
 
 // ============================================================================
 // Inserts welcome blog when user signs up to application
 // ============================================================================
-
 exports.insertWelcomeBlog = functions.https.onRequest((req, res) => {
-    var db = admin.firestore();
 
     var user_id = req.body.user_id
 
-    db.collection('blogs').doc(user_id).set({
-        name        : 'Welcome to StayFit!',
-        description : 'StayFit is an effortless way to track all your  physical activities including sleep, heart rate and calories burned. Learn more about',
-        photo       : "https://firebasestorage.googleapis.com/v0/b/stayfit-87c1a.appspot.com/o/gym.jpg?alt=media&token=16fc3018-6586-402e-8f11-4bd8d88de137"
-    });
+    // Add a new document in collection "cities"
+    db.collection("blogs").doc(user_id).collection("docs").set({
+        name: "Los Angeles",
+        state: "CA",
+        country: "USA"
+    })
 
     cors(req, res, () => {
         res.status(200).send("Successfully inserted welcome blog.");
@@ -27,40 +35,45 @@ exports.insertWelcomeBlog = functions.https.onRequest((req, res) => {
 });
 
 // ============================================================================
-// Return user blogs
+// Serverless api architecture
 // ============================================================================
+const app = express();
+// https://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
+app.disable("x-powered-by");
 
-// Unsplash workout images
-const data = [
-    {
-        name        : "Blog1",
-        description : "Blog 1 description from cloud functions"
-        //photo       : "https://images.unsplash.com/photo-1541694458248-5aa2101c77df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-        name        : "Blog2",
-        description : "Blog 2 description"
-        //photo       : "https://images.unsplash.com/photo-1517344884509-a0c97ec11bcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1234&q=80"
-    },
-    {
-        name        : "Blog3",
-        description : "Blog 3 description"
-        //photo       : "https://images.unsplash.com/photo-1570655565594-9a0161dd16eb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"
-    },
-    {
-        name        : "Blog4",
-        description : "Blog 4 description"
-        //photo       : "https://images.unsplash.com/photo-1539798488725-7387f3229c49?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-    }
-];
+// api is your functions name, and you will pass main as
+// a parameter
+exports.api = functions.https.onRequest(app);
 
-exports.getUserBlogs = functions.https.onRequest((req, res) => {
-    if (req.method === "PUT") {
-		res.status(403).send("Forbidden!");
-		return;
-    }
-    cors(req, res, () => {
-        var object = data[0];
-        res.status(200).send(object);
-	});
+// ============================================================================
+// Get welcome blog
+// ============================================================================
+app.get('/blogs/welcome', (req, res) => {
+    db.collection("blogs").doc('welcome').get().then(doc => {
+        if (doc.exists) {
+           console.log("Document data:", doc.data());
+           res.status(200).send(doc.data());
+       } else {
+           // doc.data() will be undefined in this case
+           console.log("No such document!");
+       }
+     })
+     .catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
+});
+
+// ============================================================================
+// Get user blogs
+// ============================================================================
+app.get('/blogs/user/:uid', (req, res) => {
+    const uid = req.params.uid;
+
+    db.collection("blogs").doc(uid).get().then(doc => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            res.status(200).send(doc.data());
+       } else {
+           // doc.data() will be undefined in this case
+           console.log("No such document");
+       }
+    }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
 });

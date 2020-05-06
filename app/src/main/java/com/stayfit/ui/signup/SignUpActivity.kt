@@ -26,8 +26,6 @@ class SignUpActivity : BaseHTTPAction() {
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance();
 
-    private val FIREBASE_CLOUD_FUNCTION_ISERT_BLOG = "$baseURL/insertWelcomeBlog"
-
     /**
      *
      */
@@ -79,7 +77,6 @@ class SignUpActivity : BaseHTTPAction() {
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 writeNewUser()
-                                insertWelcomeBlog()
                                 Log.d(TAG, "Email sent.")
                                 Toast.makeText(this, "Registered successfully. Please verify your email address.",
                                     Toast.LENGTH_SHORT).show()
@@ -133,20 +130,6 @@ class SignUpActivity : BaseHTTPAction() {
         } catch (e:Exception) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
-    }
-
-
-
-    private fun insertWelcomeBlog()
-    {
-        val httpBuilder = HttpUrl.parse(FIREBASE_CLOUD_FUNCTION_ISERT_BLOG)!!.newBuilder()
-
-        val data = FormEncodingBuilder()
-            .add("user_id", mAuth.uid)
-            .build()
-
-        sendPostToCloudFunction(httpBuilder, data)
-        println(">>>>>>> Blog inserted!")
     }
 
     override fun responseRunnable(responseStr: String?): Runnable?
