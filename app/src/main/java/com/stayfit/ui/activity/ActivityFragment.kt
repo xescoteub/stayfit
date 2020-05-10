@@ -40,7 +40,6 @@ class ActivityFragment : Fragment() {
     private lateinit var viewModel: ActivityViewModel
     var theDate: TextView ?= null
     var mCalendarView:android.widget.CalendarView ?= null
-    //private lateinit var events:HashMap<String,ArrayList<Routine>>
     private lateinit var mAuth: FirebaseAuth
 
     // Access a Cloud Firestore instance from your Activity
@@ -52,12 +51,9 @@ class ActivityFragment : Fragment() {
     ): View? {
         var view:View = inflater.inflate(R.layout.calendar_fragment, container, false)
         Log.d(TAG, "onCreateView: CalendarAcrivity created...")
-        //events = HashMap()
-        mAuth = FirebaseAuth.getInstance()
+        //mAuth = FirebaseAuth.getInstance()
 
-
-
-        //dayPicker(view)
+        dayPicker(view)
 
         return view
     }
@@ -68,19 +64,19 @@ class ActivityFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    /*fun dayPicker(view:View){
+    fun dayPicker(view:View){
         mCalendarView = view.findViewById(R.id.calendarView)
 
         var date: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
         date = date + " EVENTS :"
         theDate = view.findViewById(R.id.datePicker)
         theDate!!.setText("" + date)
-        if (!events.containsKey(date)) {
+        /*if (!events.containsKey(date)) {
             Toast.makeText(activity, "No events", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT).show()
             //showList(date)
-        }
+        }*/
 
         mCalendarView!!.setOnDateChangeListener(CalendarView.OnDateChangeListener { calendarView, year, month, dayOfMonth ->
             if (dayOfMonth.toString().length == 1) {
@@ -89,25 +85,23 @@ class ActivityFragment : Fragment() {
                         "0" + dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date)
-                    if (!events.containsKey(date)) {
+                    /*if (!events.containsKey(date)) {
                         Toast.makeText(activity, "No events", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT).show()
                         //showList(date)
-                    }
+                    }*/
                 } else {
                     var date: String =
                         "0" + dayOfMonth.toString() + "-" + (month + 1) + "-" + year + " EVENTS :"
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date)
-                    if (!events.containsKey(date)) {
+                    /*if (!events.containsKey(date)) {
                         Toast.makeText(activity, "No events", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT).show()
                         //showList(date)
-                    }
+                    }*/
                 }
             } else {
                 if (month.toString().length == 1) {
@@ -115,73 +109,29 @@ class ActivityFragment : Fragment() {
                         dayOfMonth.toString() + "-" + "0" + (month + 1) + "-" + year + " EVENTS :"
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date)
-                    if (!events.containsKey(date)) {
+                    /*if (!events.containsKey(date)) {
                         Toast.makeText(activity, "No events", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT).show()
                         //showList(date)
-                    }
+                    }*/
                 } else {
                     var date: String =
                         dayOfMonth.toString() + "-" + (month + 1) + "-" + year + " EVENTS :"
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date)
-                    if (!events.containsKey(date)) {
+                    /*if (!events.containsKey(date)) {
                         Toast.makeText(activity, "No events", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(activity, "Events avaliable", Toast.LENGTH_SHORT).show()
                         //showList(date)
-                    }
+                    }*/
                 }
             }
         })
 
-    }*/
-
-    fun addEvent(year:String,month:String,dayOfMonth:String,routine:Routine){
-
-        val dateEvent = "$dayOfMonth-$month-$year"
-
-        val currentUser = mAuth.currentUser.toString()
-        db.collection("events").document(currentUser).collection("myEvents").get().addOnSuccessListener { result ->
-            var eventAdded = false
-            for(day in result){
-                if(day.id == dateEvent){
-                    db.collection("events").document(currentUser).collection("myEvents").document(dateEvent).collection("myRoutines").get().addOnSuccessListener { result2 ->
-                        var alreadyExistsRoutine = false
-                        for(routine in result2) {
-                            if (routine.toObject(Routine::class.java).equals(routine)) {
-                                alreadyExistsRoutine = true
-                            }
-                        }
-                        if(!alreadyExistsRoutine){
-                            db.collection("events").document(currentUser).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routine)
-                                .addOnSuccessListener { Log.d(TAG,"Routine SUCCESSFULLY added") }
-                        }else{
-                            Log.d(TAG,"Routine ALREADY added")
-                        }
-                        eventAdded=true
-                    }
-                        .addOnFailureListener{ e-> Log.w(TAG,"Error writting document", e) }
-                }
-            }
-            if(!eventAdded){
-                db.collection("events").document(currentUser).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routine)
-                    .addOnSuccessListener { Log.d(TAG,"Routine SUCCESSFULLY added") }
-            }
-        }
-            .addOnFailureListener{ e-> Log.w(TAG,"Error writting document", e) }
     }
 
-    fun loadEvents(){
-
-    }
-
-    fun saveEvents(){
-
-    }
 
     /*private fun showList(eventDay:String) {
         recyclerCalendar.layoutManager = LinearLayoutManager(activity)

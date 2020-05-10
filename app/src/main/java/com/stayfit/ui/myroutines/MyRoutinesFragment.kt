@@ -16,11 +16,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stayfit.R
 import com.stayfit.ui.activity.ActivityFragment
-import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
 import java.lang.reflect.Type
 
@@ -28,17 +29,24 @@ import java.lang.reflect.Type
 class   MyRoutinesFragment: Fragment(){
     lateinit var routinesList: ArrayList<Routine>
     var routineSelected:Routine ?= null
-    var calendarEvents:ActivityFragment ?= null
+    //var calendarEvents:ActivityFragment ?= null
 
     companion object {
         fun newInstance() = MyRoutinesFragment()
     }
     private val TAG = "MyRoutinesFragment"
     private lateinit var viewModel: MyRoutinesViewModel
+    private lateinit var mAuth: FirebaseAuth
+
+    // Access a Cloud Firestore instance from your Activity
+    val db = FirebaseFirestore.getInstance()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         var view:View = inflater.inflate(R.layout.fragment_my_routines, container, false)
         Log.d(TAG, "onCreateView: MyRoutinesFragment created...")
+
+        mAuth = FirebaseAuth.getInstance()
 
         var button: ImageView = view.findViewById(R.id.ic_deleteRoutine)
         button.setOnClickListener { deleteRoutine() }
@@ -66,8 +74,8 @@ class   MyRoutinesFragment: Fragment(){
 
                 adb.setNegativeButton("Cancel", null)
                 adb.setPositiveButton("Ok") { dialog, which ->
-                    calendarEvents?.addEvent(year.text.toString(),month.text.toString() ,day.text.toString(),routinesList.get(position))
-                    Toast.makeText(activity,"Event added",Toast.LENGTH_SHORT).show()
+
+                    addEvent(year.text.toString(),month.text.toString() ,day.text.toString(),routinesList.get(position))
                 }
                 adb.setTitle("Select a day to set the event")
                 adb.setView(mView)
@@ -203,5 +211,89 @@ class   MyRoutinesFragment: Fragment(){
     }
 
 
+    fun addEvent(year:String,month:String,dayOfMonth:String,routine:Routine){
 
+        val dateEvent = "$dayOfMonth-$month-$year"
+
+
+        val currentUserID = mAuth.currentUser?.uid.toString()
+
+        db.collection("events").get()
+            .addOnSuccessListener { result ->
+                var userFound = false
+                for(user in result){
+                    if(user.id.equals(currentUserID)){
+                        userFound=true
+                    }
+                }
+                if(userFound){
+                    db.collection("events").document(currentUserID).collection("myEvents").get()
+                        .addOnSuccessListener { result2 ->
+                            var dateEventFound = false
+                            for(dayEvent in result2){
+                                if(dayEvent.id.equals(dateEvent)){
+                                    dateEventFound = true
+                                }
+                            }
+                            if(dateEventFound){
+                                db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").get()
+                                    .addOnSuccessListener { result3 ->
+                                        var routineAlreadyAdded = false
+                                        for(routinesR in result3){
+                                            if(routinesR.id.equals(routine.name)){
+                                                routineAlreadyAdded = true
+                                            }
+                                        }
+                                        if(routineAlreadyAdded){
+                                            Log.d(TAG,"Event already added.")
+                                            Toast.makeText(activity,"Event ${routine.name} already added",Toast.LENGTH_SHORT).show()
+                                        }else{
+                                            //Adding User Event Routine
+                                            val dataRoutine = HashMap<String, String>()
+                                            dataRoutine["routine"] = routine.name //Ha de ser un object
+                                            db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(dataRoutine)
+                                            Log.d(TAG,"Event added.")
+                                            Toast.makeText(activity,"Event ${routine.name} added",Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    .addOnFailureListener{ e3 ->
+                                        Log.w(TAG,"Error getting getting data",e3)
+                                    }
+                            }else{
+                                //Adding User Event day
+                                val dataEvent = HashMap<String, String>()
+                                dataEvent["event_Day"] = dateEvent
+                                db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).set(dataEvent)
+                                //Adding User Event Routine
+                                val dataRoutine = HashMap<String, String>()
+                                dataRoutine["routine"] = routine.name //Ha de ser un object
+                                db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(dataRoutine)
+                                Log.d(TAG,"Event added.")
+                                Toast.makeText(activity,"Event ${routine.name} added",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .addOnFailureListener{ e2 ->
+                            Log.w(TAG,"Error getting getting data",e2)
+                        }
+                }else{
+                    //Adding User credentials
+                    val dataUser = HashMap<String, String>()
+                    dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
+                    db.collection("events").document(currentUserID).set(dataUser)
+                    //Adding User Event day
+                    val dataEvent = HashMap<String, String>()
+                    dataEvent["event_Day"] = dateEvent
+                    db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).set(dataEvent)
+                    //Adding User Event Routine
+                    val dataRoutine = HashMap<String, String>()
+                    dataRoutine["routine"] = routine.name //Ha de ser un object
+                    db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(dataRoutine)
+                    Log.d(TAG,"Event added.")
+                    Toast.makeText(activity,"Event ${routine.name} added",Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG,"Error getting getting data",e)
+            }
+    }
 }
