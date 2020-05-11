@@ -2,7 +2,9 @@ package com.stayfit.ui.myroutines
 
 import com.stayfit.ui.workouts.exercises.Exercise
 
-data class Routine(var name: String, var description: String, var photo: String, var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>>){
+data class Routine(var name: String = "", var description: String = "", var photo: String = "", var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>>? = null)
+
+/*data class Routine(var name: String, var description: String, var photo: String, var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>>){
     fun getParametersList(): ArrayList<String>{
         var list: ArrayList<String> = ArrayList()
         list.add(name)
@@ -21,3 +23,4 @@ data class Routine(var name: String, var description: String, var photo: String,
         return name
     }
 }
+*/

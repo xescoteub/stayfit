@@ -123,18 +123,46 @@ class   MyRoutinesFragment: Fragment(){
 
     fun startConcreteRoutine(r: Routine){
         val intent = Intent(activity, RoutineActivity::class.java)
-        intent.putExtra("routine_map",r.getExercisesList());
+        intent.putExtra("routine_map",r.hashMapExercises);
         startActivity(intent)
     }
-    private fun saveData(){
+    private fun saveData(r: Routine){
+        /*
         var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sharedPreferences.edit()
         var gson: Gson = Gson()
         var jsonRoutines: String = gson.toJson(routinesList)
         editor.putString("routines list", jsonRoutines)
-        editor.apply()
+        editor.apply()*/
+        val currentUserID = mAuth.currentUser?.uid.toString()
+
+        db.collection("routines").get()
+            .addOnSuccessListener { result ->
+                var userFound = false
+                for(user in result){
+                    if(user.id.equals(currentUserID)){
+                        userFound=true
+                    }
+                }
+                if(userFound){
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(r)
+                }else{
+                    //Adding User credentials
+                    val dataUser = HashMap<String, String>()
+                    dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
+                    db.collection("routines").document(currentUserID).set(dataUser)
+                    //Adding User Routine
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(r)
+                    Log.d(TAG,"Routine added.")
+                    Toast.makeText(activity,"Event ${r.name} added",Toast.LENGTH_SHORT).show()
+                }
+    }
+    .addOnFailureListener{ e ->
+        Log.w(TAG,"Error getting getting data",e)
+    }
     }
     private fun loadData(){
+        /*
         var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
         var gson: Gson = Gson()
         var jsonRoutines: String? = sharedPreferences.getString("routines list", null)
@@ -142,7 +170,20 @@ class   MyRoutinesFragment: Fragment(){
         routinesList = gson.fromJson(jsonRoutines,typeRoutine)
         if (routinesList == null) {
             routinesList = ArrayList()
-        }
+        } */
+        val user = mAuth.currentUser?.uid.toString()
+        db.collection("routines").document(user).collection("MyRoutines")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    routinesList.add(document.toObject(Routine::class.java))
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting documents: ", exception)
+            }
+
     }
     private fun deleteRoutine() {
         myroutinesRecycler.adapter = RoutineAdapter(routinesList)
@@ -155,7 +196,7 @@ class   MyRoutinesFragment: Fragment(){
                 adb.setNegativeButton("Cancel", null)
                 adb.setPositiveButton("Ok") { dialog, which ->
                     routinesList.removeAt(position)
-                    saveData()
+                    //saveData()
                     showList()
                 }
                 adb.show()
@@ -167,7 +208,7 @@ class   MyRoutinesFragment: Fragment(){
     }
     private fun addRoutine(r: Routine){
         routinesList.add(r)
-        saveData()
+        saveData(r)
     }
 
     private fun newRoutine(view: View) {
@@ -197,7 +238,7 @@ class   MyRoutinesFragment: Fragment(){
     fun findRoutineByName(name: String): Routine{
         var routine:Routine ?= null
         for (r in routinesList){
-            if (name.equals(r.getNameRoutine())){
+            if (name.equals(r.name)){
                 routine = r
             }
         }
@@ -206,7 +247,7 @@ class   MyRoutinesFragment: Fragment(){
 
     fun getRoutinesNamesList(): ArrayList<String>{
         var namesRoutines: ArrayList<String> = ArrayList()
-        for (r in routinesList){ namesRoutines.add(r.getNameRoutine())}
+        for (r in routinesList){ namesRoutines.add(r.name)}
         return namesRoutines
     }
 

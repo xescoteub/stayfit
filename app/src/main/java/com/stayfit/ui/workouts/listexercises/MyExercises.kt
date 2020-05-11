@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
@@ -12,6 +13,8 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stayfit.R
@@ -28,9 +31,15 @@ class MyExercises : AppCompatActivity() {
     var arrayList: ArrayList<String> = ArrayList()
     //create ArrayList of String
     var exerciseList: ArrayList<Exercise> = ArrayList()
+
+    // Access a Cloud Firestore instance from your Activity
+    val db = FirebaseFirestore.getInstance()
+    private val TAG = "MyExercises"
+    private lateinit var mAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_exercises)
+        mAuth = FirebaseAuth.getInstance()
         listView = findViewById<ListView>(R.id.my_exercises_list)
         controlListView()
     }
@@ -61,7 +70,7 @@ class MyExercises : AppCompatActivity() {
     fun addExercise(exercise: Exercise){
         exerciseList.add(exercise)
         arrayList.add(exercise.getExerciseName())
-        saveData()
+        saveData(exercise)
     }
 
     fun newExercise(view: View) {
@@ -78,31 +87,68 @@ class MyExercises : AppCompatActivity() {
             }
         }
     }
-    private fun saveData(){
-        var sharedPreferences:SharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
-        var editor: SharedPreferences.Editor = sharedPreferences.edit()
-        var gson: Gson = Gson()
-        var jsonNames: String = gson.toJson(arrayList)
-        var jsonExercise: String = gson.toJson(exerciseList)
-        editor.putString("exercise name list", jsonNames)
-        editor.putString("exercise list", jsonExercise)
-        editor.apply()
+    private fun saveData(e: Exercise){
+        val exercise = hashMapOf(
+            "nom_exercise" to e.nom_exercise,
+            "url_video" to e.url_video,
+            "time_count" to e.time_count,
+            "jason" to e.jason,
+            "description" to e.description
+        )
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        db.collection("myexercises").get()
+            .addOnSuccessListener { result ->
+                var userFound = false
+                for(user in result){
+                    if(user.id.equals(currentUserID)){
+                        userFound=true
+                    }
+                }
+                if(userFound){
+                    db.collection("myexercises").document(currentUserID).collection("exercicis").document(e.nom_exercise!!).set(exercise)
+                }else{
+                    //Adding User credentials
+                    val dataUser = HashMap<String, String>()
+                    dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
+                    db.collection("myexercises").document(currentUserID).set(dataUser)
+                    //Adding User Routine
+                    db.collection("myexercises").document(currentUserID).collection("exercicis").document(e.nom_exercise!!).set(exercise)
+                    Log.d(TAG,"Exercise added.")
+                    Toast.makeText(this,"Exercise ${e.nom_exercise} added",Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG,"Error getting getting data",e)
+            }
+
     }
     private fun loadData(){
-        var sharedPreferences:SharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
-        var gson: Gson = Gson()
-        var jsonNames: String? = sharedPreferences.getString("exercise name list", null)
-        var jsonExercise: String? = sharedPreferences.getString("exercise list",null)
-        val typeName:Type = object : TypeToken<ArrayList<String?>?>() {}.type
-        val typeExercise:Type = object : TypeToken<ArrayList<Exercise?>?>() {}.type
-        arrayList = gson.fromJson(jsonNames, typeName)
-        exerciseList = gson.fromJson(jsonExercise,typeExercise)
-        if (arrayList == null) {
-            arrayList = ArrayList()
-        }
-        if (exerciseList == null) {
-            exerciseList = ArrayList()
-        }
+        val user = mAuth.currentUser?.uid.toString()
+        db.collection("myexercises").document(user).collection("exercicis")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+
+                    val exerciseObj = document.data as HashMap<*, *>
+                    val exercise = Exercise()
+
+                    with(exercise) {
+                        nom_exercise    = exerciseObj["nom_exercise"].toString()
+                        url_video = exerciseObj["url_video"].toString()
+                        time_count  = exerciseObj["time_count"].toString()
+                        jason = exerciseObj["jason"].toString()
+                        description  = exerciseObj["description"].toString()
+                    }
+                    Log.d(TAG, "exercise: $exercise")
+                    exerciseList.add(exercise)
+                    Log.d(TAG, "exerciseList: $exerciseList")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting documents: ", exception)
+            }
+
     }
     fun deleteItem(view: View?) {
         listView?.onItemClickListener = OnItemClickListener { a, v, position, id ->
@@ -115,50 +161,21 @@ class MyExercises : AppCompatActivity() {
             ) { dialog, which ->
                 arrayList.removeAt(position)
                 exerciseList.removeAt(position)
-                saveData()
+                //saveData()
                 controlListView()
             }
             adb.show()
         }
     }
-
     /*
-    private fun saveLists() {
-        try {
-            val file: File = Environment.getExternalStorageDirectory()
-            val filename = File(file, "name_my_exercises")
-            val fileExercises = File(file, "my_exercises")
-            var fosName = FileOutputStream(filename)
-            var fosExercise = FileOutputStream(fileExercises)
-            var outName = ObjectOutputStream(fosName)
-            var outExercise = ObjectOutputStream(fosExercise)
-            outName.writeObject(arrayList)
-            outExercise.writeObject(exerciseList)
-            outName.close()
-            outExercise.close()
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        }
-    }
-
-    private fun readLists() {
-        try {
-            val file: File = Environment.getExternalStorageDirectory()
-            val filename = File(file, "name_my_exercises")
-            val fileExercises = File(file, "my_exercises")
-            var fisName = FileInputStream(filename)
-            var fisExercise = FileInputStream(fileExercises)
-            var inName = ObjectInputStream(fisName)
-            var inExercise = ObjectInputStream(fisExercise)
-            arrayList = inName.readObject() as ArrayList<String>
-            exerciseList = inExercise.readObject() as ArrayList<Exercise>
-            inName.close()
-            inExercise.close()
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        } catch (ex: ClassNotFoundException) {
-            ex.printStackTrace()
-        }
+    fun getParametersList(exercise: Exercise): ArrayList<String>{
+        var list: ArrayList<String> = ArrayList()
+        list.add(exercise.nom_exercise!!)
+        list.add(exercise.url_video!!)
+        list.add(exercise.time_count!!)
+        list.add(exercise.jason!!)
+        list.add(exercise.description!!)
+        return list
     }*/
 }
 

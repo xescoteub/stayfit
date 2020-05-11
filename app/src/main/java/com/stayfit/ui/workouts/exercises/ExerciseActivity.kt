@@ -84,7 +84,7 @@ class ExerciseActivity: AppCompatActivity() {
         if (time==0){
             txt_time.setText(parameterIntent[4]) // set description
             txt_time.textSize = (14).toFloat()
-            txt_time.setTextColor(Color.BLACK)
+            //txt_time.setTextColor(Color.BLACK)
             progBar.visibility = View.GONE
         }else{
             progressBar = findViewById<ProgressBar>(R.id.progressBar_exercise)
