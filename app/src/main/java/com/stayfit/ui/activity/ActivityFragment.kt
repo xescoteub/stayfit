@@ -110,7 +110,7 @@ class ActivityFragment : Fragment() {
         })
 
     }
-
+ 
     private fun checkForEvents(date:String){
         val currentUserID = mAuth.currentUser?.uid.toString()
 
