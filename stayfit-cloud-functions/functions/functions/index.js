@@ -67,6 +67,7 @@ app.get('/blogs/welcome', (req, res) => {
 app.get('/blogs/user/:uid', (req, res) => {
     const uid = req.params.uid;
 
+    /*
     db.collection("blogs").doc(uid).get().then(doc => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
@@ -76,4 +77,42 @@ app.get('/blogs/user/:uid', (req, res) => {
            console.log("No such document");
        }
     }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
+    */
+
+    // Variable used to hold user blogs
+    let blogs = [];
+
+    // Get blogs database collection
+    let blogsRef = db.collection('blogs');
+
+    // Query blogs that where user_id equals the one from request(uid)
+    let query = blogsRef.where('user_id', '==', uid).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+
+        // Push snapshot documents into blogs array, and send a 200 response to client
+        snapshot.forEach(doc => {
+          blogs.push(doc.data());
+          console.log(doc.id, '=>', doc.data());
+        });
+      })
+      .catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
+
+      // Get welcome blog
+      blogsRef.doc('welcome').get().then(doc => {
+        if (doc.exists) {
+           console.log("Document data:", doc.data());
+           blogs.push(doc.data());
+           res.status(200).send(blogs);
+       } else {
+           // doc.data() will be undefined in this case
+           console.log("No such document!");
+       }
+     })
+     .catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+
+    //res.status(200).send(blogs);
 });

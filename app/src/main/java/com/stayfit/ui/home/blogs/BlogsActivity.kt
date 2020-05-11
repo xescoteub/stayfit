@@ -117,6 +117,7 @@ class BlogsActivity : BaseHTTPAction() {
             val httpBuilder = HttpUrl.parse("$FIREBASE_CLOUD_FUNCTION_BASE_URL/user/${mAuth.uid}/blogs")!!.newBuilder()
             val response = sendGetToCloudFunction(httpBuilder)
             Log.d("response: ", response.toString())
+
         }
 
     /**

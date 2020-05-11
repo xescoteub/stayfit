@@ -106,7 +106,6 @@
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
-            android:background="?attr/cardColor"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_marginStart="0dp"
