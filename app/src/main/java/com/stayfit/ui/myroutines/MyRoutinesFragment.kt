@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stayfit.R
 import com.stayfit.ui.activity.ActivityFragment
+import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
 import java.lang.reflect.Type
 
@@ -135,7 +136,12 @@ class   MyRoutinesFragment: Fragment(){
         editor.putString("routines list", jsonRoutines)
         editor.apply()*/
         val currentUserID = mAuth.currentUser?.uid.toString()
-
+        val routine = hashMapOf(
+            "name" to r.name,
+            "description" to r.description,
+            "photo" to r.photo,
+            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { hashMapToArrayList(it) }
+        )
         db.collection("routines").get()
             .addOnSuccessListener { result ->
                 var userFound = false
@@ -145,16 +151,16 @@ class   MyRoutinesFragment: Fragment(){
                     }
                 }
                 if(userFound){
-                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(r)
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(routine)
                 }else{
                     //Adding User credentials
                     val dataUser = HashMap<String, String>()
                     dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
                     db.collection("routines").document(currentUserID).set(dataUser)
                     //Adding User Routine
-                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(r)
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(routine)
                     Log.d(TAG,"Routine added.")
-                    Toast.makeText(activity,"Event ${r.name} added",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Routine ${r.name} added",Toast.LENGTH_SHORT).show()
                 }
     }
     .addOnFailureListener{ e ->
@@ -176,8 +182,20 @@ class   MyRoutinesFragment: Fragment(){
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    routinesList.add(document.toObject(Routine::class.java))
                     Log.d(TAG, "${document.id} => ${document.data}")
+                    val routineObj = document.data as HashMap<*, *>
+                    val routine = Routine()
+                    var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+                    h["exercises"] = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
+                    with(routine) {
+                        name    = routineObj["name"].toString()
+                        description  = routineObj["description"].toString()
+                        photo   = routineObj["photo"].toString()
+                        hashMapExercises  = h
+                    }
+                    Log.d(TAG, "routine: $routine")
+                    routinesList.add(routine)
+                    Log.d(TAG, "routineList: $routinesList")
                 }
             }
             .addOnFailureListener { exception ->
@@ -336,5 +354,12 @@ class   MyRoutinesFragment: Fragment(){
             .addOnFailureListener{ e ->
                 Log.w(TAG,"Error getting getting data",e)
             }
+    }
+    fun hashMapToArrayList(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        for (parametersExercise in exercises) {
+                arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+        }
+        return arrayList
     }
 }
