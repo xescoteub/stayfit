@@ -89,16 +89,23 @@
         android:text="Background: "
         android:textSize="20sp"
         android:padding="10dp"/>
-
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:srcCompat="@drawable/blog_5"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/txt_background_routine"
+        android:id="@+id/linearForm"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/blog_5"
         android:id="@+id/img_selected"
-        android:layout_marginTop="20dp"/>
-
+        android:layout_gravity="center_horizontal|top"
+        />
+    </FrameLayout>
     <ImageView
         android:id="@+id/btn_select_image"
         android:layout_width="50dp"
