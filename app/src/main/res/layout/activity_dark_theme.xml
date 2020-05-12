@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Settings"
+        android:textStyle="bold"
         android:textSize="35dp"
         android:layout_marginTop="5dp"/>
     <View
@@ -18,6 +19,14 @@
         android:background="@color/colorPrimary"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Screen"
+        android:textSize="24dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"/>
     <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +34,64 @@
         android:text="Activate / Desactivate Dark Theme"
         android:layout_marginTop="10dp"
         android:textSize="16dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="7dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorPrimary"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Account"
+        android:textSize="24dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"/>
+    <Button
+        android:id="@+id/bttnChangeEmail"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:text="Change email"
+        android:textSize="16dp"
+        android:textAlignment="textStart" />
+    <Button
+        android:id="@+id/bttnChangePasswd"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:text="Change password"
+        android:textSize="16dp"
+        android:textAlignment="textStart" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
+
+    <Button
+        android:id="@+id/exitApp"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/transparent"
+        android:text="Exit StayFit"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="#D64747"
+        android:textSize="16dp" />
 </LinearLayout>
