@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.webkit.URLUtil
 import android.widget.ProgressBar
@@ -17,9 +18,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
 import com.stayfit.ui.myroutines.MyRoutinesFragment
 import com.stayfit.ui.myroutines.MyRoutinesViewModel
+import com.stayfit.ui.myroutines.Routine
 
 
 class ExerciseActivity: AppCompatActivity() {
@@ -29,10 +33,15 @@ class ExerciseActivity: AppCompatActivity() {
     var title:TextView? = null
     private var delay:Delay = Delay(3000, 1000)
     var url_video: String = ""
+    private lateinit var mAuth: FirebaseAuth
+    // Access a Cloud Firestore instance from your Activity
+    val db = FirebaseFirestore.getInstance()
+    private val TAG = "ExerciseActivity"
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
+        mAuth = FirebaseAuth.getInstance()
         title = findViewById<TextView>(R.id.txt_exercise)
         val intent:Intent = intent
         managerParametersIntent(intent.getStringArrayListExtra("exercise_name"))
@@ -102,35 +111,49 @@ class ExerciseActivity: AppCompatActivity() {
     }
 
     fun addToRoutine(view: View) {
-        //var routinesFragment = supportFragmentManager.findFragmentById(R.id.navigation_myroutines) as MyRoutinesFragment
-
+        var routinesList: ArrayList<Routine> = ArrayList()
+        val user = mAuth.currentUser?.uid.toString()
+        db.collection("routines").document(user).collection("MyRoutines")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val routineObj = document.data as HashMap<*, *>
+                    val routine = Routine()
+                    var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+                    h["exercises"] = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
+                    with(routine) {
+                        name    = routineObj["name"].toString()
+                        description  = routineObj["description"].toString()
+                        photo   = routineObj["photo"].toString()
+                        hashMapExercises  = h
+                    }
+                    Log.d(TAG, "routine: $routine")
+                    routinesList.add(routine)
+                    Log.d(TAG, "routineList: $routinesList")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting documents: ", exception)
+            }
         // setup the alert builder
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Choose a routine")
         builder.setIcon(R.drawable.ic_assignment_purple)
         // add a list
-        //val routines = routinesFragment.getRoutinesNamesList()
-        val model = ViewModelProviders.of(this)[MyRoutinesViewModel::class.java]
-        val routines = model.getRoutines()
-        val rs: Array<CharSequence> = routines.toArray(arrayOfNulls<CharSequence>(routines.size))
+        var names = getRoutinesNamesList(routinesList)
+        val rs: Array<CharSequence> = names.toArray(arrayOfNulls<CharSequence>(names.size))
         builder.setItems(rs,
             DialogInterface.OnClickListener { dialog, which ->
                 Toast.makeText(this,"Funciona",Toast.LENGTH_SHORT).show()
             })
-
-
-        /*val animals = arrayOf("LegRoutine", "Biceps and Triceps", "Calisthenic's routine", "Cardio", "Shoulder")
-        builder.setItems(animals) { dialog, which ->
-            when (which) {
-                0 -> { /* horse */ }
-                1 -> { /* cow   */ }
-                2 -> { /* camel */ }
-                3 -> { /* sheep */ }
-                4 -> { /* goat  */ }
-            }
-        }*/
         // create and show the alert dialog
         val dialog = builder.create()
         dialog.show()
+    }
+
+    fun getRoutinesNamesList(routinesList: ArrayList<Routine>): ArrayList<String>{
+        var namesRoutines: ArrayList<String> = ArrayList()
+        for (r in routinesList){ namesRoutines.add(r.name)}
+        return namesRoutines
     }
 }
