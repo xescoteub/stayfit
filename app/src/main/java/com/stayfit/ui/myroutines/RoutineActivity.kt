@@ -19,6 +19,9 @@ import com.stayfit.MainActivity
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
 import com.stayfit.ui.workouts.exercises.ExerciseActivity
+import com.stayfit.ui.workouts.listexercises.*
+import com.stayfit.ui.workouts.menu.ArmMenu
+import com.stayfit.ui.workouts.menu.ExtraMenu
 import java.lang.Exception
 import java.lang.reflect.Type
 
@@ -70,8 +73,23 @@ class RoutineActivity : AppCompatActivity() {
     fun startExercises(view: View) {}
 
     fun startWorkouts(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Choose a category")
+        val categories = arrayOf("ARM","LEG","ABS","CHEST","BACK","EXTRA","MY EXERCISES")
+        builder.setItems(categories) { dialog, which ->
+            when (which) {
+                0 -> { startArmMenu() }
+                1 -> { startLegExercises() }
+                2 -> { startAbsExercises() }
+                3 -> {startChestExercises() }
+                4 -> { startBackExercises() }
+                5 -> {startExtraMenu() }
+                6 -> { startMyExercisesMenu() }
+            }
+        }
+        // create and show the alert dialog
+        val dialog = builder.create()
+        dialog.show()
     }
 
     fun deleteItem(view: View) {
@@ -125,5 +143,34 @@ class RoutineActivity : AppCompatActivity() {
         if (arrayNames == null) {
             arrayNames = ArrayList()
         }
+    }
+
+    fun startArmMenu() {
+        val intent = Intent(this, ArmMenu::class.java)
+        startActivity(intent)
+    }
+    fun startLegExercises() {
+        val intent = Intent(this, LegExercises::class.java)
+        startActivity(intent)
+    }
+    fun startAbsExercises() {
+        val intent = Intent(this, AbsExercises::class.java)
+        startActivity(intent)
+    }
+    fun startChestExercises() {
+        val intent = Intent(this, ChestExercises::class.java)
+        startActivity(intent)
+    }
+    fun startBackExercises() {
+        val intent = Intent(this, BackExercises::class.java)
+        startActivity(intent)
+    }
+    fun startExtraMenu() {
+        val intent = Intent(this, ExtraMenu::class.java)
+        startActivity(intent)
+    }
+    fun startMyExercisesMenu() {
+        val intent = Intent(this, MyExercises::class.java)
+        startActivity(intent)
     }
 }
