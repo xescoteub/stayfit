@@ -166,8 +166,11 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_person"/>
+                    android:src="@drawable/ic_email_black_24dp" />
+
                 <TextView
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/profile_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -186,8 +189,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_person"/>
+                    android:src="@drawable/ic_phone_black_24dp"/>
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -206,8 +210,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_person"/>
+                    android:src="@drawable/ic_lock_outline_black_24dp"/>
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
@@ -218,25 +223,14 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/editButton"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:padding="12dp"
-            android:background="@drawable/circle_border"
-            android:backgroundTint="#70000000"
-            android:src="@drawable/ic_edit_black_24dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/social"
+        android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:layout_below="@+id/rellay2"
+        android:layout_marginBottom="70dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

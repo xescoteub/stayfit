@@ -41,7 +41,7 @@ class ProfileFragment : Fragment() {
 
         // poner datos actualizados del usuario
 
-       /* var userid = user?.displayName
+        var userid = user?.displayName
         var username: TextView = view.findViewById(R.id.profile_username)
         username.setText(userid)
 
@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
         useremail.setText(email)
 
 
-        var userphoto: CircleImageView = view.findViewById(R.id.user_image)
+        /*var userphoto: CircleImageView = view.findViewById(R.id.user_image)
         Picasso.get().load(user?.photoUrl).placeholder(R.drawable.ic_person).error(R.drawable.ic_person).into(userphoto) */
 
         /*var bio : TextView = view.findViewById(R.id.profile_bio)
@@ -59,14 +59,12 @@ class ProfileFragment : Fragment() {
 
 
         //GO-TO
-       /* var instabutton: ImageView = view.findViewById(R.id.instaButton)
+       var instabutton: ImageView = view.findViewById(R.id.instaButton)
         instabutton.setOnClickListener { goto_insta() }
 
         var youtubebutton: ImageView = view.findViewById(R.id.youtubeButton)
         youtubebutton.setOnClickListener { goto_youtube() }
 
-        var editbutton: ImageView = view.findViewById(R.id.editButton)
-        editbutton.setOnClickListener { changeto_edit_data() }*/
 
 
         return view
@@ -77,11 +75,6 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         // TODO: Use the ViewModel
     }
-    private fun changeto_edit_data() {
-        val intent = Intent(activity, ProfileEditData::class.java)
-        startActivityForResult(intent, 3);// Activity is started with requestCode 2
-    }
-
 
     fun goto_insta(){
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/"))
@@ -92,12 +85,7 @@ class ProfileFragment : Fragment() {
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UCSRvhTSRmdqNA-FhGBLbzIQ"))
         startActivity(intent)
-
     }
-
-
-
-
 
 
 }

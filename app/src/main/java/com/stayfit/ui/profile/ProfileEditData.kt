@@ -35,7 +35,7 @@ class ProfileEditData : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         var user = mAuth.currentUser
 
-
+        /*
         var email= user?.email
         var useremail : EditText = findViewById<EditText>(R.id.edit_email)
         useremail.setHint(email)
@@ -58,12 +58,12 @@ class ProfileEditData : AppCompatActivity() {
         psswd.setOnClickListener{ change_psswd() }
 
         var photoTxt : TextView = findViewById<TextView>(R.id.change_photo)
-        photoTxt.setOnClickListener{ change_photo() }
+        photoTxt.setOnClickListener{ change_photo() }*/
 
 
     }
 
-    fun change_psswd() {
+    /*fun change_psswd() {
         //muestra un dialog para cambiar la contraseña
         var psswd: EditText = findViewById(R.id.editTextPsswd)
         var psswd_repeat: EditText = findViewById(R.id.editTextRepeat)
@@ -107,7 +107,7 @@ class ProfileEditData : AppCompatActivity() {
         }
         psswdDialog.setNegativeButton("No") { dialog, which -> }
         psswdDialog.show()
-    }
+    }*/
 
     fun change_photo(){
         //Cambia la foto de perfil

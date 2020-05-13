@@ -53,7 +53,18 @@
         android:layout_marginTop="8dp"
         android:textStyle="bold"/>
     <Button
-        android:id="@+id/bttnChangeEmail"
+        android:id="@+id/btnChangeUserName"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:text="Change username"
+        android:textSize="16dp"
+        android:textAlignment="textStart" />
+    <Button
+        android:id="@+id/btnChangeEmail"
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:layout_marginStart="16dp"
@@ -64,7 +75,7 @@
         android:textSize="16dp"
         android:textAlignment="textStart" />
     <Button
-        android:id="@+id/bttnChangePasswd"
+        android:id="@+id/btnChangePasswd"
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:layout_marginStart="16dp"
