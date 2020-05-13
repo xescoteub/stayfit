@@ -11,15 +11,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.squareup.okhttp.HttpUrl
+import com.squareup.okhttp.*
 import com.stayfit.R
-import com.stayfit.config.BaseHTTPAction
 import kotlinx.android.synthetic.main.activity_blogs.*
+import org.json.JSONArray
+import org.json.JSONException
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
-class BlogsActivity : BaseHTTPAction() {
+
+class BlogsActivity : AppCompatActivity() {
 
     private val TAG = "BlogsActivity"
 
@@ -30,6 +32,8 @@ class BlogsActivity : BaseHTTPAction() {
     val blogsRef: DatabaseReference = database.getReference("blogs")
 
     private lateinit var mAuth: FirebaseAuth
+
+    var baseURL = "https://us-central1-stayfit-87c1a.cloudfunctions.net"
 
     private val FIREBASE_CLOUD_FUNCTION_BASE_URL = "$baseURL/api"
 
@@ -57,47 +61,55 @@ class BlogsActivity : BaseHTTPAction() {
         // Create list to hold blogs
         blogList = ArrayList()
 
-        // Fetch blogs list
-        fetchBlogs()
-
-        getUserBlogs
+        getUserBlogs()
     }
 
     /**
-     * Get blogs list from database
+     *
      */
-    private fun fetchBlogs()
+    private fun getUserBlogs()
     {
-        // Read from the database
-        blogsRef.addValueEventListener(object : ValueEventListener {
-            @RequiresApi(Build.VERSION_CODES.KITKAT)
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+        Log.d(TAG, "getUserBlogs")
 
-                val map = dataSnapshot.getValue()
-                Log.d(TAG, "map: ${map}")
+        val client = OkHttpClient()
+        val request: Request = Request.Builder()
+            .url("$FIREBASE_CLOUD_FUNCTION_BASE_URL/blogs/user/${mAuth.uid}")
+            .build()
 
-                dataSnapshot.children.forEach {
-                    val blogObj = it.getValue() as HashMap<*, *>
-                    val blog = Blog()
+        client.newCall(request).enqueue(object : Callback {
 
-                    with(blog) {
-                        name            = blogObj["name"].toString()
-                        description     = blogObj["description"].toString()
-                        photo           = blogObj["banner_image"].toString()
-                    }
-                    Log.d(TAG, "> blog: ${blog}")
-                    blogList.add(blog)
+            override fun onFailure(request: Request?, e: IOException?) {
 
-                    showList();
-                }
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
+            override fun onResponse(response: Response?) {
+                val myResponse: String = response?.body()!!.string()
+                this@BlogsActivity.runOnUiThread(Runnable {
+                    try {
+                        val json = JSONArray(myResponse)
+
+                        // Generate a new blog object for each received document
+                        for (i in 0 until json.length()) {
+                            val item = json.getJSONObject(i)
+                            val blog = Blog()
+                            with(blog) {
+                                name            = item["name"].toString()
+                                description     = item["description"].toString()
+                                photo           = item["image"].toString()
+                            }
+//                            Log.d(TAG, "> blog: ${blog}")
+                            blogList.add(blog)
+
+                            showList();
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                })
             }
         })
     }
+
 
     /**
      * Display list of blogs
@@ -106,26 +118,5 @@ class BlogsActivity : BaseHTTPAction() {
         blogRecycler.layoutManager = LinearLayoutManager(this)
         blogRecycler.addItemDecoration(DividerItemDecoration(this, 1))
         blogRecycler.adapter = BlogAdapter(blogList)
-    }
-
-    /**
-     *
-     */
-    private val getUserBlogs: Unit
-        get() {
-            Log.d(TAG, "getUserBlogs")
-            val httpBuilder = HttpUrl.parse("$FIREBASE_CLOUD_FUNCTION_BASE_URL/user/${mAuth.uid}/blogs")!!.newBuilder()
-            val response = sendGetToCloudFunction(httpBuilder)
-            Log.d("response: ", response.toString())
-
-        }
-
-    /**
-     *
-     */
-    override fun responseRunnable(responseStr: String?): Runnable? {
-        return Runnable {
-            println("User blogs response: $responseStr")
-        }
     }
 }

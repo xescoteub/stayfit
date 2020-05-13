@@ -10,7 +10,7 @@ import java.io.IOException
 
 abstract class BaseHTTPAction : AppCompatActivity() {
 
-    abstract fun responseRunnable(responseStr: String?): Runnable?
+    abstract fun responseRunnable(response: String?): Runnable?
 
     companion object {
         private const val TAG = "BaseAction"
