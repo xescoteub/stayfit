@@ -86,22 +86,21 @@ app.get('/blogs/user/:uid', (req, res) => {
           blogs.push(doc.data());
           console.log(doc.id, '=>', doc.data());
         });
-        res.status(200).send(blogs);
-      })
-      .catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
 
-      // Get welcome blog
-//      blogsRef.doc('welcome').get().then(doc => {
-//        if (doc.exists) {
-//           console.log("Document data:", doc.data());
-//           blogs.push(doc.data());
-//           res.status(200).send(blogs);
-//       } else {
-//           // doc.data() will be undefined in this case
-//           console.log("No such document!");
-//       }
-//     })
-//     .catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+      }).then(() => {
+            // Get welcome blog
+            blogsRef.doc('welcome').get().then(doc => {
+            if (doc.exists) {
+               console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
 
-    //res.status(200).send(blogs);
+            res.status(200).send(blogs);
+
+            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+
+      }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
 });

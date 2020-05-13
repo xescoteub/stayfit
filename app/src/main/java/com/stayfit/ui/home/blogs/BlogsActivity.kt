@@ -97,7 +97,7 @@ class BlogsActivity : AppCompatActivity() {
                                 description     = item["description"].toString()
                                 photo           = item["image"].toString()
                             }
-//                            Log.d(TAG, "> blog: ${blog}")
+                            Log.d(TAG, "> blog: ${blog}")
                             blogList.add(blog)
 
                             showList();
