@@ -186,7 +186,9 @@ class   MyRoutinesFragment: Fragment(){
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-                    h["exercises"] = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
+                    var exercises:ArrayList<Exercise> = routineObj["hashMapExercises"] as ArrayList<Exercise>
+                    Log.d(TAG, "Class ${exercises.javaClass}")
+                    h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>>
                     with(routine) {
                         name    = routineObj["name"].toString()
                         description  = routineObj["description"].toString()
@@ -360,6 +362,13 @@ class   MyRoutinesFragment: Fragment(){
         var arrayList:ArrayList<Exercise> = ArrayList()
         for (parametersExercise in exercises) {
                 arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+        }
+        return arrayList
+    }
+    fun arrayListToHashMap(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
+        var arrayList:ArrayList<ArrayList<String>> = ArrayList()
+        for (ex in exercises) {
+            arrayList.add(ex.getParametersList())
         }
         return arrayList
     }
