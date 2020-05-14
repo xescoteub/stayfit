@@ -18,21 +18,24 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.MainActivity
 import com.stayfit.R
+import com.stayfit.config.BaseHTTPAction
 import kotlinx.android.synthetic.main.activity_daily_exercices.*
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DailyExercisesActivity : AppCompatActivity() {
+class DailyExercisesActivity : BaseHTTPAction() {
 
     private val TAG = "DailyExercisesActivity"
 
@@ -40,6 +43,10 @@ class DailyExercisesActivity : AppCompatActivity() {
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance();
+
+    private lateinit var mAuth: FirebaseAuth
+
+    private val FIREBASE_CLOUD_FUNCTION_BASE_URL = "$baseURL/api"
 
     /**
      * The list of exercises
@@ -118,6 +125,8 @@ class DailyExercisesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mAuth = FirebaseAuth.getInstance()
+
         setContentView(R.layout.activity_daily_exercices)
 
         val pref = applicationContext.getSharedPreferences(
@@ -176,6 +185,7 @@ class DailyExercisesActivity : AppCompatActivity() {
                  */
                 buttonHome!!.setOnClickListener {
                     startActivity(Intent(this, MainActivity::class.java))
+                    insertActivity()
                 }
             }
         }
@@ -401,7 +411,7 @@ class DailyExercisesActivity : AppCompatActivity() {
         Log.d(TAG, "images $images")
 
         // Set exercise image
-        imageView!!.setImageBitmap(getImageBitmap(images!![0]))
+        imageView!!.setImageBitmap(__getImageBitmap(images!![0]))
 
         // Set exercise description header
         textHeader!!.text = exercisesList[position].desc;
@@ -410,7 +420,7 @@ class DailyExercisesActivity : AppCompatActivity() {
     /**
      * Get bitmap from URL
      */
-    private fun getImageBitmap(url: String): Bitmap?
+    private fun __getImageBitmap(url: String): Bitmap?
     {
         var bm: Bitmap? = null
         try {
@@ -426,5 +436,48 @@ class DailyExercisesActivity : AppCompatActivity() {
             Log.e("BlogAdapter", "Error getting bitmap", e)
         }
         return bm
+    }
+
+    override fun responseRunnable(response: String?): Runnable? {
+        TODO("Not yet implemented")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun insertActivity()
+    {
+        val docData = hashMapOf(
+            "user_id" to mAuth.currentUser!!.uid,
+            "date" to LocalDateTime.now()
+        )
+
+        db.collection("daily_exercises")
+            .add(docData)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+            }
+
+
+
+//        val exercise = hashMapOf(
+//            "nom_exercise" to e.nom_exercise,
+//            "url_video" to e.url_video,
+//            "time_count" to e.time_count,
+//            "jason" to e.jason,
+//            "description" to e.description
+//        )
+
+//        val httpBuilder = HttpUrl.parse("$FIREBASE_CLOUD_FUNCTION_BASE_URL/blogs/user/${mAuth.uid}")!!.newBuilder()
+//
+//        val formBody: RequestBody = FormBody.Builder()
+//            .add("user_id", "Your message")
+//            .add("message", "Your message")
+//            .build()
+//
+//        val response = sendPostToCloudFunction(httpBuilder, formBody)
+//        Log.d("response: ", response.toString())
+
     }
 }

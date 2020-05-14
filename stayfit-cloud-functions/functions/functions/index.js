@@ -60,6 +60,15 @@ app.get('/blogs/welcome', (req, res) => {
      })
      .catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
 });
+// ============================================================================
+// Get user blogs
+// ============================================================================
+app.get('/blogs2/user/:uid', async (req, res) => {
+
+});
+
+
+
 
 // ============================================================================
 // Get user blogs
@@ -69,12 +78,24 @@ app.get('/blogs/user/:uid', (req, res) => {
 
     // Variable used to hold user blogs
     let blogs = [];
+    let completedDailyWorkouts = 0;
 
     // Get blogs database collection
-    let blogsRef = db.collection('blogs');
+    let blogsRef        = db.collection('blogs');
+    let dailyWorkoutRef  = db.collection('daily_exercises');
+
+    dailyWorkoutRef.where('user_id', '==', uid).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+
+        completedDailyWorkouts = snapshot.size;
+      });
 
     // Query blogs that where user_id equals the one from request(uid)
-    let query = blogsRef.where('user_id', '==', uid).get()
+    blogsRef.where('user_id', '==', uid).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.');
@@ -84,7 +105,7 @@ app.get('/blogs/user/:uid', (req, res) => {
         // Push snapshot documents into blogs array, and send a 200 response to client
         snapshot.forEach(doc => {
           blogs.push(doc.data());
-          console.log(doc.id, '=>', doc.data());
+          console.log(doc.id, '=>', doc.data().date);
         });
 
       }).then(() => {
@@ -97,9 +118,10 @@ app.get('/blogs/user/:uid', (req, res) => {
                // doc.data() will be undefined in this case
                console.log("No such document!");
             }
+            }).then(() => {
 
+            if ()
             res.status(200).send(blogs);
-
             }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
 
       }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));

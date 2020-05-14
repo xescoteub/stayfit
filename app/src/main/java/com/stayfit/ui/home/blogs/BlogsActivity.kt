@@ -1,16 +1,13 @@
 package com.stayfit.ui.home.blogs
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
 import com.squareup.okhttp.*
 import com.stayfit.R
 import kotlinx.android.synthetic.main.activity_blogs.*
@@ -26,10 +23,6 @@ class BlogsActivity : AppCompatActivity() {
     private val TAG = "BlogsActivity"
 
     lateinit var blogList: ArrayList<Blog>
-
-    val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-
-    val blogsRef: DatabaseReference = database.getReference("blogs")
 
     private lateinit var mAuth: FirebaseAuth
 
@@ -97,7 +90,7 @@ class BlogsActivity : AppCompatActivity() {
                                 description     = item["description"].toString()
                                 photo           = item["image"].toString()
                             }
-                            Log.d(TAG, "> blog: ${blog}")
+                            Log.d(TAG, "> blog : $blog")
                             blogList.add(blog)
 
                             showList();
@@ -109,7 +102,6 @@ class BlogsActivity : AppCompatActivity() {
             }
         })
     }
-
 
     /**
      * Display list of blogs
