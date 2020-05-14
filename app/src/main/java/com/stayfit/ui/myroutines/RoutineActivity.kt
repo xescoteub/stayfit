@@ -115,15 +115,18 @@ class RoutineActivity : AppCompatActivity() {
         }
     }
     fun setTimeBetweenExercises(view: View) {
-        val timeDialog = androidx.appcompat.app.AlertDialog.Builder(this)
-        timeDialog.setView(R.layout.routine_change_time)
-        var editText = findViewById<EditText>(R.id.editTextTime)
+        val timeDialog = AlertDialog.Builder(this)
+        //timeDialog.setView(R.layout.routine_change_time)
+        val mView:View = getLayoutInflater().inflate(R.layout.routine_change_time,null)
+        val editText: EditText = mView.findViewById(R.id.editTextTime)
         timeDialog.setPositiveButton("Apply") { dialog, which ->
-            delayTime = editText!!.text.toString().toInt()
-            Toast.makeText(this, "$delayTime", Toast.LENGTH_SHORT).show()
+            delayTime = editText.text.toString().toInt()
+            //Toast.makeText(this, "$delayTime", Toast.LENGTH_SHORT).show()
         }
         timeDialog.setNegativeButton("Cancel") { dialog, which -> }
-        timeDialog.show()
+        timeDialog.setView(mView)
+        val dialog:AlertDialog =timeDialog.create()
+        dialog.show()
     }
     private fun saveData(){
         var sharedPreferences: SharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)

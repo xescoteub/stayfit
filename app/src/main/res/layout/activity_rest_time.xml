@@ -9,21 +9,33 @@
         android:id="@+id/txt_time_delay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
         android:text="Time"
         android:textSize="30sp"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
         />
 
     <ProgressBar
         android:id="@+id/progressBar_delay"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="396dp"
-        android:layout_height="87dp"
-        android:layout_below="@+id/txt_time_delay"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="42dp"
-        android:max="10"
-        android:progress="10" />
+        android:layout_width="250dp"
+        android:layout_height="273dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="48"
+        android:progress="45"
+        android:progressDrawable="@drawable/circular_progress_bar"/>
+    <Button
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="go to exercise"
+        android:id="@+id/btn_exit"
+        android:layout_below="@+id/progressBar_delay"
+        android:onClick="exit"
+        android:background="@drawable/routine_button"
+        android:textColor="@color/colorWhite"
+        android:layout_margin="35dp"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

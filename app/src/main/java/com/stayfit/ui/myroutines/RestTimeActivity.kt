@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.stayfit.R
@@ -38,10 +39,14 @@ class RestTimeActivity : AppCompatActivity() {
         CountDownTimer(millisInFuture, countDownInterval) {
         override fun onTick(millisUntilFinished: Long) {
             progressBar!!.progress =  (millisUntilFinished / 1000).toInt()
-            text_time!!.setText(progressBar!!.progress.toString()+'"'+"/"+progressBar!!.max.toString()+'"')
+            text_time!!.setText(progressBar!!.progress.toString()+'"')
         }
         override fun onFinish() {
             finish()
         }
+    }
+
+    fun exit(view: View) {
+        finish()
     }
 }
