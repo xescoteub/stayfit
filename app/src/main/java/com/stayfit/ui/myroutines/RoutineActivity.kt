@@ -5,24 +5,18 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.stayfit.MainActivity
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
 import com.stayfit.ui.workouts.exercises.ExerciseActivity
 import com.stayfit.ui.workouts.listexercises.*
 import com.stayfit.ui.workouts.menu.ArmMenu
 import com.stayfit.ui.workouts.menu.ExtraMenu
-import java.lang.Exception
 import java.lang.reflect.Type
 
 
@@ -31,6 +25,7 @@ class RoutineActivity : AppCompatActivity() {
     var listView: ListView?= null
     var arrayList:ArrayList<Exercise> = ArrayList()
     var arrayNames: ArrayList<String> = ArrayList()
+    var delayTime:Int = 20
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +65,17 @@ class RoutineActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun startExercises(view: View) {}
+    fun startExercises(view: View) {
+        for (exercise in arrayList.reversed()){
+            val intent = Intent(this, ExerciseActivity::class.java)
+            intent.putExtra("exercise_name",exercise.getParametersList());
+            startActivity(intent)
+            val intentdelay = Intent(this, RestTimeActivity::class.java)
+            intentdelay.putExtra("delay_time",delayTime);
+            startActivity(intentdelay)
+        }
+        //Toast.makeText(this, "Congratulations!", Toast.LENGTH_SHORT).show()
+    }
 
     fun startWorkouts(view: View) {
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
@@ -112,8 +117,10 @@ class RoutineActivity : AppCompatActivity() {
     fun setTimeBetweenExercises(view: View) {
         val timeDialog = androidx.appcompat.app.AlertDialog.Builder(this)
         timeDialog.setView(R.layout.routine_change_time)
+        var editText = findViewById<EditText>(R.id.editTextTime)
         timeDialog.setPositiveButton("Apply") { dialog, which ->
-            //Actualizar
+            delayTime = editText!!.text.toString().toInt()
+            Toast.makeText(this, "$delayTime", Toast.LENGTH_SHORT).show()
         }
         timeDialog.setNegativeButton("Cancel") { dialog, which -> }
         timeDialog.show()
