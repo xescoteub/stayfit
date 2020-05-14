@@ -90,8 +90,21 @@ app.get('/blogs/user/:uid', (req, res) => {
           console.log('No matching documents.');
           return;
         }
-
         completedDailyWorkouts = snapshot.size;
+
+        // Push motivation blog if completed daily workouts is less than 5
+        if (completedDailyWorkouts < 5) {
+            // Get welcome blog
+            blogsRef.doc('motivation').get().then(doc => {
+            if (doc.exists) {
+               console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
+            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+        }
       });
 
     // Query blogs that where user_id equals the one from request(uid)
@@ -119,9 +132,7 @@ app.get('/blogs/user/:uid', (req, res) => {
                console.log("No such document!");
             }
             }).then(() => {
-
-            if ()
-            res.status(200).send(blogs);
+                res.status(200).send(blogs);
             }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
 
       }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));

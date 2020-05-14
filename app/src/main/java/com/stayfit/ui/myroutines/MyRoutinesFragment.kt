@@ -122,10 +122,11 @@ class   MyRoutinesFragment: Fragment(){
         })
     }
 
-    fun startConcreteRoutine(r: Routine){
-        val intent = Intent(activity, RoutineActivity::class.java)
-        intent.putExtra("routine_map",r.hashMapExercises);
-        startActivity(intent)
+    fun startConcreteRoutine(r: Routine) {
+        Log.d(TAG, ">>> startConcreteRoutine: $r")
+        //val intent = Intent(activity, RoutineActivity::class.java)
+        //intent.putExtra("routine_map",r.hashMapExercises);
+        //startActivity(intent)
     }
     private fun saveData(r: Routine){
         /*
@@ -186,17 +187,22 @@ class   MyRoutinesFragment: Fragment(){
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-                    var exercises:ArrayList<Exercise> = routineObj["hashMapExercises"] as ArrayList<Exercise>
+                    var exercises:ArrayList<ArrayList<String>> = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
+                    Log.d(TAG, ">>> exercises <<<: $exercises")
                     Log.d(TAG, "Class ${exercises.javaClass}")
-                    h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>>
+                    h["exercises"] = exercises
+                    Log.d(TAG, ">>> h <<<: $h")
+
+                    //h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>>
                     with(routine) {
                         name    = routineObj["name"].toString()
                         description  = routineObj["description"].toString()
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
+
+                        Log.d(TAG, "routine: $routine")
+                        routinesList.add(routine)
                     }
-                    Log.d(TAG, "routine: $routine")
-                    routinesList.add(routine)
                     Log.d(TAG, "routineList: $routinesList")
                 }
             }
@@ -372,11 +378,14 @@ class   MyRoutinesFragment: Fragment(){
         }
         return arrayList
     }
-    fun arrayListToHashMap(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
+    // TOOD : return type --> ArrayList<ArrayList<String>>
+    fun arrayListToHashMap(exercises: ArrayList<Exercise>) {
+        Log.d(TAG, "arrayListToHashMap $exercises")
         var arrayList:ArrayList<ArrayList<String>> = ArrayList()
-        for (ex in exercises) {
-            arrayList.add(ex.getParametersList())
+        for (ex in exercises.indices) {
+            Log.d(TAG, ">>> $ex")
+            //arrayList.add(ex.getParametersList())
         }
-        return arrayList
+//        return arrayList
     }
 }
