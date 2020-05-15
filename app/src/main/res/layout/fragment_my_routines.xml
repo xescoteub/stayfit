@@ -34,5 +34,15 @@
         app:srcCompat="@drawable/ic_delete"
         android:layout_marginRight="2dp"
         android:layout_toLeftOf="@+id/ic_addRoutine"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Default Routines"
+        android:id="@+id/btn_default_routines"
+        android:background="@drawable/routine_button"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"/>
 
 </RelativeLayout>

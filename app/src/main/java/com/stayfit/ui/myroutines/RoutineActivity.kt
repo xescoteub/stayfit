@@ -33,6 +33,7 @@ class RoutineActivity : AppCompatActivity() {
         listView = findViewById<ListView>(R.id.routine_list)
         val intent: Intent = this.intent
         val hashMap = intent.getSerializableExtra("routine_map") as HashMap<String, ArrayList<ArrayList<String>>>
+        if (hashMap["exercises"]==null){hashMap["exercises"]=ArrayList()}
         managerParametersIntent(hashMap["exercises"]!!)
         controlListView()
     }

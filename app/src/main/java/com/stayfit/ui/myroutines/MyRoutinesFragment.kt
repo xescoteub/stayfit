@@ -1,9 +1,7 @@
 package com.stayfit.ui.myroutines
 
 import android.app.AlertDialog
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,20 +16,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.stayfit.R
-import com.stayfit.ui.activity.ActivityFragment
 import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
-import java.lang.reflect.Type
 
 
 class   MyRoutinesFragment: Fragment(){
     lateinit var routinesList: ArrayList<Routine>
     var routineSelected:Routine ?= null
     //var calendarEvents:ActivityFragment ?= null
-
+    var exercisesRoutine: ArrayList<ArrayList<Exercise>> ?= null
     companion object {
         fun newInstance() = MyRoutinesFragment()
     }
@@ -101,11 +95,13 @@ class   MyRoutinesFragment: Fragment(){
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MyRoutinesViewModel::class.java)
         routinesList = ArrayList()
+        exercisesRoutine = ArrayList()
         showList()
     }
     private fun showList() {
         try {
             loadData()
+            loadExercises()
         }catch (e: Exception){
         }
         viewModel.setRoutines(getRoutinesNamesList())
@@ -123,10 +119,11 @@ class   MyRoutinesFragment: Fragment(){
     }
 
     fun startConcreteRoutine(r: Routine) {
+        // loadExercises() <--- dóna error extrany HashMap
         Log.d(TAG, ">>> startConcreteRoutine: $r")
-        //val intent = Intent(activity, RoutineActivity::class.java)
-        //intent.putExtra("routine_map",r.hashMapExercises);
-        //startActivity(intent)
+        val intent = Intent(activity, RoutineActivity::class.java)
+        intent.putExtra("routine_map",r.hashMapExercises);
+        startActivity(intent)
     }
     private fun saveData(r: Routine){
         /*
@@ -141,7 +138,7 @@ class   MyRoutinesFragment: Fragment(){
             "name" to r.name,
             "description" to r.description,
             "photo" to r.photo,
-            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { hashMapToArrayList(it) }
+            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
         )
         db.collection("routines").get()
             .addOnSuccessListener { result ->
@@ -187,13 +184,19 @@ class   MyRoutinesFragment: Fragment(){
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+                    /*
                     var exercises:ArrayList<ArrayList<String>> = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
                     Log.d(TAG, ">>> exercises <<<: $exercises")
                     Log.d(TAG, "Class ${exercises.javaClass}")
                     h["exercises"] = exercises
                     Log.d(TAG, ">>> h <<<: $h")
-
                     //h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>>
+                    */
+                    /*
+                    var exercises:ArrayList<Exercise> = routineObj["hashMapExercises"] as ArrayList<Exercise>
+                    Log.d(TAG, "Class ${exercises.javaClass}")
+                    h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>> */
+                    exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
                     with(routine) {
                         name    = routineObj["name"].toString()
                         description  = routineObj["description"].toString()
@@ -371,13 +374,14 @@ class   MyRoutinesFragment: Fragment(){
                 Log.w(TAG,"Error getting getting data",e)
             }
     }
-    fun hashMapToArrayList(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
+    fun toArrayListExercise(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
         var arrayList:ArrayList<Exercise> = ArrayList()
         for (parametersExercise in exercises) {
                 arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
         }
         return arrayList
     }
+    /*
     // TOOD : return type --> ArrayList<ArrayList<String>>
     fun arrayListToHashMap(exercises: ArrayList<Exercise>) {
         Log.d(TAG, "arrayListToHashMap $exercises")
@@ -387,5 +391,20 @@ class   MyRoutinesFragment: Fragment(){
             //arrayList.add(ex.getParametersList())
         }
 //        return arrayList
+    }
+    */
+    private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
+        var arrayList:ArrayList<ArrayList<String>> = ArrayList()
+        for (ex in exercises) {
+            arrayList.add(ex.getParametersList())
+        }
+        return arrayList
+    }
+    private fun loadExercises(){
+        for (r in routinesList.indices) {
+            var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+            h["exercises"] = arrayListExerciseToArrayListStrings(exercisesRoutine!!.get(r))
+            routinesList[r].hashMapExercises = h
+        }
     }
 }
