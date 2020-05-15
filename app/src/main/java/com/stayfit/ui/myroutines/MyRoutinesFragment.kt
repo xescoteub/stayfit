@@ -317,9 +317,13 @@ class   MyRoutinesFragment: Fragment(){
                                             Toast.makeText(activity,"Event ${routine.name} already added",Toast.LENGTH_SHORT).show()
                                         }else{
                                             //Adding User Event Routine
-                                            val dataRoutine = HashMap<String, String>()
-                                            dataRoutine["routine"] = routine.name //Ha de ser un object
-                                            db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(dataRoutine)
+                                            val routineData = hashMapOf(
+                                                "name" to routine.name,
+                                                "description" to routine.description,
+                                                "photo" to routine.photo,
+                                                "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+                                            )
+                                            db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routineData)
                                             Log.d(TAG,"Event added.")
                                             Toast.makeText(activity,"Event ${routine.name} added",Toast.LENGTH_SHORT).show()
                                         }
@@ -333,9 +337,13 @@ class   MyRoutinesFragment: Fragment(){
                                 dataEvent["event_Day"] = dateEvent
                                 db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).set(dataEvent)
                                 //Adding User Event Routine
-                                val dataRoutine = HashMap<String, String>()
-                                dataRoutine["routine"] = routine.name //Ha de ser un object
-                                db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(dataRoutine)
+                                val routineData = hashMapOf(
+                                    "name" to routine.name,
+                                    "description" to routine.description,
+                                    "photo" to routine.photo,
+                                    "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+                                )
+                                db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routineData)
                                 Log.d(TAG,"Event added.")
                                 Toast.makeText(activity,"Event ${routine.name} added",Toast.LENGTH_SHORT).show()
                             }
@@ -353,9 +361,13 @@ class   MyRoutinesFragment: Fragment(){
                     dataEvent["event_Day"] = dateEvent
                     db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).set(dataEvent)
                     //Adding User Event Routine
-                    val dataRoutine = HashMap<String, String>()
-                    dataRoutine["routine"] = routine.name //Ha de ser un object
-                    db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(dataRoutine)
+                    val routineData = hashMapOf(
+                        "name" to routine.name,
+                        "description" to routine.description,
+                        "photo" to routine.photo,
+                        "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+                    )
+                    db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routineData)
                     Log.d(TAG,"Event added.")
                     Toast.makeText(activity,"Event ${routine.name} added",Toast.LENGTH_SHORT).show()
                 }
