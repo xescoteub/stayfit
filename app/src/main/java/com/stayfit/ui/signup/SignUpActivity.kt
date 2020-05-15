@@ -90,7 +90,7 @@ class SignUpActivity : BaseHTTPAction() {
 
                                     val profileUpdates = UserProfileChangeRequest.Builder()
                                         .setDisplayName(username)
-                                        .setPhotoUri(Uri.parse("https://image.flaticon.com/icons/png/512/17/17004.png"))
+                                        .setPhotoUri(Uri.parse("https://lh3.googleusercontent.com/proxy/PNwnNDbDfI8zpWhdKndp5IAbWyjus-_GXyjDwGt7ziYSyDAbpGA4BIjBftxlz1h5X5lsjCYJWsbsYqx-qkUXptrZ5SF0z3W9BykZ0tAtvDPOK_YcRAQ"))
                                         .build()
 
                                     user?.updateProfile(profileUpdates)
@@ -122,6 +122,8 @@ class SignUpActivity : BaseHTTPAction() {
         try {
             val data = HashMap<String, Any>()
             data["user_email"] = tv_username.text.toString()
+            data["user_width"] = 0
+            data["user_height"] = 0
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()

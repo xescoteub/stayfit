@@ -85,6 +85,18 @@
         android:text="Change password"
         android:textSize="16dp"
         android:textAlignment="textStart" />
+
+    <Button
+        android:id="@+id/btnChangePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:text="Change photo"
+        android:textSize="16dp"
+        android:textAlignment="textStart" />
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -105,4 +117,11 @@
         android:textAllCaps="false"
         android:textColor="#D64747"
         android:textSize="16dp" />
+    
+    <ImageView
+        android:id="@+id/imagenprueba"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_lock_outline_black_24dp"/>
+
 </LinearLayout>
