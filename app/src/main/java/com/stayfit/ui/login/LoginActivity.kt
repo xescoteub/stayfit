@@ -15,7 +15,6 @@ import com.stayfit.R
 import com.stayfit.config.AppPrefs
 import com.stayfit.ui.onboarding.OnBoardingActivity
 import com.stayfit.ui.signup.SignUpActivity
-import com.stayfit.ui.signup.SignUpActivity2
 import kotlinx.android.synthetic.main.activity_signin.*
 
 
