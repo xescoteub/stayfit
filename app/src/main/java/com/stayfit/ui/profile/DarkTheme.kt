@@ -4,12 +4,17 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.stayfit.R
+import com.stayfit.toast
 
 class DarkTheme : AppCompatActivity() {
+    private lateinit var mAuth : FirebaseAuth
 
     var myswitch:Switch ?= null
 
@@ -21,6 +26,9 @@ class DarkTheme : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dark_theme)
+
+        mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
 
         myswitch=findViewById(R.id.darkTheme_switch)
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
@@ -39,56 +47,103 @@ class DarkTheme : AppCompatActivity() {
                     finish()
             }
         })
+        var psswdbtn: Button = findViewById(R.id.btnChangePasswd)
+        psswdbtn.setOnClickListener{
 
+            val pbuilder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-        var passwordbtn : Button = findViewById<Button>(R.id.btnChangePasswd)
-        passwordbtn.setOnClickListener{
-            val psswdDialog = AlertDialog.Builder(this)
-            psswdDialog.setView(R.layout.profile_change_psswd)
-            psswdDialog.setTitle("Change Password")
-            psswdDialog.setPositiveButton("Yes") { dialog, which ->
+            val pView: View = getLayoutInflater().inflate(R.layout.profile_change_psswd,null)
+            val psswd1 : EditText = pView.findViewById(R.id.editTextPsswd)
+            val psswd2 : EditText = pView.findViewById(R.id.editTextRepeat)
 
+            pbuilder.setNegativeButton( "Cancel", null)
+            pbuilder.setPositiveButton("OK") { dialog, which ->
+
+                if(psswd1.text.toString().equals((psswd2.text.toString()))){
+                    Toast.makeText(this,"IGUALES", Toast.LENGTH_SHORT)
+                }
 
             }
-            psswdDialog.setNegativeButton("No") { dialog, which ->
 
-            }
-            psswdDialog.show()
+            pbuilder.setTitle("Change Password")
+            pbuilder.setView(pView)
+            val pdialog :AlertDialog = pbuilder.create()
+            pdialog.show()
+
+
+
         }
+
+
 
         var emailbtn : Button = findViewById<Button>(R.id.btnChangeEmail)
         emailbtn.setOnClickListener{
-            val psswdDialog = AlertDialog.Builder(this)
-            psswdDialog.setView(R.layout.profile_change_email)
-            psswdDialog.setTitle("Change Email")
-            psswdDialog.setPositiveButton("Yes") { dialog, which ->
 
+            val ebuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+            val eView: View = getLayoutInflater().inflate(R.layout.profile_change_email,null)
+            val email1 : EditText = eView.findViewById(R.id.editTextEmail)
+            val email2 : EditText = eView.findViewById(R.id.emailRepeat)
+
+            ebuilder.setNegativeButton( "Cancel", null)
+            ebuilder.setPositiveButton("OK") { dialog, which ->
+
+                if(email1.text.toString().equals((email2.text.toString()))){
+                    Toast.makeText(this,"IGUALES", Toast.LENGTH_SHORT)
+                }
 
             }
-            psswdDialog.setNegativeButton("No") { dialog, which ->
 
-            }
-            psswdDialog.show()
+            ebuilder.setTitle("Change Email")
+            ebuilder.setView(eView)
+            val edialog :AlertDialog = ebuilder.create()
+            edialog.show()
+
+
         }
 
         var usernamebtn : Button = findViewById<Button>(R.id.btnChangeUserName)
         usernamebtn.setOnClickListener{
-            val psswdDialog = AlertDialog.Builder(this)
-            psswdDialog.setView(R.layout.profile_change_usernamel)
-            psswdDialog.setTitle("Change Email")
-            psswdDialog.setPositiveButton("Yes") { dialog, which ->
+
+            val ubuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+            val uView: View = getLayoutInflater().inflate(R.layout.profile_change_usernamel,null)
+            val username1 : EditText = uView.findViewById(R.id.editTextUsername)
+
+            ubuilder.setNegativeButton( "Cancel", null)
+            ubuilder.setPositiveButton("OK") { dialog, which ->
+
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(username1.text.toString())
+                    .build()
+
+                user?.updateProfile(profileUpdates)
+                    ?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.i("username ","username updated")
+                        }else{
+                            Log.i("username","username not updated")
+                        }
+                    }
+
 
 
             }
-            psswdDialog.setNegativeButton("No") { dialog, which ->
 
-            }
-            psswdDialog.show()
+            ubuilder.setTitle("Change Username")
+            ubuilder.setView(uView)
+            val udialog :AlertDialog = ubuilder.create()
+            udialog.show()
+
         }
 
 
 
 
     }
+
+
+
+
 }
 

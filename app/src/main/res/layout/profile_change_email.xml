@@ -10,7 +10,7 @@
         android:padding="10dp"
         android:textSize="18dp"
         android:textAlignment="center"
-        android:id="@+id/editTextPsswd"
+        android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="New email"/>
@@ -21,7 +21,7 @@
         android:padding="10dp"
         android:textSize="18dp"
         android:textAlignment="center"
-        android:id="@+id/editTextRepeat"
+        android:id="@+id/emailRepeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Repeat the email"/>

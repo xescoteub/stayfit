@@ -10,7 +10,7 @@
         android:padding="10dp"
         android:textSize="18dp"
         android:textAlignment="center"
-        android:id="@+id/editTextPsswd"
+        android:id="@+id/editTextUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="New username"/>
