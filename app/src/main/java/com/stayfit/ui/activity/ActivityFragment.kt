@@ -162,6 +162,7 @@ class ActivityFragment : Fragment() {
                                         if(i>0){
                                             Log.d(TAG,"Events available")
                                             showList(routinesList)
+                                            recyclerCalendar.visibility =View.VISIBLE
                                             Toast.makeText(activity,"Events available",Toast.LENGTH_SHORT).show()
                                         }else{
                                             Log.d(TAG,"No events")
