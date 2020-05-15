@@ -22,6 +22,7 @@ import com.stayfit.ui.myroutines.Routine
 import com.stayfit.ui.myroutines.RoutineActivity
 import com.stayfit.ui.myroutines.RoutineAdapter
 import com.stayfit.ui.myroutines.RoutineAdapterCalendar
+import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.calendar_fragment.*
 import kotlinx.android.synthetic.main.fragment_my_routines.*
 import java.text.SimpleDateFormat
@@ -41,6 +42,7 @@ class ActivityFragment : Fragment() {
     var theDate: TextView ?= null
     var mCalendarView:android.widget.CalendarView ?= null
     private lateinit var mAuth: FirebaseAuth
+    var exercisesRoutine: ArrayList<ArrayList<Exercise>> ?= null
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
@@ -62,7 +64,7 @@ class ActivityFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ActivityViewModel::class.java)
-        // TODO: Use the ViewModel
+        exercisesRoutine = ArrayList()
     }
 
     fun dayPicker(view:View){
@@ -137,14 +139,34 @@ class ActivityFragment : Fragment() {
                                         var routineAlreadyAdded = false
                                         //Contador para saber si hay rutinas prueba
                                         var i = 0
+                                        var routinesList:ArrayList<Routine> = arrayListOf()
                                         for(routinesR in result3){
+                                            Log.d(TAG, "${routinesR.id} => ${routinesR.data}")
+                                            val routineObj = routinesR.data as HashMap<*, *>
+                                            val routine = Routine()
+                                            var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+
+                                            with(routine) {
+                                                name    = routineObj["name"].toString()
+                                                description  = routineObj["description"].toString()
+                                                photo   = routineObj["photo"].toString()
+                                                hashMapExercises  = h
+                                                exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                                                Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                                                Log.d(TAG, "routine: $routine")
+                                                routinesList.add(routine)
+                                            }
+                                            Log.d(TAG, "routineList: $routinesList")
                                             i++
                                         }
                                         if(i>0){
                                             Log.d(TAG,"Events available")
+                                            showList(routinesList)
+                                            recyclerCalendar.visibility =View.VISIBLE
                                             Toast.makeText(activity,"Events available",Toast.LENGTH_SHORT).show()
                                         }else{
                                             Log.d(TAG,"No events")
+                                            recyclerCalendar.visibility =View.GONE
                                             Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
                                         }
                                     }
@@ -153,6 +175,7 @@ class ActivityFragment : Fragment() {
                                     }
                             }else{
                                 Log.d(TAG,"No events")
+                                recyclerCalendar.visibility =View.GONE
                                 Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -161,6 +184,7 @@ class ActivityFragment : Fragment() {
                         }
                 }else{
                     Log.d(TAG,"No events")
+                    recyclerCalendar.visibility =View.GONE
                     Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
                 }
             }
@@ -171,19 +195,31 @@ class ActivityFragment : Fragment() {
 
 
 
-    /*private fun showList(eventDay:String) {
+    private fun showList(routinesList:ArrayList<Routine>) {
+
+        viewModel.setRoutines(getRoutinesNamesList(routinesList))
         recyclerCalendar.layoutManager = LinearLayoutManager(activity)
-        var list:ArrayList<Routine> = events[eventDay]!!
-        recyclerCalendar.adapter = RoutineAdapterCalendar(list)
+        recyclerCalendar.addItemDecoration(DividerItemDecoration(activity, 1))
+        recyclerCalendar.adapter = RoutineAdapterCalendar(routinesList)
         (recyclerCalendar.adapter as RoutineAdapterCalendar).setOnItemClickListener(object :
             RoutineAdapterCalendar.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
-                //startConcreteRoutine(list[position])
+                startConcreteRoutine(routinesList[position])
             }
             override fun onItemLongClick(position: Int, v: View?) {
             }
         })
-    }*/
+    }
 
+    fun startConcreteRoutine(r: Routine){
+        val intent = Intent(activity, RoutineActivity::class.java)
+        intent.putExtra("routine_map",r.hashMapExercises);
+        startActivity(intent)
+    }
+
+    fun getRoutinesNamesList(routinesList:ArrayList<Routine>): ArrayList<String>{
+        var namesRoutines: ArrayList<String> = ArrayList()
+        for (r in routinesList){ namesRoutines.add(r.name)}
+        return namesRoutines
+    }
 }
-
