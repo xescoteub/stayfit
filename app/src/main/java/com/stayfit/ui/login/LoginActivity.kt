@@ -15,6 +15,7 @@ import com.stayfit.R
 import com.stayfit.config.AppPrefs
 import com.stayfit.ui.onboarding.OnBoardingActivity
 import com.stayfit.ui.signup.SignUpActivity
+import com.stayfit.ui.signup.SignUpActivity2
 import kotlinx.android.synthetic.main.activity_signin.*
 
 
@@ -59,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
          * Starts sign up activity
          */
         signUpTv.setOnClickListener {
+//            startActivity(Intent(this, SignUpActivity::class.java))
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
@@ -94,18 +96,18 @@ class LoginActivity : AppCompatActivity() {
      */
     private fun doLogin()
     {
-        if (tv_username.editText?.text.toString().isEmpty()) {
-            tv_username.error = "Please enter email"
-            tv_username.requestFocus()
+        if (tv_email.editText?.text.toString().isEmpty()) {
+            tv_email.error = "Please enter email"
+            tv_email.requestFocus()
             return
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(tv_username.editText?.text.toString()).matches()) {
-            tv_username.error = "Please enter valid email"
-            tv_username.requestFocus()
+        if (!Patterns.EMAIL_ADDRESS.matcher(tv_email.editText?.text.toString()).matches()) {
+            tv_email.error = "Please enter valid email"
+            tv_email.requestFocus()
             return
         } else {
-            tv_username.error = ""
+            tv_email.error = ""
         }
 
         if (tv_password.editText?.text.toString().isEmpty()) {
@@ -116,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
             tv_password.error = ""
         }
 
-        mAuth.signInWithEmailAndPassword(tv_username.editText?.text.toString(), tv_password.editText?.text.toString())
+        mAuth.signInWithEmailAndPassword(tv_email.editText?.text.toString(), tv_password.editText?.text.toString())
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmailAndPassword")
@@ -164,7 +166,7 @@ class LoginActivity : AppCompatActivity() {
     {
         try {
             val data = HashMap<String, Any>()
-            data["user_email"] = tv_username.editText?.text.toString()
+            data["user_email"] = tv_email.editText?.text.toString()
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()

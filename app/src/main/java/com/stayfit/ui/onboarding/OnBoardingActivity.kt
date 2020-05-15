@@ -133,5 +133,4 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private fun getCurrentScreen(i: Int): Int = slider.currentItem.plus(i)
 
-
 }

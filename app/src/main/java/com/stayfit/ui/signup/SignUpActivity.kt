@@ -14,6 +14,7 @@ import com.squareup.okhttp.HttpUrl
 import com.stayfit.R
 import com.stayfit.config.BaseHTTPAction
 import com.stayfit.ui.login.LoginActivity
+import com.tistory.dwfox.dwrulerviewlibrary.view.ScrollingValuePicker
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 
@@ -47,16 +48,21 @@ class SignUpActivity : BaseHTTPAction() {
     {
         val user = mAuth.currentUser
 
-
         if (tv_username.text.toString().isEmpty()) {
-            tv_username.error = "Please enter email"
+            tv_username.error = "Please enter a username"
             tv_username.requestFocus()
             return
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(tv_username.text.toString()).matches()) {
-            tv_username.error = "Please enter valid email"
-            tv_username.requestFocus()
+        if (tv_email.text.toString().isEmpty()) {
+            tv_email.error = "Please enter an email"
+            tv_email.requestFocus()
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(tv_email.text.toString()).matches()) {
+            tv_email.error = "Please enter valid email"
+            tv_email.requestFocus()
             return
         }
 
@@ -66,11 +72,8 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
-        mAuth.createUserWithEmailAndPassword(tv_username.text.toString(), tv_password.text.toString())
+        mAuth.createUserWithEmailAndPassword(tv_email.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
-
-
-
 
                 if (task.isSuccessful) {
                     user?.sendEmailVerification()
@@ -78,30 +81,7 @@ class SignUpActivity : BaseHTTPAction() {
                             if (task.isSuccessful) {
                                 writeNewUser()
                                 Log.d(TAG, "Email sent.")
-                                Toast.makeText(this, "Registered successfully. Please verify your email address.",
-                                    Toast.LENGTH_SHORT).show()
-
-                                //asignar nombre de usuario y foto
-                                // direccion de la imagen predeterminada: https://image.flaticon.com/icons/png/512/17/17004.png
-                                val email_ = user?.email
-                                if( email_ != null){
-
-                                    val username = email_.substringBefore('@')
-
-                                    val profileUpdates = UserProfileChangeRequest.Builder()
-                                        .setDisplayName(username)
-                                        .setPhotoUri(Uri.parse("https://lh3.googleusercontent.com/proxy/PNwnNDbDfI8zpWhdKndp5IAbWyjus-_GXyjDwGt7ziYSyDAbpGA4BIjBftxlz1h5X5lsjCYJWsbsYqx-qkUXptrZ5SF0z3W9BykZ0tAtvDPOK_YcRAQ"))
-                                        .build()
-
-                                    user?.updateProfile(profileUpdates)
-                                        ?.addOnCompleteListener { task ->
-                                            if (task.isSuccessful) {
-                                                Log.d(TAG, "User profile updated.")
-                                            }
-                                        }
-
-                                }
-
+                                Toast.makeText(this, "Registered successfully. Please verify your email address.", Toast.LENGTH_SHORT).show()
 
                             }
                         }
@@ -121,9 +101,8 @@ class SignUpActivity : BaseHTTPAction() {
     {
         try {
             val data = HashMap<String, Any>()
-            data["user_email"] = tv_username.text.toString()
-            data["user_width"] = 0
-            data["user_height"] = 0
+            data["user_name"] = tv_username.text.toString()
+            data["user_email"] = tv_email.text.toString()
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()

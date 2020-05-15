@@ -31,6 +31,8 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="height">Your height</string>
+    <string name="weight">Your weight</string>
     <string name="remember_me">Remember me</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="login">Login</string>

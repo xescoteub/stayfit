@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.login.LoginActivity">
+        tools:context=".ui.signup.SignUpActivity">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -16,15 +16,33 @@
                 android:id="@+id/tv_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/username"
+                android:inputType="textEmailAddress"/>
+
+        <EditText
+                android:id="@+id/tv_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"/>
 
         <EditText
-                android:id="@+id/tv_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword"/>
+            android:id="@+id/tv_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword"/>
+
+
+        <com.tistory.dwfox.dwrulerviewlibrary.view.ScrollingValuePicker
+            android:id="@+id/height_value_picker"
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:layout_above="@+id/center"
+            android:background="@color/colorGrey">
+        </com.tistory.dwfox.dwrulerviewlibrary.view.ScrollingValuePicker>
+
+
         <Button
                 android:id="@+id/btn_sign_up"
                 android:layout_width="match_parent"
