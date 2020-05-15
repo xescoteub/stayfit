@@ -104,6 +104,7 @@ class   MyRoutinesFragment: Fragment(){
             loadExercises()
         }catch (e: Exception){
         }
+
         viewModel.setRoutines(getRoutinesNamesList())
         myroutinesRecycler.layoutManager = LinearLayoutManager(activity)
         myroutinesRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
@@ -160,10 +161,10 @@ class   MyRoutinesFragment: Fragment(){
                     Log.d(TAG,"Routine added.")
                     Toast.makeText(activity,"Routine ${r.name} added",Toast.LENGTH_SHORT).show()
                 }
-    }
-    .addOnFailureListener{ e ->
-        Log.w(TAG,"Error getting getting data",e)
-    }
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG,"Error getting getting data",e)
+            }
     }
     private fun loadData(){
         /*
@@ -184,25 +185,14 @@ class   MyRoutinesFragment: Fragment(){
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-                    /*
-                    var exercises:ArrayList<ArrayList<String>> = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
-                    Log.d(TAG, ">>> exercises <<<: $exercises")
-                    Log.d(TAG, "Class ${exercises.javaClass}")
-                    h["exercises"] = exercises
-                    Log.d(TAG, ">>> h <<<: $h")
-                    //h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>>
-                    */
-                    /*
-                    var exercises:ArrayList<Exercise> = routineObj["hashMapExercises"] as ArrayList<Exercise>
-                    Log.d(TAG, "Class ${exercises.javaClass}")
-                    h["exercises"] = arrayListToHashMap(exercises) as ArrayList<ArrayList<String>> */
-                    exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+
                     with(routine) {
                         name    = routineObj["name"].toString()
                         description  = routineObj["description"].toString()
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
-
+                        exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
                         routinesList.add(routine)
                     }
@@ -377,7 +367,7 @@ class   MyRoutinesFragment: Fragment(){
     fun toArrayListExercise(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
         var arrayList:ArrayList<Exercise> = ArrayList()
         for (parametersExercise in exercises) {
-                arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
         }
         return arrayList
     }
@@ -395,6 +385,7 @@ class   MyRoutinesFragment: Fragment(){
     */
     private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
         var arrayList:ArrayList<ArrayList<String>> = ArrayList()
+        Log.d(TAG, "Class ${exercises.javaClass}")
         for (ex in exercises) {
             arrayList.add(ex.getParametersList())
         }
@@ -402,6 +393,7 @@ class   MyRoutinesFragment: Fragment(){
     }
     private fun loadExercises(){
         for (r in routinesList.indices) {
+            Log.d(TAG, "load exercisesList: ${exercisesRoutine!!.get(r)}")
             var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
             h["exercises"] = arrayListExerciseToArrayListStrings(exercisesRoutine!!.get(r))
             routinesList[r].hashMapExercises = h
