@@ -16,25 +16,6 @@ const cors = require('cors')({origin: true});
 var db = admin.firestore();
 
 // ============================================================================
-// Inserts welcome blog when user signs up to application
-// ============================================================================
-exports.insertWelcomeBlog = functions.https.onRequest((req, res) => {
-
-    var user_id = req.body.user_id
-
-    // Add a new document in collection "cities"
-    db.collection("blogs").doc(user_id).collection("docs").set({
-        name: "Los Angeles",
-        state: "CA",
-        country: "USA"
-    })
-
-    cors(req, res, () => {
-        res.status(200).send("Successfully inserted welcome blog.");
-	});
-});
-
-// ============================================================================
 // Serverless api architecture
 // ============================================================================
 const app = express();
@@ -123,74 +104,62 @@ app.get('/analytics/user/:uid', async (req, res) => {
     // Get daily workouts database collection
     let dailyWorkoutsRef = db.collection('daily_exercises');
 
-    // Get users collection
-    let usersRef = db.collection('users').doc(uid);
-
-    // Get current user information
-    usersRef.get()
-        .then(doc => {
-            if (doc.exists) {
-                console.log("Document data:", doc.data());
-                userData = doc.data();
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch(error => res.status(400).send(`Cannot get user information: ${error}`));
-
     dailyWorkoutsRef.where('user_id', '==', uid)
         .get()
         .then(snapshot => {
             if (snapshot.empty) {
-              console.log('No matching documents.');
-              return;
+                console.log('No matching documents.');
+                return;
             }
-
+            let data = {};
             snapshot.forEach(doc => {
-                var documentDate = new Date(doc.data().date);
+                console.log(doc.id, '=>', doc.data());
+                let documentDate = new Date(doc.data().date);
 
+                // Filter only documents that have been created today
                 if (documentDate.setHours(0,0,0,0) === new Date().setHours(0,0,0,0)) {
-                    var activityFactor = 1.375;
-                    var data = {
-                        total_time      : parseInt(doc.data().total_time / 60),
-                        calories_burned : calculateCaloriesBurned(userData, activityFactor)
-                    }
 
-                    console.log(doc.id, '=>', doc.data());
-                    res.send(data);
+                    let totalTime = [];
+                    totalTime.push(parseInt(doc.data().total_time / 60));
+
+                    data.total_time = totalTime;
+                    data.test = "test";
                 }
             });
-        }).catch(error => res.status(400).send(`Cannot get user analytics: ${error}`));
 
-        /*
-        var query = firebase.firestore().collection("book")
-        query = query.where(...)
-        query = query.where(...)
-        query = query.where(...)
-        query = query.orderBy(...)
-        query.get().then(...)
-        */
+            const promises = [];
+            promises.push(calculateUserCaloriesBurned(uid));
+            promises.push(calculateUserBMI(uid));
+
+            Promise.all(promises).then((results) => {
+                console.log("results : ", results)
+                data.calories_burned = results[0];
+                data.bmi             = results[1];
+                res.status(200).send(data);
+            });
+        })
 });
 
-function getUserData(uid) {
-    let userData = null;
+/**
+ * Get the personal information for a given user.
+ *
+ * @param {string} uid The UID of the user.
+ */
+async function getUserData(uid) {
+    const snap = await db.collection('users').doc(uid).get();
 
-    // Get users collection
-    let usersRef = db.collection('users').doc(uid);
-
-    // Get current user information
-    usersRef.get()
-        .then(doc => {
-            if (doc.exists) {
-             //console.log("Document data:", doc.data());
-             return doc.data();
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch(error => res.status(400).send(`Cannot get user information: ${error}`));
+    if (snap.exists) {
+     //console.log("Document data:", doc.data());
+     return snap.data();
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
 }
 
+/**
+ *
+ */
 function getActivityFactor(exercises) {
     switch(numExercises) {
         case numExercises < 1:
@@ -222,7 +191,11 @@ function getActivityFactor(exercises) {
  *  }
  *
  */
-function calculateBMI(height, weight) {
+async function calculateUserBMI(uid) {
+    const user = await getUserData(uid);
+    const weight = user.weight;
+    const height = user.height;
+
     var bmi = weight/(height/100*height/100);
     return bmi;
 }
@@ -232,8 +205,8 @@ function calculateBMI(height, weight) {
  *  Total calorie expenditure = BMR × ActivityFactor
  *  ------------------------------------------------
  *  BMR:
- *      - Women : BMR=655+9.6×weight+1.8×height−4.7×age
- *      - Men   : BMR=66+13.7×weight+5×height−6.8×age
+ *  - Women : BMR=655+9.6×weight+1.8×height−4.7×age
+ *  - Men   : BMR=66+13.7×weight+5×height−6.8×age
  *  where weight is in kilograms, height is in centimeters and age is in years
  *
  *  Sedentary i.e. little or no exercise : Activity Factor = 1.2
@@ -252,12 +225,15 @@ function calculateBMI(height, weight) {
  *  On the other hand, if the total daily calories consumed is lower than the total calories needed, the person will lose weight.
  *
  */
-function calculateCaloriesBurned(userData, activityFactor) {
-    if (userData.gender == "man") {
-        console.log("MAN")
-        BMR = 10 * userData.weight + 6.25 * userData.height - 5 * userData.age + 5;
+async function calculateUserCaloriesBurned(uid) {
+    const user = await getUserData(uid);
+
+    const activityFactor = 1.375;
+
+    if (user.gender == "man") {
+        BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age + 5;
     } else {
-      BMR = 10 * userData.weight + 6.25 * userData.height - 5 * userData.age -161;
+      BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age -161;
     }
 
     var calories = BMR * activityFactor;

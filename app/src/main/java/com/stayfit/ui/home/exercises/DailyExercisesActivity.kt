@@ -472,6 +472,20 @@ class DailyExercisesActivity : BaseHTTPAction() {
             "total_time" to time
         )
 
+        val o = {}
+
+        db.collection("daily_exercises")
+            .whereEqualTo("user_id", mAuth.currentUser!!.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
         db.collection("daily_exercises")
             .add(docData)
             .addOnSuccessListener { documentReference ->
