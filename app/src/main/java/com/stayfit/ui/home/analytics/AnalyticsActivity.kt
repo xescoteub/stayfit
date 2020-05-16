@@ -169,10 +169,11 @@ class AnalyticsActivity : AppCompatActivity() {
 
         Log.d(TAG, "[total_time]:" + json["total_time"])
 
-        val total_time: String      = json["total_time"].toString()
-        val calories_burned: Double = json["calories_burned"] as Double
+        val total_time: String = json["total_time"].toString()
+        val calories_burned1 : String = json["calories_burned"] as String
+        val calories_burned2: Double = calories_burned1.toDouble()
 
         tv_gym_time.text        = "$total_time min"
-        caloriesChart.setProgress(calories_burned, 2500.0)
+        caloriesChart.setProgress(calories_burned2, 2500.0)
     }
 }
