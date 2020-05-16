@@ -1,7 +1,9 @@
 package com.stayfit.ui.myroutines
 
 import android.app.AlertDialog
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,11 +16,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.common.reflect.TypeToken
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import com.stayfit.R
 import com.stayfit.ui.workouts.exercises.Exercise
 import kotlinx.android.synthetic.main.fragment_my_routines.*
+import java.lang.reflect.Type
 
 
 class   MyRoutinesFragment: Fragment(){
@@ -86,11 +91,6 @@ class   MyRoutinesFragment: Fragment(){
 
     }
 
-    /*
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        var button_delete: ImageButton = getView()!!.findViewById(R.id.ic_deleteRoutine)
-    } */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MyRoutinesViewModel::class.java)
@@ -100,8 +100,9 @@ class   MyRoutinesFragment: Fragment(){
     }
     private fun showList() {
         try {
-            loadData()
+            loadDataFireBase()
             loadExercises()
+            // loadDataSharedPreferences()
         }catch (e: Exception){
         }
 
@@ -118,7 +119,6 @@ class   MyRoutinesFragment: Fragment(){
             }
         })
     }
-
     fun startConcreteRoutine(r: Routine) {
         // loadExercises() <--- dóna error extrany HashMap
         Log.d(TAG, ">>> startConcreteRoutine: $r")
@@ -126,14 +126,8 @@ class   MyRoutinesFragment: Fragment(){
         intent.putExtra("routine_map",r.hashMapExercises);
         startActivity(intent)
     }
-    private fun saveData(r: Routine){
-        /*
-        var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
-        var editor: SharedPreferences.Editor = sharedPreferences.edit()
-        var gson: Gson = Gson()
-        var jsonRoutines: String = gson.toJson(routinesList)
-        editor.putString("routines list", jsonRoutines)
-        editor.apply()*/
+    private fun saveDataFireBase(r: Routine){
+
         val currentUserID = mAuth.currentUser?.uid.toString()
         val routine = hashMapOf(
             "name" to r.name,
@@ -166,7 +160,7 @@ class   MyRoutinesFragment: Fragment(){
                 Log.w(TAG,"Error getting getting data",e)
             }
     }
-    private fun loadData(){
+    private fun loadDataFireBase(){
         /*
         var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
         var gson: Gson = Gson()
@@ -217,6 +211,7 @@ class   MyRoutinesFragment: Fragment(){
                 adb.setPositiveButton("Ok") { dialog, which ->
                     routinesList.removeAt(position)
                     //saveData()
+                    // saveDataSharedPreferences()
                     showList()
                 }
                 adb.show()
@@ -228,7 +223,8 @@ class   MyRoutinesFragment: Fragment(){
     }
     private fun addRoutine(r: Routine){
         routinesList.add(r)
-        saveData(r)
+        saveDataFireBase(r)
+        //saveDataSharedPreferences()
     }
 
     private fun newRoutine(view: View) {
@@ -410,5 +406,25 @@ class   MyRoutinesFragment: Fragment(){
             h["exercises"] = arrayListExerciseToArrayListStrings(exercisesRoutine!!.get(r))
             routinesList[r].hashMapExercises = h
         }
+    }
+    private fun loadDataSharedPreferences() {
+        var sharedPreferences: SharedPreferences =
+            this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var gson: Gson = Gson()
+        var jsonRoutines: String? = sharedPreferences.getString("routines list", null)
+        val typeRoutine: Type = object : TypeToken<ArrayList<Routine?>?>() {}.type
+        routinesList = gson.fromJson(jsonRoutines, typeRoutine)
+        if (routinesList == null) {
+            routinesList = ArrayList()
+        }
+    }
+
+    private fun saveDataSharedPreferences() {
+        var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        var gson: Gson = Gson()
+        var jsonRoutines: String = gson.toJson(routinesList)
+        editor.putString("routines list", jsonRoutines)
+        editor.apply()
     }
 }
