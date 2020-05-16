@@ -159,6 +159,7 @@ class MyExercises : AppCompatActivity() {
 
     }
     fun deleteItem(view: View?) {
+        Toast.makeText(this,"Press the exercise that you want to delete",Toast.LENGTH_SHORT).show()
         listView?.onItemClickListener = OnItemClickListener { a, v, position, id ->
             val adb: AlertDialog.Builder = AlertDialog.Builder(this)
             adb.setTitle("Delete?")

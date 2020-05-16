@@ -10,6 +10,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.webkit.URLUtil
+import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -24,6 +25,7 @@ import com.stayfit.R
 import com.stayfit.ui.myroutines.MyRoutinesFragment
 import com.stayfit.ui.myroutines.MyRoutinesViewModel
 import com.stayfit.ui.myroutines.Routine
+import kotlinx.android.synthetic.main.fragment_my_routines.*
 
 
 class ExerciseActivity: AppCompatActivity() {
@@ -31,9 +33,10 @@ class ExerciseActivity: AppCompatActivity() {
     var myCountDownTimer: MyCountDownTimer? = null
     var text_time: TextView? = null
     var title:TextView? = null
-    private var delay:Delay = Delay(3000, 1000)
+    private var delay:Delay = Delay(10000, 1000)
     var url_video: String = ""
     private lateinit var mAuth: FirebaseAuth
+    var finished: Boolean = false
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
     private val TAG = "ExerciseActivity"
@@ -52,7 +55,6 @@ class ExerciseActivity: AppCompatActivity() {
         progressBar!!.max=(durada / 1000).toInt()
         progressBar!!.progress=progressBar!!.max
         text_time!!.setText(progressBar!!.progress.toString()+'"'+"/"+progressBar!!.max.toString()+'"')
-        delay.start()
         myCountDownTimer!!.start()
     }
 
@@ -68,9 +70,13 @@ class ExerciseActivity: AppCompatActivity() {
     }
     inner class Delay(millisInFuture: Long, countDownInterval: Long) :
         CountDownTimer(millisInFuture, countDownInterval) {
+        fun setFalseBoolean(){
+            finished = false
+        }
         override fun onTick(millisUntilFinished: Long) {
         }
         override fun onFinish() {
+            finished = true
         }
     }
     fun openinYT(view: View) {
@@ -112,46 +118,66 @@ class ExerciseActivity: AppCompatActivity() {
 
     fun addToRoutine(view: View) {
         var routinesList: ArrayList<Routine> = ArrayList()
+        var exercisesRoutine: ArrayList<ArrayList<Exercise>> = ArrayList()
+        val builderSingle = AlertDialog.Builder(this)
+        builderSingle.setIcon(R.drawable.ic_assignment_purple)
+        builderSingle.setTitle("Choose a routine")
+
+        val arrayAdapter = ArrayAdapter<String>(
+            this,
+            android.R.layout.select_dialog_singlechoice
+        )
         val user = mAuth.currentUser?.uid.toString()
         db.collection("routines").document(user).collection("MyRoutines")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-                    h["exercises"] = routineObj["hashMapExercises"] as ArrayList<ArrayList<String>>
+
                     with(routine) {
                         name    = routineObj["name"].toString()
                         description  = routineObj["description"].toString()
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
+                        exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                        Log.d(TAG, "routine: $routine")
+                        routinesList.add(routine)
+                        arrayAdapter.add(routineObj["name"].toString())
                     }
-                    Log.d(TAG, "routine: $routine")
-                    routinesList.add(routine)
                     Log.d(TAG, "routineList: $routinesList")
                 }
+                //Log.d(TAG, "END2")
+                //myroutinesRecycler.adapter!!.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
             }
-        // setup the alert builder
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Choose a routine")
-        builder.setIcon(R.drawable.ic_assignment_purple)
-        // add a list
-        var names = getRoutinesNamesList(routinesList)
-        val rs: Array<CharSequence> = names.toArray(arrayOfNulls<CharSequence>(names.size))
-        builder.setItems(rs,
-            DialogInterface.OnClickListener { dialog, which ->
-                Toast.makeText(this,"Funciona",Toast.LENGTH_SHORT).show()
-            })
-        // create and show the alert dialog
-        val dialog = builder.create()
-        dialog.show()
+
+        builderSingle.setNegativeButton(
+            "cancel"
+        ) { dialog, which -> dialog.dismiss() }
+
+        builderSingle.setAdapter(
+            arrayAdapter
+        ) { dialog, which ->
+            val strName = arrayAdapter.getItem(which)
+            val builderInner = AlertDialog.Builder(this)
+            builderInner.setMessage(strName)
+            builderInner.setTitle("Your Selected Item is")
+            builderInner.setPositiveButton(
+                "Ok"
+            ) { dialog, which -> dialog.dismiss() }
+            builderInner.show()
+        }
+        builderSingle.show()
     }
 
     fun getRoutinesNamesList(routinesList: ArrayList<Routine>): ArrayList<String>{
+        Log.d(TAG, "List: $routinesList")
         var namesRoutines: ArrayList<String> = ArrayList()
         for (r in routinesList){ namesRoutines.add(r.name)}
         return namesRoutines

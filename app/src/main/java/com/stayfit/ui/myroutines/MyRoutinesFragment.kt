@@ -163,15 +163,6 @@ class   MyRoutinesFragment: Fragment(){
             }
     }
     private fun loadDataFireBase(){
-        /*
-        var sharedPreferences: SharedPreferences = this.requireActivity().getSharedPreferences("shared preferences", MODE_PRIVATE)
-        var gson: Gson = Gson()
-        var jsonRoutines: String? = sharedPreferences.getString("routines list", null)
-        val typeRoutine: Type = object : TypeToken<ArrayList<Routine?>?>() {}.type
-        routinesList = gson.fromJson(jsonRoutines,typeRoutine)
-        if (routinesList == null) {
-            routinesList = ArrayList()
-        } */
         val user = mAuth.currentUser?.uid.toString()
         db.collection("routines").document(user).collection("MyRoutines")
             .get()
@@ -213,10 +204,12 @@ class   MyRoutinesFragment: Fragment(){
                 adb.setMessage("Are you sure you want to delete ${routinesList.get(position).name}?")
                 adb.setNegativeButton("Cancel", null)
                 adb.setPositiveButton("Ok") { dialog, which ->
+                    deleteItemFireBase(routinesList.get(position).name)
                     routinesList.removeAt(position)
                     //saveData()
                     // saveDataSharedPreferences()
-                    showList()
+                    Log.d(TAG, "END3")
+                    myroutinesRecycler.adapter!!.notifyDataSetChanged()
                 }
                 adb.show()
             }
@@ -431,5 +424,12 @@ class   MyRoutinesFragment: Fragment(){
         var jsonRoutines: String = gson.toJson(routinesList)
         editor.putString("routines list", jsonRoutines)
         editor.apply()
+    }
+    fun deleteItemFireBase(exercise_name: String) {
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        db.collection("routines").document(currentUserID).collection("MyRoutines").document(exercise_name)
+            .delete()
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 }
