@@ -60,20 +60,10 @@ app.get('/blogs/user/:uid', (req, res) => {
                 return;
               }
 
+              // Get recommended blogs
               const recommendations = await handleUserBlogRecommendation(completedDailyWorkouts)
-              console.log("recommendations: ", recommendations);
+              //console.log("recommendations: ", recommendations);
               res.status(200).send(recommendations)
-
-              // Store promises
-//              const promises = [];
-//              promises.push(handleUserBlogRecommendation(completedDailyWorkouts));
-//
-//              // Full-fill all promises
-//              Promise.all(promises).then((results) => {
-//                  console.log("Blog results: ", results);
-//                  res.status(200).send(results)
-//              });
-
             }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
       });
 });
@@ -88,7 +78,6 @@ async function handleUserBlogRecommendation(completedWorkouts) {
     // Array to hold list of blog objects
     const blogs = [];
 
-    console.log("handleUserBlogRecommendation", completedWorkouts, typeof completedWorkouts)
     if (completedWorkouts == 0) {
         // Get welcome blog
         await blogsRef.doc('welcome').get().then(doc => {
@@ -102,88 +91,31 @@ async function handleUserBlogRecommendation(completedWorkouts) {
         });
     }
     else if (completedWorkouts <= 4) {
-        console.log("completedWorkouts < 4");
         // Get motivation blog
         await blogsRef.doc('motivation').get().then(doc => {
-        if (doc.exists) {
-           console.log("Document data:", doc.data());
-           blogs.push(doc.data());
-        } else {
-           // doc.data() will be undefined in this case
-           console.log("No such document!");
-        }
+            if (doc.exists) {
+               console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
         }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
     }
-    else if (completedWorkouts < 4){
-        console.log("completedWorkouts > 4");
-        // If user has completed more than 4 daily workouts,
-        // delete motivation blog
-        //blogsRef.doc('motivation').delete();
+    else if (completedWorkouts > 4){
+        await blogsRef.doc('healthy_food').get().then(doc => {
+            if (doc.exists) {
+               console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
+        }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
     }
     else {
         //
     }
-
-/*
-    const promises = [];
-
-    // Get daily workouts database collection
-    let blogsRef = db.collection('blogs');
-
-    switch(completedWorkouts) {
-        case completedWorkouts == 4:
-            console.log("completedWorkouts <= 4")
-            // Get motivation blog
-            blogsRef.doc('motivation').get().then(doc => {
-            if (doc.exists) {
-               console.log("Document data:", doc.data());
-               blogs.push(doc.data());
-            } else {
-               // doc.data() will be undefined in this case
-               console.log("No such document!");
-            }
-            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
-            break;
-        case completedWorkouts > 4:
-            console.log("completedWorkouts > 4");
-            // If user has completed more than 4 daily workouts,
-            // delete motivation blog
-            blogsRef.doc('motivation').delete();
-
-            // Get healthy food blog
-            blogsRef.doc('healthy_food').get().then(doc => {
-            if (doc.exists) {
-               console.log("Document data:", doc.data());
-               blogs.push(doc.data());
-            } else {
-               // doc.data() will be undefined in this case
-               console.log("No such document!");
-            }
-            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
-            break;
-        default:
-            // Get welcome blog
-            const welcome_blog = blogsRef.doc('welcome').get().then(doc => {
-                if (doc.exists) {
-                   console.log("Document data:", doc.data());
-                   blogs.push(doc.data());
-                } else {
-                   // doc.data() will be undefined in this case
-                   console.log("No such document!");
-                }
-            }).then(() => {
-                blogs.push(welcome_blog);
-            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
-            promises.push(welcome_blog);
-            break;
-    }
-
-    // Full-fill all promises
-    Promise.all(promises).then((results) => {
-        console.log("Blog results: ", results);
-        console.log("BLOGS: ", blogs);
-        return blogs;
-    });*/
     return blogs;
 }
 
@@ -238,6 +170,8 @@ app.get('/analytics/user/:uid', async (req, res) => {
                 data.calories_burned = results[0];
                 data.bmi             = results[1];
                 data.total_time      = totalWorkoutTimeOfToday.reduce((a, b) => a + b, 0); // Sum of all workout time for a given day (in minutes)
+
+                // Send data object
                 res.status(200).send(data);
             });
         })
@@ -270,17 +204,23 @@ async function getUserData(uid) {
  *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
  */
 function getActivityFactor(numExercises) {
-    switch(numExercises) {
-        case numExercises < 1:
-            return 1.2;
-        case numExercises >= 3:
-            return 1.375;
-        case numExercises >= 3 && numExercises <= 5:
-            return 1.55;
-        case numExercises >= 6 && numExercises <= 7:
-            return 1.725;
-        case numExercises > 7:
-            return 1.9;
+    if (numExercises < 1) {
+        return 1.2;
+    }
+    else if (numExercises >= 3) {
+        return 1.375;
+    }
+    else if (numExercises >= 3 && numExercises <= 5) {
+        return 1.55;
+    }
+    else if(numExercises >= 6 && numExercises <= 7) {
+        return 1.725;
+    }
+    else if (numExercises > 7) {
+        return 1.9;
+    }
+    else {
+        return 0;
     }
 }
 
@@ -335,9 +275,23 @@ async function calculateUserBMI(uid) {
  *
  */
 async function calculateUserCaloriesBurned(uid) {
+    // Get user data
     const user = await getUserData(uid);
 
-    const activityFactor = 1.375;
+    // The user completed workouts
+    let completedDailyWorkouts = 0;
+
+    // Get user completed daily workouts count
+    db.collection('daily_exercises').where('user_id', '==', uid).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+        completedDailyWorkouts = snapshot.size;
+    });
+
+    const activityFactor = getActivityFactor(completedDailyWorkouts);
 
     if (user.gender == "man") {
         BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age + 5;

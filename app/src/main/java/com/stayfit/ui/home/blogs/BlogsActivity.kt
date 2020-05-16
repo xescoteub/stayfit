@@ -82,7 +82,7 @@ class BlogsActivity : AppCompatActivity() {
                     try {
 
                         val json = JSONArray(myResponse)
-
+                        println("json: $json")
                         // Generate a new blog object for each received document
                         for (i in 0 until json.length()) {
                             val item = json.getJSONObject(i)
