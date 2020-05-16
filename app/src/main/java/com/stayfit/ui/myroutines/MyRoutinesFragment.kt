@@ -117,6 +117,8 @@ class   MyRoutinesFragment: Fragment(){
             override fun onItemLongClick(position: Int, v: View?) {
             }
         })
+        (myroutinesRecycler.adapter as RoutineAdapter).notifyDataSetChanged()
+        Log.d(TAG, "END1")
     }
 
     fun startConcreteRoutine(r: Routine) {
@@ -198,6 +200,8 @@ class   MyRoutinesFragment: Fragment(){
                     }
                     Log.d(TAG, "routineList: $routinesList")
                 }
+                Log.d(TAG, "END2")
+                myroutinesRecycler.adapter!!.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
