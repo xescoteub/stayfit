@@ -46,8 +46,8 @@ class MyExercises : AppCompatActivity() {
     fun controlListView(){
         //Add elements to arraylist
         try {
-            //loadData()
-            loadDataSharedPreferences()
+            loadData()
+            //loadDataSharedPreferences()
             //Toast.makeText(this, "Loaded!", Toast.LENGTH_SHORT).show()
         }catch (e: Exception){
 
@@ -58,6 +58,8 @@ class MyExercises : AppCompatActivity() {
         listView?.adapter = arrayAdapter
         //add listener to listview
         listView?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) }
+        (listView?.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+        Log.d(TAG, "END1")
 
     }
     fun startConcreteExercise(i: Int){
@@ -72,8 +74,8 @@ class MyExercises : AppCompatActivity() {
     fun addExercise(exercise: Exercise){
         exerciseList.add(exercise)
         arrayList.add(exercise.getExerciseName())
-        //saveData(exercise)
-        saveDataSharedPreferences()
+        saveData(exercise)
+        //saveDataSharedPreferences()
     }
 
     fun newExercise(view: View) {
@@ -148,6 +150,8 @@ class MyExercises : AppCompatActivity() {
                     arrayList.add(exerciseObj["nom_exercise"].toString())
                     Log.d(TAG, "exerciseList: $exerciseList")
                 }
+                Log.d(TAG, "END2")
+                (listView?.adapter as ArrayAdapter<*>).notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
@@ -167,8 +171,10 @@ class MyExercises : AppCompatActivity() {
                 arrayList.removeAt(position)
                 exerciseList.removeAt(position)
                 //saveData()
-                saveDataSharedPreferences()
-                controlListView()
+                // saveDataSharedPreferences()
+                Log.d(TAG, "END2")
+                (listView?.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                //controlListView()
             }
             adb.show()
         }
