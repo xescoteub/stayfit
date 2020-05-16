@@ -46,7 +46,9 @@ class MyExercises : AppCompatActivity() {
     fun controlListView(){
         //Add elements to arraylist
         try {
-            loadData()
+            //loadData()
+            loadDataSharedPreferences()
+            //Toast.makeText(this, "Loaded!", Toast.LENGTH_SHORT).show()
         }catch (e: Exception){
 
         }
@@ -70,7 +72,8 @@ class MyExercises : AppCompatActivity() {
     fun addExercise(exercise: Exercise){
         exerciseList.add(exercise)
         arrayList.add(exercise.getExerciseName())
-        saveData(exercise)
+        //saveData(exercise)
+        saveDataSharedPreferences()
     }
 
     fun newExercise(view: View) {
@@ -142,6 +145,7 @@ class MyExercises : AppCompatActivity() {
                     }
                     Log.d(TAG, "exercise: $exercise")
                     exerciseList.add(exercise)
+                    arrayList.add(exerciseObj["nom_exercise"].toString())
                     Log.d(TAG, "exerciseList: $exerciseList")
                 }
             }
@@ -159,9 +163,11 @@ class MyExercises : AppCompatActivity() {
             adb.setPositiveButton(
                 "Ok"
             ) { dialog, which ->
+                deleteItemFireBase(arrayList.get(position))
                 arrayList.removeAt(position)
                 exerciseList.removeAt(position)
                 //saveData()
+                saveDataSharedPreferences()
                 controlListView()
             }
             adb.show()
@@ -177,5 +183,41 @@ class MyExercises : AppCompatActivity() {
         list.add(exercise.description!!)
         return list
     }*/
+    fun deleteItemFireBase(exercise_name: String) {
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        db.collection("myexercises").document(currentUserID).collection("exercicis").document(exercise_name)
+            .delete()
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+    private fun loadDataSharedPreferences() {
+        var sharedPreferences: SharedPreferences =
+            this.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var gson: Gson = Gson()
+        var jsonExercises: String? = sharedPreferences.getString("exercises list", null)
+        var jsonNames: String? = sharedPreferences.getString("names list", null)
+        val typeExercise: Type = object : TypeToken<ArrayList<Exercise?>?>() {}.type
+        val typeNames: Type = object : TypeToken<ArrayList<String?>?>() {}.type
+        exerciseList = gson.fromJson(jsonExercises, typeExercise)
+        arrayList = gson.fromJson(jsonNames, typeNames)
+        if (exerciseList == null) {
+            exerciseList = ArrayList()
+        }
+        if (arrayList == null) {
+            arrayList = ArrayList()
+        }
+    }
+
+    private fun saveDataSharedPreferences() {
+        var sharedPreferences: SharedPreferences = this.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sharedPreferences.edit()
+        var gson: Gson = Gson()
+        var jsonExercises: String = gson.toJson(exerciseList)
+        var jsonNames: String = gson.toJson(arrayList)
+        editor.putString("exercises list", jsonExercises)
+        editor.putString("names list", jsonNames)
+        editor.apply()
+    }
+
 }
 
