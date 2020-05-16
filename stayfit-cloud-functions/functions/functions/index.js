@@ -291,6 +291,7 @@ async function calculateUserCaloriesBurned(uid) {
         completedDailyWorkouts = snapshot.size;
     });
 
+    // Get user activity factor (computed accordingly the daily completed workouts)
     const activityFactor = getActivityFactor(completedDailyWorkouts);
 
     if (user.gender == "man") {
@@ -301,7 +302,8 @@ async function calculateUserCaloriesBurned(uid) {
 
     var calories = BMR * activityFactor;
 
-    return calories;
+    // Add 1 decimal
+    return calories.toFixed(1);
 }
 
 function calculateRecommendedWaterIntake() {
