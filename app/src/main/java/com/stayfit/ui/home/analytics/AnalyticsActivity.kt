@@ -21,7 +21,7 @@ import com.stayfit.ui.home.blogs.Blog
 import kotlinx.android.synthetic.main.activity_analytics.*
 import kotlinx.android.synthetic.main.bottom_sheet_calories.*
 import kotlinx.android.synthetic.main.bottom_sheet_heart.*
-import kotlinx.android.synthetic.main.bottom_sheet_sleep.*
+import kotlinx.android.synthetic.main.bottom_sheet_bmi.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -166,16 +166,22 @@ class AnalyticsActivity : AppCompatActivity() {
     private fun parseAnalyticsJSON(json: JSONObject)
     {
         val caloriesChart = findViewById<CircularProgressIndicator>(R.id.caloriesChart)
+        val caloriesChartBottomSheet = findViewById<CircularProgressIndicator>(R.id.caloriesChartBottomSheet)
 
         Log.d(TAG, "[total_time]:" + json["total_time"])
 
         val total_time: String = json["total_time"].toString()
-        val bmi: String = json["bmi"].toString()
+        val bmi = json.getJSONObject("bmi")//["bmi"]
+        Log.d(TAG, "BMI JSON Object: $bmi")
         val calories_burned1 : String = json["calories_burned"] as String
         val calories_burned2: Double = calories_burned1.toDouble()
 
         tv_gym_time.text        = "$total_time min"
-        tv_body_mass.text       = bmi
+        tv_body_mass.text       = bmi.get("bmi").toString()
+        bmi_result_message.text = bmi.get("result_message").toString()
+        bmi_advice_message.text = bmi.get("advice_message").toString()
+
         caloriesChart.setProgress(calories_burned2, 2500.0)
+        caloriesChartBottomSheet.setProgress(calories_burned2, 2500.0)
     }
 }

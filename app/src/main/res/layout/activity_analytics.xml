@@ -414,7 +414,7 @@
     <!-- ================================================== -->
     <!-- Include widget bottom sheets                       -->
     <!-- ================================================== -->
-    <include layout="@layout/bottom_sheet_sleep" />
+    <include layout="@layout/bottom_sheet_bmi" />
     <include layout="@layout/bottom_sheet_heart" />
     <include layout="@layout/bottom_sheet_calories" />
 

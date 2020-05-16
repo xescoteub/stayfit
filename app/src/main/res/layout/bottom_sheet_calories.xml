@@ -60,7 +60,7 @@
         android:weightSum="6">
 
         <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-            android:id="@+id/caloriesChart"
+            android:id="@+id/caloriesChartBottomSheet"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
@@ -68,6 +68,6 @@
             app:direction="counterclockwise"
             app:drawDot="true"
             app:enableProgressAnimation="true"
-            app:progressColor="@color/colorPrimary" />
+            app:progressColor="@color/colorPrimaryDarker" />
     </LinearLayout>
 </LinearLayout>

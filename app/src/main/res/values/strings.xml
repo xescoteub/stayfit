@@ -81,7 +81,7 @@
     <string name="titleHeartWidget">Heart</string>
     <string name="titleCaloriesWidget">Calories</string>
 
-    <string name="subTitleBottomSheetSleep">Average sleep hours today</string>
+    <string name="subTitleBottomSheetSleep">Your BMI:</string>
     <string name="subTitleBottomSheetHeart">Heart BPM rate</string>
 
 

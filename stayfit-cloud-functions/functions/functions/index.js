@@ -271,11 +271,11 @@ async function calculateUserBMI(uid) {
         obj.advice_message = under_weight_message;
     }
     if(bmi > 18.5 && bmi < 25) {
-        obj.message = "Your BMI is " + bmi + " indicating your weight is in the Normal category for your height.";
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Normal category for your height.";
         obj.advice_message = normal_weight_message;
     }
     if(bmi > 25) {
-        obj.message = "Your BMI is " + bmi + " indicating your weight is in the Overweight category for your height.";
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Overweight category for your height.";
         obj.advice_message = over_weight_advice_message;
     }
     return obj;
