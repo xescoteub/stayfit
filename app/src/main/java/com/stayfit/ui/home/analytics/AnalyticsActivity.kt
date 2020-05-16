@@ -133,6 +133,8 @@ class AnalyticsActivity : AppCompatActivity() {
     private fun fetchUserAnalytics() {
         Log.d(TAG, "fetchUserAnalytics")
 
+        progress_circular.visibility = View.VISIBLE;
+
         val client = OkHttpClient()
         val request: Request = Request.Builder()
             .url("$FIREBASE_CLOUD_FUNCTION_BASE_URL/analytics/user/${mAuth.uid}")
@@ -152,6 +154,8 @@ class AnalyticsActivity : AppCompatActivity() {
                         parseAnalyticsJSON(JSONObject(response))
                     } catch (e: JSONException) {
                         e.printStackTrace()
+                    } finally {
+                        progress_circular.visibility = View.GONE;
                     }
                 })
             }

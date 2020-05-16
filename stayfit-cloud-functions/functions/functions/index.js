@@ -111,30 +111,38 @@ app.get('/analytics/user/:uid', async (req, res) => {
                 console.log('No matching documents.');
                 return;
             }
+
+            // Array that holds response object containing:
+            // - BMI
+            // - Calories burned
+            // - Total workout minutes (for a given day)
             let data = {};
+
+            // Array that holds the total workout time records for a given day
+            let totalWorkoutTimeOfToday = [];
+
             snapshot.forEach(doc => {
                 console.log(doc.id, '=>', doc.data());
                 let documentDate = new Date(doc.data().date);
 
                 // Filter only documents that have been created today
+                // and store it's workout time (in minutes -> total_time / 60) in totalWorkoutTimeOfToday
                 if (documentDate.setHours(0,0,0,0) === new Date().setHours(0,0,0,0)) {
-
-                    let totalTime = [];
-                    totalTime.push(parseInt(doc.data().total_time / 60));
-
-                    data.total_time = totalTime;
-                    data.test = "test";
+                    totalWorkoutTimeOfToday.push(parseInt(doc.data().total_time / 60));
                 }
             });
 
+            // Store promises
             const promises = [];
             promises.push(calculateUserCaloriesBurned(uid));
             promises.push(calculateUserBMI(uid));
 
+            // Full-fill all promises
             Promise.all(promises).then((results) => {
                 console.log("results : ", results)
                 data.calories_burned = results[0];
                 data.bmi             = results[1];
+                data.total_time      = totalWorkoutTimeOfToday.reduce((a, b) => a + b, 0); // Sum of all workout time for a given day (in minutes)
                 res.status(200).send(data);
             });
         })
@@ -158,9 +166,15 @@ async function getUserData(uid) {
 }
 
 /**
+ *  Returns the activity factor for a given number of exercises.
  *
+ *  Sedentary i.e. little or no exercise : Activity Factor = 1.2
+ *  Lightly active i.e.light exercise 1-3 days/week : Activity Factor = 1.375
+ *  Moderately active i.e. exercise 3-5 days/week : Activity Factor = 1.55
+ *  Very active i.e.exercise/sports 6-7 days a week) : Activity Factor = 1.725
+ *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
  */
-function getActivityFactor(exercises) {
+function getActivityFactor(numExercises) {
     switch(numExercises) {
         case numExercises < 1:
             return 1.2;
@@ -239,5 +253,9 @@ async function calculateUserCaloriesBurned(uid) {
     var calories = BMR * activityFactor;
 
     return calories;
+}
+
+function calculateRecommendedWaterIntake() {
+
 }
 

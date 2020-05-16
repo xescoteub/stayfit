@@ -243,6 +243,8 @@ class DailyExercisesActivity : BaseHTTPAction() {
      */
     private fun fetchExercises()
     {
+        progress_circular.visibility = View.VISIBLE;
+
         db.collection("exercises")
             .get()
             .addOnSuccessListener { result ->
@@ -267,6 +269,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
 
                 // Display first exercise form list
                 displayData(currentExercise)
+                progress_circular.visibility = View.GONE;
 
                 createExercisesProgressLayout()
             }
@@ -471,20 +474,6 @@ class DailyExercisesActivity : BaseHTTPAction() {
             "date" to Date().toString(),
             "total_time" to time
         )
-
-        val o = {}
-
-        db.collection("daily_exercises")
-            .whereEqualTo("user_id", mAuth.currentUser!!.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
-            }
 
         db.collection("daily_exercises")
             .add(docData)
