@@ -54,7 +54,7 @@
                     android:imeOptions="actionNext"
                     android:minWidth="320dp"
                     android:minHeight="50dp"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.cardview.widget.CardView>
