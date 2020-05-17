@@ -37,27 +37,36 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/titleSleepWidget"
+            android:text="@string/titleBodyMass"
             android:textStyle="bold" />
 
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/bmi_result_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/subTitleBottomSheetSleep"
         android:textColor="@android:color/darker_gray"
         android:gravity="center"
+        android:layout_margin="10dp"
         android:layout_marginBottom="20dp"/>
 
     <LinearLayout
-        android:layout_width="158dp"
-        android:layout_height="128dp"
+        android:layout_width="371dp"
+        android:layout_height="195dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:orientation="vertical"
+        android:layout_margin="10dp"
         android:weightSum="6">
 
+        <TextView
+            android:id="@+id/bmi_advice_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray" />
 
     </LinearLayout>
 </LinearLayout>

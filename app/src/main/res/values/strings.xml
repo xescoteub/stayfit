@@ -76,12 +76,12 @@
     <!-- ====================================================================== -->
     <string name="titleWalkWidget">Walk</string>
     <string name="titleGymWidget">Walk</string>
-    <string name="titleSleepWidget">Sleep</string>
+    <string name="titleBodyMass">BMI</string>
     <string name="titleWaterWidget">Water</string>
     <string name="titleHeartWidget">Heart</string>
     <string name="titleCaloriesWidget">Calories</string>
 
-    <string name="subTitleBottomSheetSleep">Average sleep hours today</string>
+    <string name="subTitleBottomSheetSleep">Your BMI:</string>
     <string name="subTitleBottomSheetHeart">Heart BPM rate</string>
 
 

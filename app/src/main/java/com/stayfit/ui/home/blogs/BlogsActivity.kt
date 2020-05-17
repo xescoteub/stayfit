@@ -63,6 +63,7 @@ class BlogsActivity : AppCompatActivity() {
     private fun getUserBlogs()
     {
         Log.d(TAG, "getUserBlogs")
+        progress_circular.visibility = View.VISIBLE;
 
         val client = OkHttpClient()
         val request: Request = Request.Builder()
@@ -79,8 +80,9 @@ class BlogsActivity : AppCompatActivity() {
                 val myResponse: String = response?.body()!!.string()
                 this@BlogsActivity.runOnUiThread(Runnable {
                     try {
-                        val json = JSONArray(myResponse)
 
+                        val json = JSONArray(myResponse)
+                        println("json: $json")
                         // Generate a new blog object for each received document
                         for (i in 0 until json.length()) {
                             val item = json.getJSONObject(i)
@@ -97,6 +99,8 @@ class BlogsActivity : AppCompatActivity() {
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
+                    } finally {
+                        progress_circular.visibility = View.GONE;
                     }
                 })
             }

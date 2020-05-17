@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.CalendarView
 import android.widget.TextView
 import android.widget.Toast
@@ -114,6 +115,13 @@ class ActivityFragment : Fragment() {
     }
 
     private fun checkForEvents(date:String){
+        var arrayAdapter = activity?.let {
+            ArrayAdapter<ArrayList<Exercise>>(
+                it,
+                android.R.layout.select_dialog_singlechoice
+            )
+        }
+
         val currentUserID = mAuth.currentUser?.uid.toString()
 
         db.collection("events").get()
@@ -151,7 +159,8 @@ class ActivityFragment : Fragment() {
                                                 description  = routineObj["description"].toString()
                                                 photo   = routineObj["photo"].toString()
                                                 hashMapExercises  = h
-                                                exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                                                //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                                                arrayAdapter!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
                                                 Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                                                 Log.d(TAG, "routine: $routine")
                                                 routinesList.add(routine)
@@ -211,7 +220,7 @@ class ActivityFragment : Fragment() {
         })
     }
 
-    fun startConcreteRoutine(r: Routine){
+    fun startConcreteRoutine(r: Routine){ //No va
         val intent = Intent(activity, RoutineActivity::class.java)
         intent.putExtra("routine_map",r.hashMapExercises);
         startActivity(intent)

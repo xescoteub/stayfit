@@ -38,6 +38,7 @@
             android:layout_below="@+id/userimage"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
+            android:textColor="@color/colorWhite"
             android:text="UserName"
             android:textStyle="bold"
             android:textSize="25dp"/>
@@ -83,6 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
                     android:text="HEIGHT"
                     android:textSize="18dp"/>
 
@@ -119,6 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
                     android:text="WIDTH"
                     android:textSize="18dp"/>
 

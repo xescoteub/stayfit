@@ -21,6 +21,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.MainActivity
 import com.stayfit.R
@@ -119,9 +120,12 @@ class DailyExercisesActivity : BaseHTTPAction() {
     // TODO: explain
     var isDoneClicked : Boolean= false
 
+    var totalSeconds : ArrayList<Int> = ArrayList()
+
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -147,7 +151,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
         // Fetch exercises list
         fetchExercises()
 
-        milliseconds = pref.getInt("seconds", 10000)
+        milliseconds = pref.getInt("seconds", 60000)
 
         countDownTimer = object : CountDownTimer(300, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
@@ -210,11 +214,11 @@ class DailyExercisesActivity : BaseHTTPAction() {
             onBackPressed()
         }
 
-        mainView                 = findViewById(R.id.lv_view)
+        mainView                = findViewById(R.id.lv_view)
 
-        finalExercisesView    = findViewById(R.id.exercises_final_view)
+        finalExercisesView      = findViewById(R.id.exercises_final_view)
 
-        buttonHome                = findViewById(R.id.button_go_home)
+        buttonHome              = findViewById(R.id.button_go_home)
 
         imageView               = findViewById(R.id.workout_image_view)
 
@@ -239,6 +243,8 @@ class DailyExercisesActivity : BaseHTTPAction() {
      */
     private fun fetchExercises()
     {
+        progress_circular.visibility = View.VISIBLE;
+
         db.collection("exercises")
             .get()
             .addOnSuccessListener { result ->
@@ -263,6 +269,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
 
                 // Display first exercise form list
                 displayData(currentExercise)
+                progress_circular.visibility = View.GONE;
 
                 createExercisesProgressLayout()
             }
@@ -334,7 +341,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
         restTimer = object : CountDownTimer(milliseconds.toLong(), 1000) {
             @SuppressLint("SetTextI18n")
             override fun onTick(millisUntilFinished: Long) {
-                textSecondsCounter!!.text = "" + millisUntilFinished / 1000
+                textSecondsCounter!!.text = "" + millisUntilFinished / 1000 + "s"
             }
 
             override fun onFinish() {
@@ -395,6 +402,16 @@ class DailyExercisesActivity : BaseHTTPAction() {
                     myTextViews[i]!!.setTextColor(Color.WHITE)
                 }
             }
+            Log.d(TAG, ">>>>> 1textSecondsCounter: " + textSecondsCounter?.text.toString())
+            val secs = removeLastChar(textSecondsCounter?.text.toString())?.toInt()
+            Log.d(TAG, ">>>>> 2textSecondsCounter: " + textSecondsCounter?.text.toString())
+
+            if (secs != null) {
+                totalSeconds.add(secs)
+            }
+            Log.d(TAG, ">>>>> totalSeconds: $totalSeconds")
+
+
             countDownTimer!!.start()
             restTimer!!.cancel()
         }
@@ -442,12 +459,20 @@ class DailyExercisesActivity : BaseHTTPAction() {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Insert new daily activity entry
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun insertActivity()
     {
+        // The sum of time spent for each exercise
+        val time = totalSeconds.sum()
+        Log.d(TAG, "<time> $time </time>")
+
         val docData = hashMapOf(
             "user_id" to mAuth.currentUser!!.uid,
-            "date" to LocalDateTime.now()
+            "date" to Date().toString(),
+            "total_time" to time
         )
 
         db.collection("daily_exercises")
@@ -459,25 +484,9 @@ class DailyExercisesActivity : BaseHTTPAction() {
                 Log.w(TAG, "Error adding document", e)
             }
 
+    }
 
-
-//        val exercise = hashMapOf(
-//            "nom_exercise" to e.nom_exercise,
-//            "url_video" to e.url_video,
-//            "time_count" to e.time_count,
-//            "jason" to e.jason,
-//            "description" to e.description
-//        )
-
-//        val httpBuilder = HttpUrl.parse("$FIREBASE_CLOUD_FUNCTION_BASE_URL/blogs/user/${mAuth.uid}")!!.newBuilder()
-//
-//        val formBody: RequestBody = FormBody.Builder()
-//            .add("user_id", "Your message")
-//            .add("message", "Your message")
-//            .build()
-//
-//        val response = sendPostToCloudFunction(httpBuilder, formBody)
-//        Log.d("response: ", response.toString())
-
+    private fun removeLastChar(str: String): String? {
+        return str.substring(0, str.length - 1)
     }
 }

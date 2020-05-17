@@ -16,25 +16,6 @@ const cors = require('cors')({origin: true});
 var db = admin.firestore();
 
 // ============================================================================
-// Inserts welcome blog when user signs up to application
-// ============================================================================
-exports.insertWelcomeBlog = functions.https.onRequest((req, res) => {
-
-    var user_id = req.body.user_id
-
-    // Add a new document in collection "cities"
-    db.collection("blogs").doc(user_id).collection("docs").set({
-        name: "Los Angeles",
-        state: "CA",
-        country: "USA"
-    })
-
-    cors(req, res, () => {
-        res.status(200).send("Successfully inserted welcome blog.");
-	});
-});
-
-// ============================================================================
 // Serverless api architecture
 // ============================================================================
 const app = express();
@@ -46,56 +27,60 @@ app.disable("x-powered-by");
 exports.api = functions.https.onRequest(app);
 
 // ============================================================================
-// Get welcome blog
-// ============================================================================
-app.get('/blogs/welcome', (req, res) => {
-    db.collection("blogs").doc('welcome').get().then(doc => {
-        if (doc.exists) {
-           console.log("Document data:", doc.data());
-           res.status(200).send(doc.data());
-       } else {
-           // doc.data() will be undefined in this case
-           console.log("No such document!");
-       }
-     })
-     .catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
-});
-// ============================================================================
-// Get user blogs
-// ============================================================================
-app.get('/blogs2/user/:uid', async (req, res) => {
-
-});
-
-
-
-
-// ============================================================================
-// Get user blogs
+//
+// USER BLOG'S
+//
 // ============================================================================
 app.get('/blogs/user/:uid', (req, res) => {
     const uid = req.params.uid;
 
+    // Get blogs database collection
+    let blogsRef = db.collection('blogs');
+
     // Variable used to hold user blogs
     let blogs = [];
+
+    // The user completed workouts
     let completedDailyWorkouts = 0;
 
-    // Get blogs database collection
-    let blogsRef        = db.collection('blogs');
-    let dailyWorkoutRef  = db.collection('daily_exercises');
-
-    dailyWorkoutRef.where('user_id', '==', uid).get()
+    // Get user completed daily workouts count
+    db.collection('daily_exercises').where('user_id', '==', uid).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.');
           return;
         }
         completedDailyWorkouts = snapshot.size;
+      }).then(() => {
+          // Query blogs that where user_id equals the one from request(uid)
+          blogsRef.get()
+            .then(async snapshot => {
+              if (snapshot.empty) {
+                console.log('No matching documents.');
+                return;
+              }
 
-        // Push motivation blog if completed daily workouts is less than 5
-        if (completedDailyWorkouts < 5) {
-            // Get welcome blog
-            blogsRef.doc('motivation').get().then(doc => {
+              // Get recommended blogs
+              const recommendations = await handleUserBlogRecommendation(completedDailyWorkouts)
+              //console.log("recommendations: ", recommendations);
+              res.status(200).send(recommendations)
+            }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
+      });
+});
+
+/**
+ * Utility function to handle user blogs recommendation
+ */
+async function handleUserBlogRecommendation(completedWorkouts) {
+    // Get daily workouts database collection
+    let blogsRef = db.collection('blogs');
+
+    // Array to hold list of blog objects
+    const blogs = [];
+
+    if (completedWorkouts == 0) {
+        // Get welcome blog
+        await blogsRef.doc('welcome').get().then(doc => {
             if (doc.exists) {
                console.log("Document data:", doc.data());
                blogs.push(doc.data());
@@ -103,37 +88,248 @@ app.get('/blogs/user/:uid', (req, res) => {
                // doc.data() will be undefined in this case
                console.log("No such document!");
             }
-            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
-        }
-      });
+        });
+    }
+    else if (completedWorkouts <= 4) {
+        // Get motivation blog
+        await blogsRef.doc('motivation').get().then(doc => {
+            if (doc.exists) {
+               console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
+        }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+    }
+    else if (completedWorkouts > 4){
+        await blogsRef.doc('healthy_food').get().then(doc => {
+            if (doc.exists) {
+               console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
+        }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+    }
+    else {
+        //
+    }
+    return blogs;
+}
 
-    // Query blogs that where user_id equals the one from request(uid)
-    blogsRef.where('user_id', '==', uid).get()
+// ============================================================================
+//  USER ANALYTICS
+//      - BMI
+//      - Calories burned
+//      - Total workout minutes (for a given day)
+// ============================================================================
+app.get('/analytics/user/:uid', async (req, res) => {
+    const uid = req.params.uid;
+
+    // Get daily workouts database collection
+    let dailyWorkoutsRef = db.collection('daily_exercises');
+
+    dailyWorkoutsRef.where('user_id', '==', uid)
+        .get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+                console.log('No matching documents.');
+                return;
+            }
+
+            // Array that holds response object containing:
+            // - BMI
+            // - Calories burned
+            // - Total workout minutes (for a given day)
+            let data = {};
+
+            // Array that holds the total workout time records for a given day
+            let totalWorkoutTimeOfToday = [];
+
+            snapshot.forEach(doc => {
+                console.log(doc.id, '=>', doc.data());
+                let documentDate = new Date(doc.data().date);
+
+                // Filter only documents that have been created today
+                // and store it's workout time (in minutes -> total_time / 60) in totalWorkoutTimeOfToday
+                if (documentDate.setHours(0,0,0,0) === new Date().setHours(0,0,0,0)) {
+                    totalWorkoutTimeOfToday.push(parseInt(doc.data().total_time / 60));
+                }
+            });
+
+            // Store promises
+            const promises = [];
+            promises.push(calculateUserCaloriesBurned(uid));
+            promises.push(calculateUserBMI(uid));
+
+            // Full-fill all promises
+            Promise.all(promises).then((results) => {
+                console.log("results : ", results)
+                data.calories_burned = results[0];
+                data.bmi             = results[1];
+                data.total_time      = totalWorkoutTimeOfToday.reduce((a, b) => a + b, 0); // Sum of all workout time for a given day (in minutes)
+
+                // Send data object
+                res.status(200).send(data);
+            });
+        })
+});
+
+/**
+ * Get the personal information for a given user.
+ *
+ * @param {string} uid The UID of the user.
+ */
+async function getUserData(uid) {
+    const snap = await db.collection('users').doc(uid).get();
+
+    if (snap.exists) {
+     //console.log("Document data:", doc.data());
+     return snap.data();
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}
+
+/**
+ *  Returns the activity factor for a given number of exercises.
+ *
+ *  Sedentary i.e. little or no exercise : Activity Factor = 1.2
+ *  Lightly active i.e.light exercise 1-3 days/week : Activity Factor = 1.375
+ *  Moderately active i.e. exercise 3-5 days/week : Activity Factor = 1.55
+ *  Very active i.e.exercise/sports 6-7 days a week) : Activity Factor = 1.725
+ *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
+ */
+function getActivityFactor(numExercises) {
+    if (numExercises < 1) {
+        return 1.2;
+    }
+    else if (numExercises >= 3) {
+        return 1.375;
+    }
+    else if (numExercises >= 3 && numExercises <= 5) {
+        return 1.55;
+    }
+    else if(numExercises >= 6 && numExercises <= 7) {
+        return 1.725;
+    }
+    else if (numExercises > 7) {
+        return 1.9;
+    }
+    else {
+        return 0;
+    }
+}
+
+/**
+ *  Calculates Body Mass Index (BMI) and returns object with BMI + advice message
+ *  Weight in kg
+ *  Height in cm
+ */
+async function calculateUserBMI(uid) {
+    // Get user data (weight / height)
+    const user = await getUserData(uid);
+
+    const weight = user.weight;
+    const height = user.height;
+
+    // The response object containing the actual BMI value plus an informative message
+    const obj = {};
+
+    // Compute BMI
+    const bmi = parseInt(weight/(height/100*height/100));
+
+    obj.bmi = bmi;
+
+    // BMI messages
+    const under_weight_message       = "For your height, a normal weight range would be from 129 to 174 pounds. Talk with your healthcare provider to determine possible causes of underweight and if you need to gain weight."
+
+    const normal_weight_message      = "Maintaining a healthy weight may reduce the risk of chronic diseases associated with overweight and obesity."
+                                     + "For information about the importance of a healthy diet and physical activity in maintaining a healthy weight, visit Preventing Weight Gain."
+
+    const over_weight_advice_message = "Anyone who is overweight should try to avoid gaining additional weight."
+                                     + "Additionally, if you are overweight with other risk factors (such as high LDL cholesterol, low HDL cholesterol, or high blood pressure), you should try to lose weight."
+                                     + "Even a small weight loss (just 10% of your current weight) may help lower the risk of disease. Talk with your healthcare provider to determine appropriate ways to lose weight."
+                                     + "For information about the importance of a healthy diet and physical activity in reaching a healthy weight, visit Healthy Weight."
+
+    if (bmi < 18.5) {
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Underweight category for your height.";
+        obj.advice_message = under_weight_message;
+    }
+    if (bmi > 18.5 && bmi < 25) {
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Normal category for your height.";
+        obj.advice_message = normal_weight_message;
+    }
+    if (bmi > 25) {
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Overweight category for your height.";
+        obj.advice_message = over_weight_advice_message;
+    }
+    return obj;
+}
+
+/**
+ *  -------------------------------------------------
+ *  Total calories expenditure = BMR × ActivityFactor
+ *  -------------------------------------------------
+ *  BMR:
+ *  - Women : BMR=655+9.6×weight+1.8×height−4.7×age
+ *  - Men   : BMR=66+13.7×weight+5×height−6.8×age
+ *  where weight is in kilograms, height is in centimeters and age is in years
+ *
+ *  Sedentary i.e. little or no exercise : Activity Factor = 1.2
+ *  Lightly active i.e.light exercise 1-3 days/week : Activity Factor = 1.375
+ *  Moderately active i.e. exercise 3-5 days/week : Activity Factor = 1.55
+ *  Very active i.e.exercise/sports 6-7 days a week) : Activity Factor = 1.725
+ *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
+ *
+ *  Example:
+ *  activityFactor = 1.55 ( Moderate exercise )
+ *  BMR = 1200
+ *  Calories -> 1860
+ *
+ *  The total calories needed to maintain the current weight must be the same as the total calorie expenditure i.e. 1860
+ *  If the total daily calories consumed is higher than the total calories needed, the person will gain weight.
+ *  On the other hand, if the total daily calories consumed is lower than the total calories needed, the person will lose weight.
+ *
+ */
+async function calculateUserCaloriesBurned(uid) {
+    // Get user data
+    const user = await getUserData(uid);
+
+    // The user completed workouts
+    let completedDailyWorkouts = 0;
+
+    // Get user completed daily workouts count
+    db.collection('daily_exercises').where('user_id', '==', uid).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents.');
           return;
         }
+        completedDailyWorkouts = snapshot.size;
+    });
 
-        // Push snapshot documents into blogs array, and send a 200 response to client
-        snapshot.forEach(doc => {
-          blogs.push(doc.data());
-          console.log(doc.id, '=>', doc.data().date);
-        });
+    // Get user activity factor (computed accordingly the daily completed workouts)
+    const activityFactor = getActivityFactor(completedDailyWorkouts);
 
-      }).then(() => {
-            // Get welcome blog
-            blogsRef.doc('welcome').get().then(doc => {
-            if (doc.exists) {
-               console.log("Document data:", doc.data());
-               blogs.push(doc.data());
-            } else {
-               // doc.data() will be undefined in this case
-               console.log("No such document!");
-            }
-            }).then(() => {
-                res.status(200).send(blogs);
-            }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+    if (user.gender == "man") {
+        BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age + 5;
+    } else {
+      BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age -161;
+    }
 
-      }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
-});
+    var calories = BMR * activityFactor;
+
+    // Parse the value as a float value
+    calories = parseFloat(calories);
+    //Format the value w/ the specified number
+    //of decimal places and return it.
+    return calories.toFixed(1);
+}
+
+function calculateRecommendedWaterIntake() {
+
+}

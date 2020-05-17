@@ -68,6 +68,14 @@
                     android:layout_height="match_parent"
                     android:layout_above="@+id/done">
 
+                    <ProgressBar
+                        android:id="@+id/progress_circular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        android:layout_centerInParent="true" />
+
                     <ImageView
                         android:id="@+id/workout_image_view"
                         android:layout_width="wrap_content"
