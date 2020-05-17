@@ -66,6 +66,12 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
+        if(tv_phone.text.toString().length != 9){
+            tv_phone.error = "Please enter valid phone"
+            tv_phone.requestFocus()
+            return
+        }
+
         if (tv_password.text.toString().isEmpty()) {
             tv_password.error = "Please enter password"
             tv_password.requestFocus()
@@ -103,6 +109,7 @@ class SignUpActivity : BaseHTTPAction() {
             val data = HashMap<String, Any>()
             data["user_name"] = tv_username.text.toString()
             data["user_email"] = tv_email.text.toString()
+            data["user_phone"] = tv_phone.text.toString()
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()

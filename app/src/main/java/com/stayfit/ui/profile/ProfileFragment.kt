@@ -1,26 +1,35 @@
 package com.stayfit.ui.profile
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.stayfit.R
 import de.hdodenhof.circleimageview.CircleImageView
+import org.w3c.dom.Text
+import java.io.ByteArrayOutputStream
 import java.util.HashMap
 
 
@@ -28,8 +37,9 @@ class ProfileFragment : Fragment() {
     private lateinit var mAuth : FirebaseAuth
 
 
-    var km_recorred: Int = 0
-    var times_loged: Int = 0
+    val PICK_IMAGE = 1
+    val REQUEST_IMAGE_CAPTURE = 3
+    var photo: String = "null"
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -40,25 +50,19 @@ class ProfileFragment : Fragment() {
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
         var view:View = inflater.inflate(R.layout.profile_fragment, container, false)
 
-        datosusuario(view)
+        datosusuario(view)// pone en pantalla los datos actualizados el usuario
 
         mAuth = FirebaseAuth.getInstance()
         var actualuser = mAuth.currentUser
 
-        // poner datos actualizados del usuario
 
-        var userid = actualuser?.displayName
+        /*var userid = actualuser?.displayName
         var username: TextView = view.findViewById(R.id.profile_username)
-        username.setText(userid)
-
-        var email= actualuser?.email
-        var useremail: TextView = view.findViewById(R.id.profile_email)
-        useremail.setText(email)
+        username.setText(userid)*/
 
 
         var userphoto: CircleImageView = view.findViewById(R.id.user_image)
         Picasso.get().load(actualuser?.photoUrl).placeholder(R.drawable.ic_person).error(R.drawable.ic_person).into(userphoto)
-        //
 
 
         //GO-TO
@@ -69,10 +73,57 @@ class ProfileFragment : Fragment() {
         youtubebutton.setOnClickListener { goto_youtube() }
 
 
+        //Controlar Height i Weight
+
+
+        var heigth : TextView = view.findViewById(R.id.textVHeight)
+        heigth.setOnClickListener{
+
+            val hadb: AlertDialog.Builder = AlertDialog.Builder(activity)
+
+            val hView:View = getLayoutInflater().inflate(R.layout.profile_change_height,null)
+            val height_et: EditText = hView.findViewById(R.id.editTextHeight)
+
+            hadb.setNegativeButton("Cancel", null)
+            hadb.setPositiveButton("Ok") { dialog, which ->
+
+                heigth.setText(height_et.text)
+
+            }
+            hadb.setTitle("Change Height")
+            hadb.setView(hView)
+            val hdialog:AlertDialog =hadb.create()
+            hdialog.show()
+
+        }
+
+        var width : TextView = view.findViewById(R.id.textVWidth)
+        width.setOnClickListener{
+
+            val wadb: AlertDialog.Builder = AlertDialog.Builder(activity)
+
+            val wView:View = getLayoutInflater().inflate(R.layout.profile_change_width,null)
+            val width_et: EditText = wView.findViewById(R.id.editTextWidth)
+
+            wadb.setNegativeButton("Cancel", null)
+            wadb.setPositiveButton("Ok") { dialog, which ->
+
+                width.setText(width_et.text)
+
+            }
+            wadb.setTitle("Change Width")
+            wadb.setView(wView)
+            val wdialog:AlertDialog =wadb.create()
+            wdialog.show()
+
+        }
+
+
 
         return view
     }
 
+    //Recoge los datos del usuario actual y los inserta en su correspondiente sitio del perfil
     private fun datosusuario(view: View) {
         val db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
@@ -83,22 +134,20 @@ class ProfileFragment : Fragment() {
                 val user = result.data
 
                 val email = user?.get("user_email").toString()
+                var useremail: TextView = view.findViewById(R.id.profile_email)
+                useremail.setText(email)
 
-                Log.i("users", user?.get("user_email").toString())
+                val username = user?.get("user_name").toString()
+                var username_tv : TextView = view.findViewById(R.id.profile_username)
+                username_tv.setText(username)
 
-                /*for(user_iterator in result){
+                val phone = user?.get("user_phone").toString()
+                var phone_tv : TextView = view.findViewById(R.id.profile_phone)
+                phone_tv.setText(phone)
 
-                    val user = user_iterator.data as HashMap<*, *>
-                    Log.i("Users", user["user_email"].toString() )
-
-                    if(user["user_email"].toString().equals(actualuser?.email)){
-
-                        var username1: TextView = view.findViewById(R.id.profile_username)
-                        username1.setText(user["user_email"].toString())
-                    }
-
-
-                }*/
+                Log.i("userse1", user?.get("user_email").toString())
+                Log.i("usersn1", user?.get("user_name").toString())
+                Log.i("usersp1", user?.get("user_phone").toString())
 
             }
     }
@@ -119,6 +168,7 @@ class ProfileFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UCSRvhTSRmdqNA-FhGBLbzIQ"))
         startActivity(intent)
     }
+
 
 
 }

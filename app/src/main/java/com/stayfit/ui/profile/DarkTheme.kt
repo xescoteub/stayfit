@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 
 class DarkTheme : AppCompatActivity() {
@@ -38,6 +40,8 @@ class DarkTheme : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         var user = mAuth.currentUser
+        val db = FirebaseFirestore.getInstance();
+        val data = HashMap<String, Any>() // hash map para sobre escribir datos
 
         myswitch=findViewById(R.id.darkTheme_switch)
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
@@ -56,6 +60,10 @@ class DarkTheme : AppCompatActivity() {
                     finish()
             }
         })
+
+
+
+        //Listener del boton para cambiar contraseña (abre un Dialog)
         var psswdbtn: Button = findViewById(R.id.btnChangePasswd)
         psswdbtn.setOnClickListener{
 
@@ -83,8 +91,33 @@ class DarkTheme : AppCompatActivity() {
 
         }
 
+        var phonebtn: Button = findViewById(R.id.btnChangePhone)
+        phonebtn.setOnClickListener{
+
+            val phonebuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+            val phoneView: View = getLayoutInflater().inflate(R.layout.profile_change_phone,null)
+            val phone_et : EditText = phoneView.findViewById(R.id.editTextPhone)
+
+            phonebuilder.setNegativeButton( "Cancel", null)
+            phonebuilder.setPositiveButton("OK") { dialog, which ->
+
+                data["user_phone"] = phone_et.text.toString()
+                db.collection("users").document(mAuth.uid!!).update(data)
+
+            }
+
+            phonebuilder.setTitle("Change Phone")
+            phonebuilder.setView(phoneView)
+            val pdialog :AlertDialog = phonebuilder.create()
+            pdialog.show()
 
 
+
+        }
+
+
+        //Listener del boton para cambiar email (abre un Dialog)
         var emailbtn : Button = findViewById<Button>(R.id.btnChangeEmail)
         emailbtn.setOnClickListener{
 
@@ -98,6 +131,10 @@ class DarkTheme : AppCompatActivity() {
             ebuilder.setPositiveButton("OK") { dialog, which ->
 
                 if(email1.text.toString().equals((email2.text.toString()))){
+
+                    data["user_email"] = email1.text.toString()
+                    db.collection("users").document(mAuth.uid!!).update(data)
+
                     Toast.makeText(this,"IGUALES", Toast.LENGTH_SHORT).show()
                 }
 
@@ -110,7 +147,7 @@ class DarkTheme : AppCompatActivity() {
 
 
         }
-
+        //Listener del boton para cambiar el nombre de usuario (abre un Dialog)
         var usernamebtn : Button = findViewById<Button>(R.id.btnChangeUserName)
         usernamebtn.setOnClickListener{
 
@@ -122,6 +159,15 @@ class DarkTheme : AppCompatActivity() {
             ubuilder.setNegativeButton( "Cancel", null)
             ubuilder.setPositiveButton("OK") { dialog, which ->
 
+
+
+
+                //cogemos datos del username
+                data["user_name"] = username1.text.toString()
+                db.collection("users").document(mAuth.uid!!).update(data)
+
+
+                //actualizar username en firrebase
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setDisplayName(username1.text.toString())
                     .build()
@@ -144,6 +190,7 @@ class DarkTheme : AppCompatActivity() {
 
         }
 
+        //Listener del boton para cambiar contraseña
         var photobtn : Button = findViewById(R.id.btnChangePhoto)
         photobtn.setOnClickListener{
 
@@ -155,35 +202,60 @@ class DarkTheme : AppCompatActivity() {
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
             startActivityForResult(chooserIntent, PICK_IMAGE)
 
-
-
         }
 
 
     }
 
-
+    // Pone en la FireBase del usuario su foto de perfil (URI)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val imageView: ImageView = findViewById(R.id.imagenprueba)
+
+        mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && null != data) {
             val uri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-            val round_bitmap = RoundedBitmapDrawableFactory.create(resources, bitmap)
-            round_bitmap.setCircular(true)
-            imageView.setImageDrawable(round_bitmap)
+            val photo_uri = getImageUri(this, bitmap)
             photo = uri.toString()
+
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(photo_uri)
+                .build()
+
+            user?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i("username ","username updated")
+                    }else{
+                        Log.i("username","username not updated")
+                    }
+                }
+
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
-            val round_bitmap = RoundedBitmapDrawableFactory.create(resources, imageBitmap)
-            round_bitmap.setCircular(true)
-            imageView.setImageDrawable(round_bitmap)
+
+            val photo_uri1 = getImageUri(this, imageBitmap)
+
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(photo_uri1)
+                .build()
+
+            user?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i("username ","username updated")
+                    }else{
+                        Log.i("username","username not updated")
+                    }
+                }
+
         }
 
     }
-
+    //convierte el bitmap en Uri
     fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
@@ -195,6 +267,7 @@ class DarkTheme : AppCompatActivity() {
         )
         return Uri.parse(path)
     }
+
 
 
 
