@@ -134,6 +134,7 @@ class SignUpActivity : BaseHTTPAction() {
             data["user_name"]   = tv_username.text.toString()
             data["user_email"]  = tv_email.text.toString()
             data["user_phone"]  = tv_phone.text.toString()
+            data["user_gender"] = gender_spinner.selectedItem.toString().toLowerCase();
             data["user_height"] = et_height.text.toString()
             data["user_weight"] = et_weight.text.toString()
 
