@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -57,6 +58,9 @@ class   MyRoutinesFragment: Fragment(){
         var buttonCalendar: ImageView = view.findViewById(R.id.ic_addToCalendar)
         buttonCalendar.setOnClickListener { calendarEvent() }
 
+        var buttonDefault: Button = view.findViewById(R.id.btn_default_routines)
+        buttonDefault.setOnClickListener { openDefaultRoutines() }
+
         return view
     }
 
@@ -104,6 +108,7 @@ class   MyRoutinesFragment: Fragment(){
             loadExercises()
             // loadDataSharedPreferences()
         }catch (e: Exception){
+            Log.d(TAG,"Exception: ${e.message}")
         }
 
         viewModel.setRoutines(getRoutinesNamesList())
@@ -122,7 +127,11 @@ class   MyRoutinesFragment: Fragment(){
         Log.d(TAG, "END1")
     }
     fun startConcreteRoutine(r: Routine) {
-        // loadExercises() <--- dóna error extrany HashMap
+        try {
+            loadExercises() // <--- dóna error extrany HashMap
+        }catch (e: Exception){
+            Log.d(TAG,"Exception: ${e.message}")
+        }
         Log.d(TAG, ">>> startConcreteRoutine: $r")
         val intent = Intent(activity, RoutineActivity::class.java)
         intent.putExtra("routine_map",r.hashMapExercises);
@@ -431,5 +440,75 @@ class   MyRoutinesFragment: Fragment(){
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    private fun saveDataPhoto(r: Routine){
+
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        val routine = hashMapOf(
+            "name" to r.name,
+            "description" to r.description,
+            "photo" to r.photo,
+            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+        )
+        db.collection("routines").get()
+            .addOnSuccessListener { result ->
+                var userFound = false
+                for(user in result){
+                    if(user.id.equals(currentUserID)){
+                        userFound=true
+                    }
+                }
+                if(userFound){
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(routine)
+                }else{
+                    //Adding User credentials
+                    val dataUser = HashMap<String, String>()
+                    dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
+                    db.collection("routines").document(currentUserID).set(dataUser)
+                    //Adding User Routine
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(routine)
+                    Log.d(TAG,"Routine added.")
+                    Toast.makeText(activity,"Routine ${r.name} added",Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG,"Error getting getting data",e)
+            }
+    }
+    private fun loadDataPhoto(){
+        val user = mAuth.currentUser?.uid.toString()
+        db.collection("routines").document(user).collection("MyRoutines")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    val routineObj = document.data as HashMap<*, *>
+                    val routine = Routine()
+                    var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+
+                    with(routine) {
+                        name    = routineObj["name"].toString()
+                        description  = routineObj["description"].toString()
+                        photo   = routineObj["photo"].toString()
+                        hashMapExercises  = h
+                        exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                        Log.d(TAG, "routine: $routine")
+                        routinesList.add(routine)
+                    }
+                    Log.d(TAG, "routineList: $routinesList")
+                }
+                Log.d(TAG, "END2")
+                myroutinesRecycler.adapter!!.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting documents: ", exception)
+            }
+
+    }
+    fun openDefaultRoutines(){
+        val intent = Intent(activity, DefaultRoutinesActivity::class.java)
+        startActivity(intent)
     }
 }

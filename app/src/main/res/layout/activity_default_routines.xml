@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.myroutines.DefaultRoutinesActivity"
+    android:paddingTop="16dp">
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/defaultroutinesRecycler"
+        android:layout_below="@+id/ic_addDRToCalendar">
+    </androidx.recyclerview.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/ic_addDRToCalendar"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        app:srcCompat="@drawable/ic_assignment_purple"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"/>
+
+</RelativeLayout>
