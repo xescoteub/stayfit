@@ -90,7 +90,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
             }
         });
     }
-    else if (completedWorkouts <= 4) {
+    else if (completedWorkouts <= 2) {
         // Get motivation blog
         await blogsRef.doc('motivation').get().then(doc => {
             if (doc.exists) {
@@ -102,7 +102,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
             }
         }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
     }
-    else if (completedWorkouts > 4){
+    else if (completedWorkouts >= 4){
         await blogsRef.doc('healthy_food').get().then(doc => {
             if (doc.exists) {
                console.log("Document data:", doc.data());
