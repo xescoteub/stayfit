@@ -9,10 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -38,6 +35,7 @@ class   MyRoutinesFragment: Fragment(){
     private val TAG = "MyRoutinesFragment"
     private lateinit var viewModel: MyRoutinesViewModel
     private lateinit var mAuth: FirebaseAuth
+    var arrayAdapter: ArrayAdapter<ArrayList<Exercise>> ?= null
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
@@ -172,6 +170,12 @@ class   MyRoutinesFragment: Fragment(){
             }
     }
     private fun loadDataFireBase(){
+        arrayAdapter = activity?.let {
+            ArrayAdapter<ArrayList<Exercise>>(
+                it,
+                android.R.layout.select_dialog_singlechoice
+            )
+        }
         val user = mAuth.currentUser?.uid.toString()
         db.collection("routines").document(user).collection("MyRoutines")
             .get()
@@ -187,7 +191,8 @@ class   MyRoutinesFragment: Fragment(){
                         description  = routineObj["description"].toString()
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
-                        exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        arrayAdapter!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
                         Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
                         routinesList.add(routine)
@@ -200,7 +205,6 @@ class   MyRoutinesFragment: Fragment(){
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
             }
-
     }
     private fun deleteRoutine() {
         Toast.makeText(activity,"Press the routine that you want to delete",Toast.LENGTH_SHORT).show()
@@ -401,6 +405,7 @@ class   MyRoutinesFragment: Fragment(){
     private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
         var arrayList:ArrayList<ArrayList<String>> = ArrayList()
         Log.d(TAG, "Class ${exercises.javaClass}")
+        Log.d(TAG, "EX ${exercises}")
         for (ex in exercises) {
             arrayList.add(ex.getParametersList())
         }
@@ -408,9 +413,9 @@ class   MyRoutinesFragment: Fragment(){
     }
     private fun loadExercises(){
         for (r in routinesList.indices) {
-            Log.d(TAG, "load exercisesList: ${exercisesRoutine!!.get(r)}")
+            Log.d(TAG, "load exercisesList: ${arrayAdapter!!.getItem(r)}")
             var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-            h["exercises"] = arrayListExerciseToArrayListStrings(exercisesRoutine!!.get(r))
+            h["exercises"] = arrayListExerciseToArrayListStrings(arrayAdapter!!.getItem(r)!!)
             routinesList[r].hashMapExercises = h
         }
     }
