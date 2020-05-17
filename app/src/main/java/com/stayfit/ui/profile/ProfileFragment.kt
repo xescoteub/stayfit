@@ -156,6 +156,10 @@ class ProfileFragment : Fragment() {
                 var width_tv : TextView = view.findViewById(R.id.textVWidth)
                 width_tv.setText(width)
 
+                var bio = user?.get("user_bio").toString()
+                var bio_tv : TextView = view.findViewById(R.id.profileBio)
+                bio_tv.setText(bio)
+
 
                 Log.i("userse1", user?.get("user_email").toString())
                 Log.i("usersn1", user?.get("user_name").toString())

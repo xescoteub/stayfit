@@ -75,17 +75,7 @@
         android:text="Change phone"
         android:textSize="16dp"
         android:textAlignment="textStart" />
-    <Button
-        android:id="@+id/btnChangeEmail"
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/transparent"
-        android:textAllCaps="false"
-        android:text="Change email"
-        android:textSize="16dp"
-        android:textAlignment="textStart" />
+
     <Button
         android:id="@+id/btnChangePasswd"
         android:layout_width="match_parent"
@@ -107,6 +97,17 @@
         android:background="@color/transparent"
         android:textAllCaps="false"
         android:text="Change photo"
+        android:textSize="16dp"
+        android:textAlignment="textStart" />
+    <Button
+        android:id="@+id/btnChangeBio"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/transparent"
+        android:textAllCaps="false"
+        android:text="Change bio"
         android:textSize="16dp"
         android:textAlignment="textStart" />
     <View

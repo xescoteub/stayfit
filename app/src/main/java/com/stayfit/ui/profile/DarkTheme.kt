@@ -87,16 +87,12 @@ class DarkTheme : AppCompatActivity() {
 
                 }
 
-
-
             }
 
             pbuilder.setTitle("Change Password")
             pbuilder.setView(pView)
             val pdialog :AlertDialog = pbuilder.create()
             pdialog.show()
-
-
 
         }
 
@@ -133,7 +129,7 @@ class DarkTheme : AppCompatActivity() {
 
 
         //Listener del boton para cambiar email (abre un Dialog)
-        var emailbtn : Button = findViewById<Button>(R.id.btnChangeEmail)
+        /*var emailbtn : Button = findViewById<Button>(R.id.btnChangeEmail)
         emailbtn.setOnClickListener{
 
             val ebuilder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -161,7 +157,8 @@ class DarkTheme : AppCompatActivity() {
             edialog.show()
 
 
-        }
+        }*/
+
         //Listener del boton para cambiar el nombre de usuario (abre un Dialog)
         var usernamebtn : Button = findViewById<Button>(R.id.btnChangeUserName)
         usernamebtn.setOnClickListener{
@@ -173,9 +170,6 @@ class DarkTheme : AppCompatActivity() {
 
             ubuilder.setNegativeButton( "Cancel", null)
             ubuilder.setPositiveButton("OK") { dialog, which ->
-
-
-
 
                 //actualizmamos datos del username en FireStore
                 data["user_name"] = username1.text.toString()
@@ -205,6 +199,29 @@ class DarkTheme : AppCompatActivity() {
 
         }
 
+        var biobtn : Button = findViewById(R.id.btnChangeBio)
+        biobtn.setOnClickListener{
+
+            val bbuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+            val bView: View = getLayoutInflater().inflate(R.layout.profile_change_bio,null)
+            val bio : EditText = bView.findViewById(R.id.editTextBio)
+
+            bbuilder.setNegativeButton( "Cancel", null)
+            bbuilder.setPositiveButton("OK") { dialog, which ->
+
+                data["user_bio"] = bio.text.toString()
+                db.collection("users").document(mAuth.uid!!).update(data)
+
+            }
+
+            bbuilder.setTitle("Change Username")
+            bbuilder.setView(bView)
+            val bdialog :AlertDialog = bbuilder.create()
+            bdialog.show()
+
+        }
+
         //Listener del boton para cambiar contraseña
         var photobtn : Button = findViewById(R.id.btnChangePhoto)
         photobtn.setOnClickListener{
@@ -218,6 +235,8 @@ class DarkTheme : AppCompatActivity() {
             startActivityForResult(chooserIntent, PICK_IMAGE)
 
         }
+
+
 
         var exitbtn : Button = findViewById(R.id.exitApp)
         exitbtn.setOnClickListener{

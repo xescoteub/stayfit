@@ -152,6 +152,7 @@ class SignUpActivity : BaseHTTPAction() {
             data["user_gender"] = gender_spinner.selectedItem.toString().toLowerCase()
             data["user_height"] = et_height.text.toString()
             data["user_weight"] = et_weight.text.toString()
+            data["user_bio"] = "Im new on StayFit"
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
