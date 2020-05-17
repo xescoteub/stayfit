@@ -31,6 +31,7 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
 
     <string name="remember_me">Remember me</string>
     <string name="forgot_password">Forgot password?</string>
@@ -74,7 +75,7 @@
     <string name="get_started">Get started</string>
     <string name="Start">Start</string>
     <string name="wellDone">Well Done!</string>
-    <string name="congratulations">Congratulation you are done with today workout</string>
+    <string name="congratulations">Congratulation you are done with your workout session!</string>
 
     <!-- ====================================================================== -->
     <!-- Analytics activity bottom sheets                                       -->

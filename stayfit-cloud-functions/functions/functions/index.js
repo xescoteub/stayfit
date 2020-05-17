@@ -212,16 +212,18 @@ async function getUserData(uid) {
  *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
  */
 function getActivityFactor(numExercises) {
-    if (numExercises < 1) {
+    console.log("getActivityFactor: ", numExercises)
+
+    if (numExercises >= 1 && numExercises < 3) {
         return 1.2;
     }
-    else if (numExercises >= 3) {
+    else if (numExercises >= 3 && numExercises < 5) {
         return 1.375;
     }
-    else if (numExercises >= 3 && numExercises <= 5) {
+    else if (numExercises > 3 && numExercises < 5) {
         return 1.55;
     }
-    else if(numExercises >= 6 && numExercises <= 7) {
+    else if(numExercises >= 5 && numExercises < 7) {
         return 1.725;
     }
     else if (numExercises > 7) {
@@ -311,7 +313,7 @@ async function calculateUserCaloriesBurned(uid) {
     let completedDailyWorkouts = 0;
 
     // Get user completed daily workouts count
-    db.collection('daily_exercises').where('user_id', '==', uid).get()
+    await db.collection('daily_exercises').where('user_id', '==', uid).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents for uid: ', uid);
@@ -321,15 +323,15 @@ async function calculateUserCaloriesBurned(uid) {
     });
 
     // Get user activity factor (computed accordingly the daily completed workouts)
-    const activityFactor = getActivityFactor(completedDailyWorkouts);
-
+    const activityFactor = await getActivityFactor(completedDailyWorkouts);
+console.log("activityFactor: ", activityFactor)
     if (user.user_gender == "man") {
         BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age + 5;
     } else {
       BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age -161;
     }
 
-    var calories = BMR * activityFactor;
+    let calories = BMR * activityFactor;
 
     // Parse the value as a float value
     calories = parseFloat(calories);

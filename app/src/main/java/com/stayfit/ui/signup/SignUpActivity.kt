@@ -98,6 +98,12 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
+        if (tv_password_repeat.text.toString() != tv_password.text.toString()) {
+            tv_password.error = "Passwords don't match"
+            tv_password.requestFocus()
+            return
+        }
+
         if (et_age.text.toString().isEmpty()) {
             et_age.error = "Please enter your age"
             et_age.requestFocus()
@@ -118,14 +124,13 @@ class SignUpActivity : BaseHTTPAction() {
 
         mAuth.createUserWithEmailAndPassword(tv_email.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
-
                 if (task.isSuccessful) {
                     user?.sendEmailVerification()
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 writeNewUser()
                                 Log.d(TAG, "Email sent.")
-                                Toast.makeText(this, "Registered successfully. Please verify your email address.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Registered successfully. Please verify your email address.", Toast.LENGTH_LONG).show()
 
                             }
                         }

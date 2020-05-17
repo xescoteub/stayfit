@@ -149,7 +149,6 @@ class DailyExercisesActivity : BaseHTTPAction() {
 
         // 60 seconds workout countdown time
         milliseconds = pref.getInt("seconds", 60000)
-        println(">>>>>>>>>>>>>>>>>>>>> milliseconds" + milliseconds)
         countDownTimer = object : CountDownTimer(300, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
@@ -279,7 +278,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
     @SuppressLint("SetTextI18n")
     private fun createExercisesProgressLayout()
     {
-        Log.d(TAG, "exercisesList indices ${exercisesList.indices}")
+        //Log.d(TAG, "exercisesList indices ${exercisesList.indices}")
 
         // Iteration without extra object allocations
         for (idx in exercisesList.indices) {
@@ -399,14 +398,10 @@ class DailyExercisesActivity : BaseHTTPAction() {
             val secs = removeLastChar(textSecondsCounter?.text.toString())?.toInt()
 
             if (secs != null) {
+                // Compute elapsed time on an exercise (total duration = 1 min, minus the time required for doing the exercise)
                 val elapsed = (milliseconds / 1000) - (secs)
-                Log.d(TAG, ">>>>> elapsed:" + elapsed)
-
                 totalSeconds.add(elapsed)
             }
-            Log.d(TAG, ">>>>> totalSeconds: $totalSeconds")
-
-
             countDownTimer!!.start()
             restTimer!!.cancel()
         }
@@ -417,10 +412,10 @@ class DailyExercisesActivity : BaseHTTPAction() {
      */
     private fun displayData(position: Int)
     {
-        Log.d(TAG, "displayData $position")
+        //Log.d(TAG, "displayData $position")
 
         val images = exercisesList[position].images;
-        Log.d(TAG, "images $images")
+        //Log.d(TAG, "images $images")
 
         // Set exercise image
         imageView!!.setImageBitmap(__getImageBitmap(images!![0]))
@@ -478,7 +473,6 @@ class DailyExercisesActivity : BaseHTTPAction() {
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding document", e)
             }
-
     }
 
     private fun removeLastChar(str: String): String? {
