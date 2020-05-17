@@ -21,7 +21,7 @@
 
     <!-- On-boarding screen 3 -->
     <string name="onboarding_slide3_title">Scheduled</string>
-    <string name="onboarding_slide3_desc">Set reminders to develop a good habit</string>
+    <string name="onboarding_slide3_desc">Add training routines to your personalized calendar</string>
 
     <!-- ====================================================================== -->
     <!-- Sign in activity                                                       -->
