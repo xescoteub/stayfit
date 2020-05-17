@@ -1,20 +1,17 @@
 package com.stayfit.ui.signup
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.okhttp.FormEncodingBuilder
-import com.squareup.okhttp.HttpUrl
 import com.stayfit.R
 import com.stayfit.config.BaseHTTPAction
 import com.stayfit.ui.login.LoginActivity
-import com.tistory.dwfox.dwrulerviewlibrary.view.ScrollingValuePicker
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 
@@ -38,6 +35,21 @@ class SignUpActivity : BaseHTTPAction() {
 
         btn_sign_up.setOnClickListener {
             signUpUser()
+        }
+
+
+        // Gender spinner
+        val spinner: Spinner = findViewById(R.id.gender_spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.gender_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
         }
     }
 
@@ -78,6 +90,18 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
+        if (et_height.text.toString().isEmpty()) {
+            et_height.error = "Please enter your height"
+            et_height.requestFocus()
+            return
+        }
+
+        if (et_weight.text.toString().isEmpty()) {
+            et_weight.error = "Please enter your weight"
+            et_weight.requestFocus()
+            return
+        }
+
         mAuth.createUserWithEmailAndPassword(tv_email.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
 
@@ -107,9 +131,11 @@ class SignUpActivity : BaseHTTPAction() {
     {
         try {
             val data = HashMap<String, Any>()
-            data["user_name"] = tv_username.text.toString()
-            data["user_email"] = tv_email.text.toString()
-            data["user_phone"] = tv_phone.text.toString()
+            data["user_name"]   = tv_username.text.toString()
+            data["user_email"]  = tv_email.text.toString()
+            data["user_phone"]  = tv_phone.text.toString()
+            data["user_height"] = et_height.text.toString()
+            data["user_weight"] = et_weight.text.toString()
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()

@@ -86,9 +86,6 @@ dependencies {
     // Blog card animation
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
 
-    // Ruler picker
-    implementation 'com.github.dwfox:DWRulerView:1.1.0'
-
     // Android charts data visualization library
     //implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'

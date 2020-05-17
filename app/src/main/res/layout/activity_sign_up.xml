@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.signup.SignUpActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.signup.SignUpActivity">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -39,15 +39,36 @@
             android:hint="@string/password"
             android:inputType="textPassword"/>
 
-
-        <com.tistory.dwfox.dwrulerviewlibrary.view.ScrollingValuePicker
-            android:id="@+id/height_value_picker"
+        <Spinner
+            android:id="@+id/gender_spinner"
+            android:hint="@string/height"
             android:layout_width="match_parent"
-            android:layout_height="97dp"
-            android:layout_above="@+id/center"
-            android:background="@color/colorGrey">
-        </com.tistory.dwfox.dwrulerviewlibrary.view.ScrollingValuePicker>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+            <EditText
+                android:id="@+id/et_weight"
+                android:layout_width="189dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:hint="@string/height"
+                android:textAlignment="center" />
+            <EditText
+                android:id="@+id/et_height"
+                android:layout_width="189dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:hint="@string/weight"
+                android:textAlignment="center" />
+        </LinearLayout>
 
         <Button
                 android:id="@+id/btn_sign_up"
@@ -62,12 +83,6 @@
                 android:textAllCaps="false"
                 style="@style/SolidButtonStyle"
             />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center"/>
     </LinearLayout>
 
 </RelativeLayout>

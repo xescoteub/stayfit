@@ -123,8 +123,6 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "signInWithEmailAndPassword")
                     val user = mAuth.currentUser
 
-                    writeNewUser()
-
                     updateUI(user)
                 } else {
                     Log.w(TAG, "signInWithEmailAndPassword:failure", task.exception)
@@ -155,23 +153,6 @@ class LoginActivity : AppCompatActivity() {
                 this, "Login failed.",
                 Toast.LENGTH_SHORT
             ).show()
-        }
-    }
-
-    /**
-     * Inserts a new entry in users db
-     */
-    private fun writeNewUser()
-    {
-        try {
-            val data = HashMap<String, Any>()
-            data["user_email"] = tv_email.editText?.text.toString()
-
-            db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
-                    exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
-            }
-        } catch (e:Exception) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
     }
 }

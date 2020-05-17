@@ -131,7 +131,7 @@ class AnalyticsActivity : AppCompatActivity() {
     }
 
     private fun fetchUserAnalytics() {
-        Log.d(TAG, "fetchUserAnalytics")
+        Log.d(TAG, "fetchUserAnalytics" + mAuth.uid)
 
         progress_circular.visibility = View.VISIBLE;
 

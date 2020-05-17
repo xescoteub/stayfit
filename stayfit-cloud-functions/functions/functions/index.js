@@ -133,9 +133,17 @@ app.get('/analytics/user/:uid', async (req, res) => {
 
     dailyWorkoutsRef.where('user_id', '==', uid)
         .get()
-        .then(snapshot => {
+        .then(async snapshot => {
             if (snapshot.empty) {
-                console.log('No matching documents.');
+                console.log('User: ' + uid + " has no daily workouts registered.");
+                const bmi = await calculateUserBMI(uid)
+                const data = {
+                    calories_burned : "0",
+                    bmi             : bmi,
+                    total_time      : 0
+                }
+                // Send data object
+                res.status(200).send(data);
                 return;
             }
 
@@ -166,7 +174,7 @@ app.get('/analytics/user/:uid', async (req, res) => {
 
             // Full-fill all promises
             Promise.all(promises).then((results) => {
-                console.log("results : ", results)
+                //console.log("results : ", results)
                 data.calories_burned = results[0];
                 data.bmi             = results[1];
                 data.total_time      = totalWorkoutTimeOfToday.reduce((a, b) => a + b, 0); // Sum of all workout time for a given day (in minutes)
@@ -190,7 +198,7 @@ async function getUserData(uid) {
      return snap.data();
     } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        console.log("No such document for uid: ", uid);
     }
 }
 
@@ -233,8 +241,8 @@ async function calculateUserBMI(uid) {
     // Get user data (weight / height)
     const user = await getUserData(uid);
 
-    const weight = user.weight;
-    const height = user.height;
+    const weight = user.user_weight;
+    const height = user.user_height;
 
     // The response object containing the actual BMI value plus an informative message
     const obj = {};
@@ -306,7 +314,7 @@ async function calculateUserCaloriesBurned(uid) {
     db.collection('daily_exercises').where('user_id', '==', uid).get()
       .then(snapshot => {
         if (snapshot.empty) {
-          console.log('No matching documents.');
+          console.log('No matching documents for uid: ', uid);
           return;
         }
         completedDailyWorkouts = snapshot.size;
@@ -316,15 +324,16 @@ async function calculateUserCaloriesBurned(uid) {
     const activityFactor = getActivityFactor(completedDailyWorkouts);
 
     if (user.gender == "man") {
-        BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age + 5;
+        BMR = 10 * user.user_weight + 6.25 * user.height - 5 * user.age + 5;
     } else {
-      BMR = 10 * user.weight + 6.25 * user.height - 5 * user.age -161;
+      BMR = 10 * user.user_weight + 6.25 * user.height - 5 * user.age -161;
     }
 
     var calories = BMR * activityFactor;
 
     // Parse the value as a float value
     calories = parseFloat(calories);
+
     //Format the value w/ the specified number
     //of decimal places and return it.
     return calories.toFixed(1);
