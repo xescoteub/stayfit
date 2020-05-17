@@ -215,7 +215,7 @@ class DarkTheme : AppCompatActivity() {
 
             }
 
-            bbuilder.setTitle("Change Username")
+            bbuilder.setTitle("Change Bio")
             bbuilder.setView(bView)
             val bdialog :AlertDialog = bbuilder.create()
             bdialog.show()
