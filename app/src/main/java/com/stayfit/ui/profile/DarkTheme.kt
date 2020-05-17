@@ -13,10 +13,12 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
+import com.stayfit.ui.login.LoginActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 
@@ -72,13 +74,20 @@ class DarkTheme : AppCompatActivity() {
             val pView: View = getLayoutInflater().inflate(R.layout.profile_change_psswd,null)
             val psswd1 : EditText = pView.findViewById(R.id.editTextPsswd)
             val psswd2 : EditText = pView.findViewById(R.id.editTextRepeat)
+            val psswd_old: EditText = pView.findViewById(R.id.editTextOldPsswd)
+
 
             pbuilder.setNegativeButton( "Cancel", null)
             pbuilder.setPositiveButton("OK") { dialog, which ->
 
+
                 if(psswd1.text.toString().equals((psswd2.text.toString()))){
-                    Toast.makeText(this,"IGUALES", Toast.LENGTH_SHORT).show()
+
+                    updatepsswd(psswd1.text.toString(), psswd_old.text.toString())
+
                 }
+
+
 
             }
 
@@ -102,8 +111,14 @@ class DarkTheme : AppCompatActivity() {
             phonebuilder.setNegativeButton( "Cancel", null)
             phonebuilder.setPositiveButton("OK") { dialog, which ->
 
-                data["user_phone"] = phone_et.text.toString()
-                db.collection("users").document(mAuth.uid!!).update(data)
+                if(phone_et.text.toString().length != 9 ){
+                    Toast.makeText(this, "Invalid Phone", Toast.LENGTH_SHORT).show()
+                }else{
+
+                    data["user_phone"] = phone_et.text.toString()
+                    db.collection("users").document(mAuth.uid!!).update(data)
+
+                }
 
             }
 
@@ -162,12 +177,12 @@ class DarkTheme : AppCompatActivity() {
 
 
 
-                //cogemos datos del username
+                //actualizmamos datos del username en FireStore
                 data["user_name"] = username1.text.toString()
                 db.collection("users").document(mAuth.uid!!).update(data)
 
 
-                //actualizar username en firrebase
+                //actualizar username en firebase
                 val profileUpdates = UserProfileChangeRequest.Builder()
                     .setDisplayName(username1.text.toString())
                     .build()
@@ -204,8 +219,57 @@ class DarkTheme : AppCompatActivity() {
 
         }
 
+        var exitbtn : Button = findViewById(R.id.exitApp)
+        exitbtn.setOnClickListener{
+
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Are you sure you want to exit?").setTitle("EXIT")
+                .setPositiveButton("Yes"){ dialog, which ->
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this,LoginActivity::class.java)
+                    startActivity(intent)
+                }
+                .setNegativeButton("No"){ dialog, which ->
+
+
+                }
+            val dialog: AlertDialog? = builder?.create()
+            dialog?.show()
+
+        }
+
 
     }
+    //funcion que actualiza la contraseña del usuario
+    private fun updatepsswd(password: String, oldPassword: String) {
+        mAuth = FirebaseAuth.getInstance()
+        var user = mAuth.currentUser
+        var email = user?.email.toString()
+        var oldpsswd = oldPassword
+        var newpsswd = password
+        var credential = EmailAuthProvider.getCredential(email,oldpsswd)
+
+        user?.reauthenticate(credential)?.addOnCompleteListener { task ->
+            if(task.isSuccessful){
+
+                user?.updatePassword(newpsswd).addOnCompleteListener{ task ->
+
+                    if(task.isSuccessful){
+                        Toast.makeText(this,"Password changed successfully", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this,"Password not changed successfully", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }else{
+                Toast.makeText(this,"Autentication Failed", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+
+    }
+
+
 
     // Pone en la FireBase del usuario su foto de perfil (URI)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

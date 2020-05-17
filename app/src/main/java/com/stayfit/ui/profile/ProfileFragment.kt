@@ -54,11 +54,9 @@ class ProfileFragment : Fragment() {
 
         mAuth = FirebaseAuth.getInstance()
         var actualuser = mAuth.currentUser
+        val db = FirebaseFirestore.getInstance();
+        val data = HashMap<String, Any>() // hash map para sobre escribir datos
 
-
-        /*var userid = actualuser?.displayName
-        var username: TextView = view.findViewById(R.id.profile_username)
-        username.setText(userid)*/
 
 
         var userphoto: CircleImageView = view.findViewById(R.id.user_image)
@@ -75,7 +73,6 @@ class ProfileFragment : Fragment() {
 
         //Controlar Height i Weight
 
-
         var heigth : TextView = view.findViewById(R.id.textVHeight)
         heigth.setOnClickListener{
 
@@ -86,6 +83,9 @@ class ProfileFragment : Fragment() {
 
             hadb.setNegativeButton("Cancel", null)
             hadb.setPositiveButton("Ok") { dialog, which ->
+
+                data["user_height"] = height_et.text.toString()
+                db.collection("users").document(mAuth.uid!!).update(data)
 
                 heigth.setText(height_et.text)
 
@@ -107,6 +107,9 @@ class ProfileFragment : Fragment() {
 
             wadb.setNegativeButton("Cancel", null)
             wadb.setPositiveButton("Ok") { dialog, which ->
+
+                data["user_width"] = width_et.text.toString()
+                db.collection("users").document(mAuth.uid!!).update(data)
 
                 width.setText(width_et.text)
 
@@ -145,9 +148,20 @@ class ProfileFragment : Fragment() {
                 var phone_tv : TextView = view.findViewById(R.id.profile_phone)
                 phone_tv.setText(phone)
 
+                var height = user?.get("user_height").toString()
+                var height_tv : TextView = view.findViewById(R.id.textVHeight)
+                height_tv.setText(height)
+
+                var width = user?.get("user_width").toString()
+                var width_tv : TextView = view.findViewById(R.id.textVWidth)
+                width_tv.setText(width)
+
+
                 Log.i("userse1", user?.get("user_email").toString())
                 Log.i("usersn1", user?.get("user_name").toString())
                 Log.i("usersp1", user?.get("user_phone").toString())
+                Log.i("usersh1", user?.get("user_height").toString())
+                Log.i("usersw1", user?.get("user_width").toString())
 
             }
     }
