@@ -98,6 +98,12 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
+        if (tv_password_repeat.text.toString() != tv_password.text.toString()) {
+            tv_password.error = "Passwords don't match"
+            tv_password.requestFocus()
+            return
+        }
+
         if (et_age.text.toString().isEmpty()) {
             et_age.error = "Please enter your age"
             et_age.requestFocus()
@@ -118,14 +124,13 @@ class SignUpActivity : BaseHTTPAction() {
 
         mAuth.createUserWithEmailAndPassword(tv_email.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
-
                 if (task.isSuccessful) {
                     user?.sendEmailVerification()
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 writeNewUser()
                                 Log.d(TAG, "Email sent.")
-                                Toast.makeText(this, "Registered successfully. Please verify your email address.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Registered successfully. Please verify your email address.", Toast.LENGTH_LONG).show()
 
                             }
                         }
@@ -152,7 +157,7 @@ class SignUpActivity : BaseHTTPAction() {
             data["user_gender"] = gender_spinner.selectedItem.toString().toLowerCase()
             data["user_height"] = et_height.text.toString()
             data["user_weight"] = et_weight.text.toString()
-            data["user_bio"] = "Im new on StayFit"
+            data["user_bio"]    = "Hey, I'm new on StayFit"
 
             db.collection("users").document(mAuth.uid!!).set(data).addOnFailureListener {
                     exception: java.lang.Exception -> Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()

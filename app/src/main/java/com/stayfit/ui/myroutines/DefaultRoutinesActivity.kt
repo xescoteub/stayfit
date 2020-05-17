@@ -57,6 +57,14 @@ class DefaultRoutinesActivity : AppCompatActivity() {
                 "\n" +
                 "Good for: six-pack abs and transverse abs")
         exercises.add(bentLegVUp.getParametersList())
+        var ex3:Exercise = Exercise("Alternating Toe Reach","https://youtu.be/tzJC-HijGsk", "30", "null","How to: Start lying on back with legs extended in air at 45-degree angle and arms straight out to sides on floor at shoulder level. At the same time, raise right leg up and lift torso trying to touch toes with left hand. Return to start and repeat on the other side. That’s one rep. Do 15 reps.\n" +
+                "\n" +
+                "Good for: obliques and transverse abs")
+        var ex4:Exercise = Exercise("Leg Raise and Reach Clap","https://youtu.be/2O469gGYSew", "30", "null","How to: Start lying on back with legs lifted in air at 45-degree angle and arms by side pressing into mat. Without letting lower back lift off floor, raise legs to hip level while curling upper body off floor and bringing hands to clap behind knees. Return to start. That’s one rep. Do 15 reps.\n" +
+                "\n" +
+                "Good for: six-pack abs and transverse abs")
+        exercises.add(ex3.getParametersList())
+        exercises.add(ex4.getParametersList())
         h["exercises"] = exercises
         routinesList.add(Routine("Abs like rocks", "Perfect routine for people who wants abs results in short time.",R.drawable.abs_default.toString(),h ))
         var h1: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()

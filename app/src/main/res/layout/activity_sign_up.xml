@@ -40,6 +40,13 @@
             android:inputType="textPassword"/>
 
         <EditText
+            android:id="@+id/tv_password_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/repeat_password"
+            android:inputType="textPassword"/>
+
+        <EditText
             android:id="@+id/et_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

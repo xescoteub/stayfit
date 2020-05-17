@@ -90,7 +90,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
             }
         });
     }
-    else if (completedWorkouts <= 4) {
+    else if (completedWorkouts <= 2) {
         // Get motivation blog
         await blogsRef.doc('motivation').get().then(doc => {
             if (doc.exists) {
@@ -102,7 +102,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
             }
         }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
     }
-    else if (completedWorkouts > 4){
+    else if (completedWorkouts >= 4){
         await blogsRef.doc('healthy_food').get().then(doc => {
             if (doc.exists) {
                console.log("Document data:", doc.data());
@@ -163,7 +163,6 @@ app.get('/analytics/user/:uid', async (req, res) => {
                 // Filter only documents that have been created today
                 // and store it's workout time (in minutes -> total_time / 60) in totalWorkoutTimeOfToday
                 if (documentDate.setHours(0,0,0,0) === new Date().setHours(0,0,0,0)) {
-                    console.log("total_time: ", doc.data().total_time / 60))
                     totalWorkoutTimeOfToday.push(parseInt(doc.data().total_time / 60));
                 }
             });
@@ -213,16 +212,16 @@ async function getUserData(uid) {
  *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
  */
 function getActivityFactor(numExercises) {
-    if (numExercises < 1) {
+    if (numExercises >= 1 && numExercises < 3) {
         return 1.2;
     }
-    else if (numExercises >= 3) {
+    else if (numExercises >= 3 && numExercises < 5) {
         return 1.375;
     }
-    else if (numExercises >= 3 && numExercises <= 5) {
+    else if (numExercises > 3 && numExercises < 5) {
         return 1.55;
     }
-    else if(numExercises >= 6 && numExercises <= 7) {
+    else if(numExercises >= 5 && numExercises < 7) {
         return 1.725;
     }
     else if (numExercises > 7) {
@@ -312,7 +311,7 @@ async function calculateUserCaloriesBurned(uid) {
     let completedDailyWorkouts = 0;
 
     // Get user completed daily workouts count
-    db.collection('daily_exercises').where('user_id', '==', uid).get()
+    await db.collection('daily_exercises').where('user_id', '==', uid).get()
       .then(snapshot => {
         if (snapshot.empty) {
           console.log('No matching documents for uid: ', uid);
@@ -322,7 +321,7 @@ async function calculateUserCaloriesBurned(uid) {
     });
 
     // Get user activity factor (computed accordingly the daily completed workouts)
-    const activityFactor = getActivityFactor(completedDailyWorkouts);
+    const activityFactor = await getActivityFactor(completedDailyWorkouts);
 
     if (user.user_gender == "man") {
         BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age + 5;
@@ -330,7 +329,7 @@ async function calculateUserCaloriesBurned(uid) {
       BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age -161;
     }
 
-    var calories = BMR * activityFactor;
+    let calories = BMR * activityFactor;
 
     // Parse the value as a float value
     calories = parseFloat(calories);

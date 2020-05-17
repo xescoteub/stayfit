@@ -53,8 +53,8 @@
 
     </com.google.android.material.textfield.TextInputLayout>
     <Button
-        android:layout_width="100dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="OK"
         android:id="@+id/btn_ok_r"
         android:layout_alignParentBottom="true"
@@ -65,8 +65,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"/>
     <Button
-        android:layout_width="100dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/btn_cancel_r"
         android:layout_alignParentBottom="true"
