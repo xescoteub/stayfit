@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorLightGrey"
     tools:context=".ui.home.analytics.AnalyticsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,6 +80,7 @@
                     app:dotWidth="5dp"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
+                    app:textColor="@color/colorPrimary"
                     app:progressColor="@color/colorPrimaryDarker" />
 
             </LinearLayout>
@@ -404,6 +404,7 @@
                     app:direction="counterclockwise"
                     app:drawDot="true"
                     app:enableProgressAnimation="true"
+                    app:textColor="@color/colorPrimary"
                     app:progressColor="@color/colorPrimaryDarker" />
             </LinearLayout>
 

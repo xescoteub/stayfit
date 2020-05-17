@@ -38,7 +38,7 @@
             android:gravity="center"
             android:layout_centerInParent="true"
             android:text="@string/titleCaloriesWidget"
-            android:textStyle="bold" />
+            android:textColor="@color/colorBlack" />
 
     </RelativeLayout>
 
