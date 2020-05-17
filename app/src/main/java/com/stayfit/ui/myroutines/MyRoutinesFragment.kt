@@ -63,6 +63,7 @@ class   MyRoutinesFragment: Fragment(){
     }
 
     private fun calendarEvent() {
+        Toast.makeText(activity,"Press the routine that you want to set for a day",Toast.LENGTH_SHORT).show()
         myroutinesRecycler.adapter = RoutineAdapter(routinesList)
         (myroutinesRecycler.adapter as RoutineAdapter).setOnItemClickListener(object :
             RoutineAdapter.ClickListener {
