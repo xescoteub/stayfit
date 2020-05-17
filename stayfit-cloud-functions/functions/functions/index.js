@@ -163,7 +163,6 @@ app.get('/analytics/user/:uid', async (req, res) => {
                 // Filter only documents that have been created today
                 // and store it's workout time (in minutes -> total_time / 60) in totalWorkoutTimeOfToday
                 if (documentDate.setHours(0,0,0,0) === new Date().setHours(0,0,0,0)) {
-                    console.log("total_time: ", doc.data().total_time / 60))
                     totalWorkoutTimeOfToday.push(parseInt(doc.data().total_time / 60));
                 }
             });

@@ -173,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="@string/blogs"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -194,6 +195,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/analytics"
+                        android:textColor="@color/colorBlack"
                         android:textSize="12sp" />
                 </LinearLayout>
 
