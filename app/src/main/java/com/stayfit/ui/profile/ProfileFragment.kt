@@ -183,7 +183,7 @@ class ProfileFragment : Fragment() {
     }
     private fun goto_youtube(){
 
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UCSRvhTSRmdqNA-FhGBLbzIQ"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UCxkZ7QnTh3JTrPJXV76TIWw/"))
         startActivity(intent)
     }
 
