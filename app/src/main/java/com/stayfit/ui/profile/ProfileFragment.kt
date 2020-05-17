@@ -177,7 +177,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun goto_insta(){
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/stayfit_pis/"))
         startActivity(intent)
 
     }
