@@ -28,7 +28,7 @@ exports.api = functions.https.onRequest(app);
 
 // ============================================================================
 //
-// Get user blogs
+// USER BLOG'S
 //
 // ============================================================================
 app.get('/blogs/user/:uid', (req, res) => {
@@ -120,10 +120,10 @@ async function handleUserBlogRecommendation(completedWorkouts) {
 }
 
 // ============================================================================
-// Get user analytics
-// - BMI
-// - Calories burned
-// - Total workout minutes (for a given day)
+//  USER ANALYTICS
+//      - BMI
+//      - Calories burned
+//      - Total workout minutes (for a given day)
 // ============================================================================
 app.get('/analytics/user/:uid', async (req, res) => {
     const uid = req.params.uid;
@@ -225,34 +225,55 @@ function getActivityFactor(numExercises) {
 }
 
 /**
- *  Calculates Body Mass Index (BMI)
+ *  Calculates Body Mass Index (BMI) and returns object with BMI + advice message
  *  Weight in kg
  *  Height in cm
- *
- *  if(bmi < 18.5) {
- *      You are too thin
- *  }
- *  if(bmi > 18.5 && finalBmi < 25) {
- *      You are healthy
- *  }
- *  if(bmi > 25) {
- *      You have overweight
- *  }
- *
  */
 async function calculateUserBMI(uid) {
+    // Get user data (weight / height)
     const user = await getUserData(uid);
+
     const weight = user.weight;
     const height = user.height;
 
-    var bmi = weight/(height/100*height/100);
-    return bmi;
+    // The response object containing the actual BMI value plus an informative message
+    const obj = {};
+
+    // Compute BMI
+    const bmi = parseInt(weight/(height/100*height/100));
+
+    obj.bmi = bmi;
+
+    // BMI messages
+    const under_weight_message       = "For your height, a normal weight range would be from 129 to 174 pounds. Talk with your healthcare provider to determine possible causes of underweight and if you need to gain weight."
+
+    const normal_weight_message      = "Maintaining a healthy weight may reduce the risk of chronic diseases associated with overweight and obesity."
+                                     + "For information about the importance of a healthy diet and physical activity in maintaining a healthy weight, visit Preventing Weight Gain."
+
+    const over_weight_advice_message = "Anyone who is overweight should try to avoid gaining additional weight."
+                                     + "Additionally, if you are overweight with other risk factors (such as high LDL cholesterol, low HDL cholesterol, or high blood pressure), you should try to lose weight."
+                                     + "Even a small weight loss (just 10% of your current weight) may help lower the risk of disease. Talk with your healthcare provider to determine appropriate ways to lose weight."
+                                     + "For information about the importance of a healthy diet and physical activity in reaching a healthy weight, visit Healthy Weight."
+
+    if (bmi < 18.5) {
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Underweight category for your height.";
+        obj.advice_message = under_weight_message;
+    }
+    if (bmi > 18.5 && bmi < 25) {
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Normal category for your height.";
+        obj.advice_message = normal_weight_message;
+    }
+    if (bmi > 25) {
+        obj.result_message = "Your BMI is " + bmi + " indicating your weight is in the Overweight category for your height.";
+        obj.advice_message = over_weight_advice_message;
+    }
+    return obj;
 }
 
 /**
- *  ------------------------------------------------
- *  Total calorie expenditure = BMR × ActivityFactor
- *  ------------------------------------------------
+ *  -------------------------------------------------
+ *  Total calories expenditure = BMR × ActivityFactor
+ *  -------------------------------------------------
  *  BMR:
  *  - Women : BMR=655+9.6×weight+1.8×height−4.7×age
  *  - Men   : BMR=66+13.7×weight+5×height−6.8×age
@@ -302,7 +323,10 @@ async function calculateUserCaloriesBurned(uid) {
 
     var calories = BMR * activityFactor;
 
-    // Add 1 decimal
+    // Parse the value as a float value
+    calories = parseFloat(calories);
+    //Format the value w/ the specified number
+    //of decimal places and return it.
     return calories.toFixed(1);
 }
 
