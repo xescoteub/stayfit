@@ -19,9 +19,9 @@
                 android:hint="@string/username"
                 android:inputType="textEmailAddress"/>
         <EditText
+            android:id="@+id/tv_phone"
             android:hint="Phone"
             android:inputType="number"
-            android:id="@+id/tv_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -38,6 +38,13 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"/>
+
+        <EditText
+            android:id="@+id/et_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/age"
+            android:inputType="number"/>
 
         <Spinner
             android:id="@+id/gender_spinner"

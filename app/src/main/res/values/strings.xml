@@ -47,10 +47,11 @@
     <string name="sign_up">Sign up</string>
     <string name="no_account">Don\’t have an account?</string>
     <string name="text_signup_social_media">Or Sign up using social media</string>
+    <string name="age">Your age</string>
     <string name="height">Your height</string>
     <string name="weight">Your weight</string>
     <string-array name="gender_array">
-        <item>Men</item>
+        <item>Man</item>
         <item>Women</item>
     </string-array>
 
@@ -71,7 +72,7 @@
     <string name="skip">Skip</string>
     <string name="take_rest">Take rest</string>
     <string name="get_started">Get started</string>
-    <string name="Done">Done</string>
+    <string name="Start">Start</string>
     <string name="wellDone">Well Done!</string>
     <string name="congratulations">Congratulation you are done with today workout</string>
 

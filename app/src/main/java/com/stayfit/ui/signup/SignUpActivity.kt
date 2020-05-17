@@ -2,6 +2,7 @@ package com.stayfit.ui.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
 import android.widget.ArrayAdapter
@@ -66,6 +67,19 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
+
+        if (tv_phone.text.toString().isEmpty()) {
+            tv_phone.error = "Please enter a phone number"
+            tv_phone.requestFocus()
+            return
+        }
+
+        if (!Patterns.PHONE.matcher(tv_phone.text.toString()).matches()) {
+            tv_phone.error = "Please enter valid phone"
+            tv_phone.requestFocus()
+            return
+        }
+
         if (tv_email.text.toString().isEmpty()) {
             tv_email.error = "Please enter an email"
             tv_email.requestFocus()
@@ -78,15 +92,15 @@ class SignUpActivity : BaseHTTPAction() {
             return
         }
 
-        if(tv_phone.text.toString().length != 9){
-            tv_phone.error = "Please enter valid phone"
-            tv_phone.requestFocus()
-            return
-        }
-
         if (tv_password.text.toString().isEmpty()) {
             tv_password.error = "Please enter password"
             tv_password.requestFocus()
+            return
+        }
+
+        if (et_age.text.toString().isEmpty()) {
+            et_age.error = "Please enter your age"
+            et_age.requestFocus()
             return
         }
 
@@ -134,7 +148,8 @@ class SignUpActivity : BaseHTTPAction() {
             data["user_name"]   = tv_username.text.toString()
             data["user_email"]  = tv_email.text.toString()
             data["user_phone"]  = tv_phone.text.toString()
-            data["user_gender"] = gender_spinner.selectedItem.toString().toLowerCase();
+            data["user_age"]    = et_age.text.toString()
+            data["user_gender"] = gender_spinner.selectedItem.toString().toLowerCase()
             data["user_height"] = et_height.text.toString()
             data["user_weight"] = et_weight.text.toString()
 
@@ -151,6 +166,14 @@ class SignUpActivity : BaseHTTPAction() {
     {
         return Runnable {
             println("Blog inserted : $responseStr")
+        }
+    }
+
+    private fun isValidPhone(phone: CharSequence?): Boolean {
+        return if (TextUtils.isEmpty(phone)) {
+            false
+        } else {
+            Patterns.PHONE.matcher(phone).matches()
         }
     }
 }

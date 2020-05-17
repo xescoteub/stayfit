@@ -163,6 +163,7 @@ app.get('/analytics/user/:uid', async (req, res) => {
                 // Filter only documents that have been created today
                 // and store it's workout time (in minutes -> total_time / 60) in totalWorkoutTimeOfToday
                 if (documentDate.setHours(0,0,0,0) === new Date().setHours(0,0,0,0)) {
+                    console.log("total_time: ", doc.data().total_time / 60))
                     totalWorkoutTimeOfToday.push(parseInt(doc.data().total_time / 60));
                 }
             });
@@ -323,10 +324,10 @@ async function calculateUserCaloriesBurned(uid) {
     // Get user activity factor (computed accordingly the daily completed workouts)
     const activityFactor = getActivityFactor(completedDailyWorkouts);
 
-    if (user.gender == "man") {
-        BMR = 10 * user.user_weight + 6.25 * user.height - 5 * user.age + 5;
+    if (user.user_gender == "man") {
+        BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age + 5;
     } else {
-      BMR = 10 * user.user_weight + 6.25 * user.height - 5 * user.age -161;
+      BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age -161;
     }
 
     var calories = BMR * activityFactor;

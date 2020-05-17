@@ -118,7 +118,7 @@
                         android:layout_marginStart="37dp"
                         android:layout_marginEnd="32dp"
                         android:layout_marginBottom="-26dp"
-                        android:text="@string/Done"
+                        android:text="@string/Start"
                         android:textColor="@color/colorWhite"
                         android:textSize="18sp"
                         android:textStyle="bold" />

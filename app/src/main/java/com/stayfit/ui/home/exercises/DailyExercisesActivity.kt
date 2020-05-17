@@ -21,7 +21,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.MainActivity
 import com.stayfit.R
@@ -32,7 +31,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -65,8 +63,6 @@ class DailyExercisesActivity : BaseHTTPAction() {
     //
     // ====================================================
     private var buttonHome: TextView? = null
-
-    private var take_rest: String? = null
 
     /**
      * The currently running exercise image
@@ -151,8 +147,9 @@ class DailyExercisesActivity : BaseHTTPAction() {
         // Fetch exercises list
         fetchExercises()
 
+        // 60 seconds workout countdown time
         milliseconds = pref.getInt("seconds", 60000)
-
+        println(">>>>>>>>>>>>>>>>>>>>> milliseconds" + milliseconds)
         countDownTimer = object : CountDownTimer(300, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
@@ -172,9 +169,9 @@ class DailyExercisesActivity : BaseHTTPAction() {
                      * Displays timer countdown layout
                      */
                     showTimerLayout()
-                    
+
                     Log.e("id==", "" + currentExercise)
-                    
+
                     doneClicked()
                 } else {
                     isDoneClicked = false
@@ -233,9 +230,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
 
         textSecondsCounter      = findViewById(R.id.timer_seconds)
 
-        take_rest               = resources.getString(R.string.take_rest)
-
-        done_button.text        = resources.getString(R.string.Done)
+        done_button.text        = resources.getString(R.string.Start)
     }
 
     /**
@@ -277,9 +272,9 @@ class DailyExercisesActivity : BaseHTTPAction() {
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
-    
+
     /**
-     * 
+     *
      */
     @SuppressLint("SetTextI18n")
     private fun createExercisesProgressLayout()
@@ -324,7 +319,6 @@ class DailyExercisesActivity : BaseHTTPAction() {
     private fun showTimerLayout()
     {
         Log.d(TAG, "setLayout")
-        textHeader!!.text = take_rest
         done_button.text =  resources.getString(R.string.skip)
 
         countDownTimer!!.cancel()
@@ -349,7 +343,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
                 restTimer!!.cancel()
                 imageView!!.visibility = View.VISIBLE
 
-                done_button.text = resources.getString(R.string.Done)
+                done_button.text = resources.getString(R.string.Start)
 
                 lv_timer!!.visibility = View.GONE
 
@@ -383,7 +377,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
         restTimer!!.cancel()
         imageView!!.visibility = View.VISIBLE
 
-        done_button.text = resources.getString(R.string.Done)
+        done_button.text = resources.getString(R.string.Start)
 
         lv_timer!!.visibility = View.GONE
 
@@ -402,12 +396,13 @@ class DailyExercisesActivity : BaseHTTPAction() {
                     myTextViews[i]!!.setTextColor(Color.WHITE)
                 }
             }
-            Log.d(TAG, ">>>>> 1textSecondsCounter: " + textSecondsCounter?.text.toString())
             val secs = removeLastChar(textSecondsCounter?.text.toString())?.toInt()
-            Log.d(TAG, ">>>>> 2textSecondsCounter: " + textSecondsCounter?.text.toString())
 
             if (secs != null) {
-                totalSeconds.add(secs)
+                val elapsed = (milliseconds / 1000) - (secs)
+                Log.d(TAG, ">>>>> elapsed:" + elapsed)
+
+                totalSeconds.add(elapsed)
             }
             Log.d(TAG, ">>>>> totalSeconds: $totalSeconds")
 
