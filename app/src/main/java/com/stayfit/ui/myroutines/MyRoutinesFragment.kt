@@ -236,6 +236,8 @@ class   MyRoutinesFragment: Fragment(){
         routinesList.add(r)
         saveDataFireBase(r)
         //saveDataSharedPreferences()
+        Log.d(TAG, "END2")
+        myroutinesRecycler.adapter!!.notifyDataSetChanged()
     }
 
     private fun newRoutine(view: View) {
@@ -265,7 +267,6 @@ class   MyRoutinesFragment: Fragment(){
                 var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>> = HashMap()
                 hashMapExercises.put("exercises",list_ex)
                 addRoutine(Routine( arrayList[0], arrayList[1], arrayList[2], hashMapExercises))
-                showList()
             }
         }
     }
