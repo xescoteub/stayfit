@@ -122,11 +122,11 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textColor="@color/colorBlack"
-                    android:text="WIDTH"
+                    android:text="WEIGHT"
                     android:textSize="18dp"/>
 
                 <TextView
-                    android:id="@+id/textVWidth"
+                    android:id="@+id/textVWeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"

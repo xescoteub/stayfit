@@ -97,8 +97,8 @@ class ProfileFragment : Fragment() {
 
         }
 
-        var width : TextView = view.findViewById(R.id.textVWidth)
-        width.setOnClickListener{
+        var weight : TextView = view.findViewById(R.id.textVWeight)
+        weight.setOnClickListener{
 
             val wadb: AlertDialog.Builder = AlertDialog.Builder(activity)
 
@@ -108,10 +108,10 @@ class ProfileFragment : Fragment() {
             wadb.setNegativeButton("Cancel", null)
             wadb.setPositiveButton("Ok") { dialog, which ->
 
-                data["user_width"] = width_et.text.toString()
+                data["user_weight"] = width_et.text.toString()
                 db.collection("users").document(mAuth.uid!!).update(data)
 
-                width.setText(width_et.text)
+                weight.setText(width_et.text)
 
             }
             wadb.setTitle("Change Width")
@@ -152,9 +152,9 @@ class ProfileFragment : Fragment() {
                 var height_tv : TextView = view.findViewById(R.id.textVHeight)
                 height_tv.setText(height)
 
-                var width = user?.get("user_width").toString()
-                var width_tv : TextView = view.findViewById(R.id.textVWidth)
-                width_tv.setText(width)
+                var weight = user?.get("user_weight").toString()
+                var weight_tv : TextView = view.findViewById(R.id.textVWeight)
+                weight_tv.setText(weight)
 
                 var bio = user?.get("user_bio").toString()
                 var bio_tv : TextView = view.findViewById(R.id.profileBio)
