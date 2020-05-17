@@ -212,8 +212,6 @@ async function getUserData(uid) {
  *  Extra active i.e hard exercise & physical job : Activity Factor = 1.9
  */
 function getActivityFactor(numExercises) {
-    console.log("getActivityFactor: ", numExercises)
-
     if (numExercises >= 1 && numExercises < 3) {
         return 1.2;
     }
@@ -324,7 +322,7 @@ async function calculateUserCaloriesBurned(uid) {
 
     // Get user activity factor (computed accordingly the daily completed workouts)
     const activityFactor = await getActivityFactor(completedDailyWorkouts);
-console.log("activityFactor: ", activityFactor)
+
     if (user.user_gender == "man") {
         BMR = 10 * user.user_weight + 6.25 * user.user_height - 5 * user.user_age + 5;
     } else {
