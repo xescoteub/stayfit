@@ -36,34 +36,52 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:onClick="openinYT"/>
-    <com.airbnb.lottie.LottieAnimationView
+    <FrameLayout
         android:layout_width="300dp"
         android:layout_height="400dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/ic_arrow1"
+        android:id="@+id/linearEA1"
+        android:layout_centerHorizontal="true">
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         app:lottie_autoPlay="true"
         app:lottie_fileName="character_running.json"
         app:lottie_loop="true"
-        android:layout_below="@+id/ic_arrow1"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="top|center_horizontal"
         android:id="@+id/jason_exercise"/>
-
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/linearEA1"
+        android:id="@+id/linearEA2"
+        android:layout_centerHorizontal="true">
     <TextView
         android:id="@+id/txt_time_exercise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/jason_exercise"
-        android:paddingLeft="20dp"
+        android:layout_gravity="top"
+        android:paddingStart="20dp"
         android:text="Time"
         android:textSize="30sp" />
-
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/linearEA2"
+        android:id="@+id/linearEA3"
+        android:layout_centerHorizontal="true">
     <ProgressBar
         android:id="@+id/progressBar_exercise"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="396dp"
-        android:layout_height="87dp"
-        android:layout_below="@+id/jason_exercise"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:max="10"
         android:progress="10" />
+    </FrameLayout>
 </RelativeLayout>

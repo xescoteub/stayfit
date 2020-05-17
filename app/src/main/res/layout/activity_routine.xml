@@ -38,21 +38,28 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/ic_addExercise"
+        android:id="@+id/linearAR"
+        android:layout_centerHorizontal="true">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="540dp"
         android:id="@+id/routine_list"
-        android:layout_below="@+id/ic_addExercise"/>
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:text="Start"
-        android:id="@+id/btn_start"
-        android:layout_below="@+id/routine_list"
-        android:onClick="startExercises"
-        android:background="@drawable/routine_button"
-        android:textColor="@color/colorWhite"
-        android:layout_margin="35dp"
-        android:layout_centerHorizontal="true"/>
+        />
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:text="Start"
+            android:id="@+id/btn_start"
+            android:onClick="startExercises"
+            android:background="@drawable/routine_button"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="20dp"/>
+    </FrameLayout>
 
 </RelativeLayout>
