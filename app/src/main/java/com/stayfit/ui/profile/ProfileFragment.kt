@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.lottie.parser.IntegerParser
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -84,13 +85,19 @@ class ProfileFragment : Fragment() {
             hadb.setNegativeButton("Cancel", null)
             hadb.setPositiveButton("Ok") { dialog, which ->
 
-                data["user_height"] = height_et.text.toString()
-                db.collection("users").document(mAuth.uid!!).update(data)
+                if(height_et.text.toString().toInt() > 230){
+                    Toast.makeText(activity, "Are you really that tall?",Toast.LENGTH_SHORT).show()
+                }else{
 
-                heigth.setText(height_et.text)
+                    data["user_height"] = height_et.text.toString()
+                    db.collection("users").document(mAuth.uid!!).update(data)
+
+                    heigth.setText(height_et.text)
+                }
+
 
             }
-            hadb.setTitle("Change Height")
+            hadb.setTitle("Change your height")
             hadb.setView(hView)
             val hdialog:AlertDialog =hadb.create()
             hdialog.show()
@@ -108,13 +115,18 @@ class ProfileFragment : Fragment() {
             wadb.setNegativeButton("Cancel", null)
             wadb.setPositiveButton("Ok") { dialog, which ->
 
-                data["user_weight"] = width_et.text.toString()
-                db.collection("users").document(mAuth.uid!!).update(data)
+                if(width_et.text.toString().toInt() > 300){
+                    Toast.makeText(activity, "We cannot handle so much weight",Toast.LENGTH_SHORT).show()
+                }else {
 
-                weight.setText(width_et.text)
+                    data["user_weight"] = width_et.text.toString()
+                    db.collection("users").document(mAuth.uid!!).update(data)
+
+                    weight.setText(width_et.text)
+                }
 
             }
-            wadb.setTitle("Change Width")
+            wadb.setTitle("Change your weight")
             wadb.setView(wView)
             val wdialog:AlertDialog =wadb.create()
             wdialog.show()
@@ -165,7 +177,7 @@ class ProfileFragment : Fragment() {
                 Log.i("usersn1", user?.get("user_name").toString())
                 Log.i("usersp1", user?.get("user_phone").toString())
                 Log.i("usersh1", user?.get("user_height").toString())
-                Log.i("usersw1", user?.get("user_width").toString())
+                Log.i("usersw1", user?.get("user_weight").toString())
 
             }
     }

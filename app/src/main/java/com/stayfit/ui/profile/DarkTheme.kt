@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
 import com.stayfit.ui.login.LoginActivity
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.profile_change_psswd.*
 import java.io.ByteArrayOutputStream
 
 class DarkTheme : AppCompatActivity() {
@@ -64,7 +66,6 @@ class DarkTheme : AppCompatActivity() {
         })
 
 
-
         //Listener del boton para cambiar contraseña (abre un Dialog)
         var psswdbtn: Button = findViewById(R.id.btnChangePasswd)
         psswdbtn.setOnClickListener{
@@ -77,13 +78,27 @@ class DarkTheme : AppCompatActivity() {
             val psswd_old: EditText = pView.findViewById(R.id.editTextOldPsswd)
 
 
+
             pbuilder.setNegativeButton( "Cancel", null)
             pbuilder.setPositiveButton("OK") { dialog, which ->
 
+                if (psswd_old.text.toString().equals(psswd1.text.toString()) || psswd_old.text.toString().equals(psswd2.text.toString()) ){
+                    Toast.makeText(this, "The password must be different to the previous one",Toast.LENGTH_SHORT).show()
+                }else{
 
-                if(psswd1.text.toString().equals((psswd2.text.toString()))){
+                    if ( psswd1.text.toString().length < 8 || psswd2.text.toString().length < 8){
+                        Toast.makeText(this, " The password is too short ", Toast.LENGTH_SHORT).show()
+                    }else{
 
-                    updatepsswd(psswd1.text.toString(), psswd_old.text.toString())
+                        if(psswd1.text.toString().equals((psswd2.text.toString()))){
+                            updatepsswd(psswd1.text.toString(), psswd_old.text.toString())
+
+                        }else{
+                            Toast.makeText(this,"The passwords must coincide",Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+
 
                 }
 
@@ -171,24 +186,32 @@ class DarkTheme : AppCompatActivity() {
             ubuilder.setNegativeButton( "Cancel", null)
             ubuilder.setPositiveButton("OK") { dialog, which ->
 
-                //actualizmamos datos del username en FireStore
-                data["user_name"] = username1.text.toString()
-                db.collection("users").document(mAuth.uid!!).update(data)
+                if(username1.text.toString().length > 20){
+                    Toast.makeText(this,"The username is too long",Toast.LENGTH_SHORT).show()
+                }else{
+
+                    //actualizmamos datos del username en FireStore
+                    data["user_name"] = username1.text.toString()
+                    db.collection("users").document(mAuth.uid!!).update(data)
 
 
-                //actualizar username en firebase
-                val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName(username1.text.toString())
-                    .build()
+                    //actualizar username en firebase
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(username1.text.toString())
+                        .build()
 
-                user?.updateProfile(profileUpdates)
-                    ?.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.i("username ","username updated")
-                        }else{
-                            Log.i("username","username not updated")
+                    user?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.i("username ","username updated")
+                            }else{
+                                Log.i("username","username not updated")
+                            }
                         }
-                    }
+
+                }
+
+
 
             }
 
@@ -210,8 +233,16 @@ class DarkTheme : AppCompatActivity() {
             bbuilder.setNegativeButton( "Cancel", null)
             bbuilder.setPositiveButton("OK") { dialog, which ->
 
-                data["user_bio"] = bio.text.toString()
-                db.collection("users").document(mAuth.uid!!).update(data)
+
+                if(bio.text.toString().length > 90 ){
+                    Toast.makeText(this, "The bio is too long", Toast.LENGTH_SHORT).show()
+                }else{
+                    data["user_bio"] = bio.text.toString()
+                    db.collection("users").document(mAuth.uid!!).update(data)
+
+                }
+
+
 
             }
 
