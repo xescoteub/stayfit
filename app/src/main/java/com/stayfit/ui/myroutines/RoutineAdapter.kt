@@ -71,7 +71,7 @@ class RoutineAdapter(var items: ArrayList<Routine>) : RecyclerView.Adapter<Routi
         if (!url.equals("null")) {
             val currentUserID = FirebaseAuth.getInstance().currentUser?.uid.toString()
             var storageRef: StorageReference = FirebaseStorage.getInstance().getReference().child("Backgrounds").child(currentUserID).child(url)
-            storageRef.getBytes(1024*1024).addOnSuccessListener {
+            storageRef.getBytes(1073741824).addOnSuccessListener {
                 holder.routinePhoto.setImageBitmap(BitmapFactory.decodeByteArray(it,0,it.size))
             }
             /*
