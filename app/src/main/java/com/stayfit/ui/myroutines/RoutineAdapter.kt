@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.stayfit.R
@@ -67,9 +69,12 @@ class RoutineAdapter(var items: ArrayList<Routine>) : RecyclerView.Adapter<Routi
         var url = items.get(position).photo
 
         if (!url.equals("null")) {
-
-            var storageRef: StorageReference = FirebaseStorage.getInstance().getReference()
-
+            val currentUserID = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            var storageRef: StorageReference = FirebaseStorage.getInstance().getReference().child("Backgrounds").child(currentUserID).child(url)
+            storageRef.getBytes(1024*1024).addOnSuccessListener {
+                holder.routinePhoto.setImageBitmap(BitmapFactory.decodeByteArray(it,0,it.size))
+            }
+            /*
             Log.e("RoutineAdapter", "$url")
             storageRef.child("1589965060105.jpg").downloadUrl
                 .addOnSuccessListener {
@@ -84,6 +89,8 @@ class RoutineAdapter(var items: ArrayList<Routine>) : RecyclerView.Adapter<Routi
                     // Handle any errors
                     holder.routinePhoto.setImageResource(R.drawable.blog_1)
                 }
+
+             */
         }else{
             holder.routinePhoto.setImageResource(R.drawable.blog_5)
         }

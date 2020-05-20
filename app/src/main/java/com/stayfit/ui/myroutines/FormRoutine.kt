@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.stayfit.R
@@ -25,11 +26,13 @@ class FormRoutine : AppCompatActivity() {
     val PICK_IMAGE = 1
     val REQUEST_IMAGE_CAPTURE = 3
     var photo: String = "null"
+    private lateinit var mAuth: FirebaseAuth
     private var mStorageRef: StorageReference? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_routine)
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance()
     }
 
     fun addNewRoutine(view: View) {
@@ -107,8 +110,9 @@ class FormRoutine : AppCompatActivity() {
     }
 
     fun fileUploader(){
-
-        val riversRef: StorageReference = mStorageRef!!.child(System.currentTimeMillis().toString()+"."+getExtension(photo.toUri()))
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        var pathString = System.currentTimeMillis().toString()+"."+getExtension(photo.toUri())
+        val riversRef: StorageReference = mStorageRef!!.child("Backgrounds").child(currentUserID).child(pathString)
 
         riversRef.putFile(photo.toUri())
             .addOnSuccessListener { taskSnapshot -> // Get a URL to the uploaded content
@@ -117,6 +121,7 @@ class FormRoutine : AppCompatActivity() {
                 // Handle unsuccessful uploads
                 // ...
             }
+        photo = pathString
     }
 
     private fun getExtension(uri: Uri): String{
