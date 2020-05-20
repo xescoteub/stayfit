@@ -1,5 +1,6 @@
 package com.stayfit.ui.activity
 
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.CalendarView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -44,6 +42,9 @@ class ActivityFragment : Fragment() {
     var mCalendarView:android.widget.CalendarView ?= null
     private lateinit var mAuth: FirebaseAuth
     var exercisesRoutine: ArrayList<ArrayList<Exercise>> ?= null
+    lateinit var routinesListC: ArrayList<Routine>
+    var currentDayEvent:String ?= null
+    var eventsAvailable:Boolean ?= null
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
@@ -57,6 +58,9 @@ class ActivityFragment : Fragment() {
 
         mAuth = FirebaseAuth.getInstance()
 
+        var buttonDelete: ImageView = view.findViewById(R.id.ic_deleteEvent)
+        buttonDelete.setOnClickListener { deleteRoutine() }
+
         dayPicker(view)
 
         return view
@@ -66,6 +70,7 @@ class ActivityFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(ActivityViewModel::class.java)
         exercisesRoutine = ArrayList()
+        routinesListC = ArrayList()
     }
 
     fun dayPicker(view:View){
@@ -75,6 +80,7 @@ class ActivityFragment : Fragment() {
         theDate = view.findViewById(R.id.datePicker)
         theDate!!.setText("" + date + " EVENTS :")
         //Comprobar si hay eventos
+        currentDayEvent=date
         checkForEvents(date)
 
         mCalendarView!!.setOnDateChangeListener(CalendarView.OnDateChangeListener { calendarView, year, month, dayOfMonth ->
@@ -84,6 +90,7 @@ class ActivityFragment : Fragment() {
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date + " EVENTS :")
                     //Comprobar si hay eventos
+                    currentDayEvent=date
                     checkForEvents(date)
 
                 } else {
@@ -91,6 +98,7 @@ class ActivityFragment : Fragment() {
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date + " EVENTS :")
                     //Comprobar si hay eventos
+                    currentDayEvent=date
                     checkForEvents(date)
 
                 }
@@ -100,6 +108,7 @@ class ActivityFragment : Fragment() {
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date + " EVENTS :")
                     //Comprobar si hay eventos
+                    currentDayEvent=date
                     checkForEvents(date)
 
                 } else {
@@ -107,6 +116,7 @@ class ActivityFragment : Fragment() {
                     theDate = view.findViewById(R.id.datePicker)
                     theDate!!.setText("" + date + " EVENTS :")
                     //Comprobar si hay eventos
+                    currentDayEvent=date
                     checkForEvents(date)
                 }
             }
@@ -170,11 +180,15 @@ class ActivityFragment : Fragment() {
                                         }
                                         if(i>0){
                                             Log.d(TAG,"Events available")
+                                            routinesListC = arrayListOf()
+                                            routinesListC=routinesList
+                                            eventsAvailable=true
                                             showList(routinesList)
                                             recyclerCalendar.visibility =View.VISIBLE
                                             Toast.makeText(activity,"Events available",Toast.LENGTH_SHORT).show()
                                         }else{
                                             Log.d(TAG,"No events")
+                                            eventsAvailable=false
                                             recyclerCalendar.visibility =View.GONE
                                             Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
                                         }
@@ -184,6 +198,7 @@ class ActivityFragment : Fragment() {
                                     }
                             }else{
                                 Log.d(TAG,"No events")
+                                eventsAvailable=false
                                 recyclerCalendar.visibility =View.GONE
                                 Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
                             }
@@ -193,6 +208,7 @@ class ActivityFragment : Fragment() {
                         }
                 }else{
                     Log.d(TAG,"No events")
+                    eventsAvailable=false
                     recyclerCalendar.visibility =View.GONE
                     Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
                 }
@@ -230,5 +246,43 @@ class ActivityFragment : Fragment() {
         var namesRoutines: ArrayList<String> = ArrayList()
         for (r in routinesList){ namesRoutines.add(r.name)}
         return namesRoutines
+    }
+
+    private fun deleteRoutine() {
+        if(eventsAvailable!!) {
+            Toast.makeText(activity, "Press the routine that you want to delete from this day", Toast.LENGTH_SHORT).show()
+            recyclerCalendar.adapter = RoutineAdapterCalendar(routinesListC)
+            (recyclerCalendar.adapter as RoutineAdapterCalendar).setOnItemClickListener(object :
+                RoutineAdapterCalendar.ClickListener {
+                override fun onItemClick(position: Int, v: View?) {
+                    val adb: AlertDialog.Builder = AlertDialog.Builder(activity)
+                    adb.setTitle("Delete?")
+                    adb.setMessage("Are you sure you want to delete ${routinesListC.get(position).name}?")
+                    adb.setNegativeButton("Cancel", null)
+                    adb.setPositiveButton("Ok") { dialog, which ->
+                        deleteItemFireBase(routinesListC.get(position).name)
+                        routinesListC.removeAt(position)
+                        showList(routinesListC)
+                        Log.d(TAG, "END3")
+                        recyclerCalendar.adapter!!.notifyDataSetChanged()
+                    }
+                    adb.show()
+                }
+
+                override fun onItemLongClick(position: Int, v: View?) {
+
+                }
+            })
+        }else{
+            Toast.makeText(activity, "No events to delete", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun deleteItemFireBase(exercise_name: String) {
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        db.collection("events").document(currentUserID).collection("myEvents").document(currentDayEvent!!).collection("myRoutines").document(exercise_name)
+            .delete()
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 }

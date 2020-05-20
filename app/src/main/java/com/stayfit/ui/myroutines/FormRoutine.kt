@@ -1,41 +1,38 @@
 package com.stayfit.ui.myroutines
 
-import android.app.Activity
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.google.android.material.textfield.TextInputLayout
-import com.stayfit.BuildConfig
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.stayfit.R
 import kotlinx.android.synthetic.main.activity_form_routine.*
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class FormRoutine : AppCompatActivity() {
     val PICK_IMAGE = 1
     val REQUEST_IMAGE_CAPTURE = 3
     var photo: String = "null"
-    private var cameraFilePath: String? = null
+    private lateinit var mAuth: FirebaseAuth
+    private var mStorageRef: StorageReference? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_routine)
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance()
     }
 
     fun addNewRoutine(view: View) {
@@ -88,14 +85,50 @@ class FormRoutine : AppCompatActivity() {
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
             imageView.setImageBitmap(bitmap)
             photo = uri.toString()
+            fileUploader()
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
             imageView.setImageBitmap(imageBitmap)
+            photo = getImageUri(this, imageBitmap).toString()
+            fileUploader()
         }
     }
 
     fun startCamera(view: View) {dispatchTakePictureIntent()}
+    //convierte el bitmap en Uri
+    fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            inContext.getContentResolver(),
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
+
+    fun fileUploader(){
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        var pathString = System.currentTimeMillis().toString()+"."+getExtension(photo.toUri())
+        val riversRef: StorageReference = mStorageRef!!.child("Backgrounds").child(currentUserID).child(pathString)
+
+        riversRef.putFile(photo.toUri())
+            .addOnSuccessListener { taskSnapshot -> // Get a URL to the uploaded content
+            }
+            .addOnFailureListener {
+                // Handle unsuccessful uploads
+                // ...
+            }
+        photo = pathString
+    }
+
+    private fun getExtension(uri: Uri): String{
+        var cr:ContentResolver = contentResolver
+        var mimeTypeMap:MimeTypeMap = MimeTypeMap.getSingleton()
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri))!!
+    }
 
 
 }
