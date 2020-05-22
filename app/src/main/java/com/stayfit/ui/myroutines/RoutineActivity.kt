@@ -141,7 +141,7 @@ class RoutineActivity : AppCompatActivity() {
             ) { dialog, which ->
                 arrayList.removeAt(position)
                 arrayNames.removeAt(position)
-                saveData()
+                saveDataFireBase(routine!!)
                 controlListView()
             }
             adb.show()
@@ -265,7 +265,7 @@ class RoutineActivity : AppCompatActivity() {
             "name" to r.name,
             "description" to r.description,
             "photo" to r.photo,
-            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+            "hashMapExercises" to arrayList,
             "time_be" to delayTime.toString()
         )
         db.collection("routines").get()

@@ -195,7 +195,9 @@ class   MyRoutinesFragment: Fragment(){
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
                         //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                        arrayAdapter!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]!!.javaClass}")
+                        Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]}")
+                        arrayAdapter!!.add(toArrayListExercise2(routineObj["hashMapExercises"] as ArrayList<HashMap<*,String>>))
                         Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
                         time_be = routineObj["time_be"].toString()
@@ -253,23 +255,7 @@ class   MyRoutinesFragment: Fragment(){
         if (requestCode == 3) {
             if (resultCode == 3){
                 var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST ROUTINE")
-                val list_ex: ArrayList<ArrayList<String>> = ArrayList()
-                var parametersExercise: ArrayList<String> = ArrayList()
-                parametersExercise.add("funciona?")
-                parametersExercise.add("")
-                parametersExercise.add("30")
-                parametersExercise.add("null")
-                parametersExercise.add("")
-                list_ex.add(parametersExercise)
-                var parametersExercise2: ArrayList<String> = ArrayList()
-                parametersExercise2.add("funciona2")
-                parametersExercise2.add("")
-                parametersExercise2.add("30")
-                parametersExercise2.add("null")
-                parametersExercise2.add("")
-                list_ex.add(parametersExercise2)
                 var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>> = HashMap()
-                hashMapExercises.put("exercises",list_ex)
                 addRoutine(Routine( arrayList[0], arrayList[1], arrayList[2], hashMapExercises))
             }
         }
@@ -395,18 +381,25 @@ class   MyRoutinesFragment: Fragment(){
         }
         return arrayList
     }
-    /*
-    // TOOD : return type --> ArrayList<ArrayList<String>>
-    fun arrayListToHashMap(exercises: ArrayList<Exercise>) {
-        Log.d(TAG, "arrayListToHashMap $exercises")
-        var arrayList:ArrayList<ArrayList<String>> = ArrayList()
-        for (ex in exercises.indices) {
-            Log.d(TAG, ">>> $ex")
-            //arrayList.add(ex.getParametersList())
+    fun toArrayListExercise2(exercises: ArrayList<HashMap<*,String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        if (exercises.size>0){
+        for (i in exercises.indices) {
+            var exercise = exercises[i];
+            arrayList.add(
+                Exercise(
+                    exercise["nom_exercise"],
+                    exercise["url_video"],
+                    exercise["time_count"],
+                    exercise["jason"],
+                    exercise["description"]
+                )
+            )
         }
-//        return arrayList
+        }
+
+        return arrayList
     }
-    */
     private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
         var arrayList:ArrayList<ArrayList<String>> = ArrayList()
         Log.d(TAG, "Class ${exercises.javaClass}")
