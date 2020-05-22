@@ -5,10 +5,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.stayfit.R
@@ -17,6 +20,8 @@ import com.stayfit.ui.workouts.exercises.ExerciseActivity
 import com.stayfit.ui.workouts.listexercises.*
 import com.stayfit.ui.workouts.menu.ArmMenu
 import com.stayfit.ui.workouts.menu.ExtraMenu
+import kotlinx.android.synthetic.main.fragment_my_routines.*
+import java.lang.Exception
 import java.lang.reflect.Type
 
 
@@ -26,14 +31,21 @@ class RoutineActivity : AppCompatActivity() {
     var arrayList:ArrayList<Exercise> = ArrayList()
     var arrayNames: ArrayList<String> = ArrayList()
     var delayTime:Int = 20
+    var nameR: String ?=null
+    private lateinit var mAuth: FirebaseAuth
+    val db = FirebaseFirestore.getInstance()
+    var routine:Routine ?=null
+    private val TAG = "RoutineActivity"
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_routine)
         listView = findViewById<ListView>(R.id.routine_list)
         val intent: Intent = this.intent
+        mAuth = FirebaseAuth.getInstance()
         val hashMap = intent.getSerializableExtra("routine_map") as HashMap<String, ArrayList<ArrayList<String>>>
         if (hashMap["exercises"]==null){hashMap["exercises"]=ArrayList()}
+        nameR = intent.getStringExtra("routine_name") as String
         managerParametersIntent(hashMap["exercises"]!!)
         controlListView()
     }
@@ -46,13 +58,20 @@ class RoutineActivity : AppCompatActivity() {
         }}
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun controlListView(){
+        try {
+            loadDataFireBase()
+        }catch (e: Exception){
+
+        }
         //Create Adapter
-        val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayNames as List<Any>?)
+        val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayList as List<Any>?)
         //assign adapter to listview
         listView?.adapter = arrayAdapter
         //add listener to listview
         listView?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l -> startConcreteExercise(i) }
+        (listView?.adapter as ArrayAdapter<*>).notifyDataSetChanged()
 
     }
     fun startConcreteExercise(i: Int){
@@ -98,6 +117,7 @@ class RoutineActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun deleteItem(view: View) {
         listView?.onItemClickListener = AdapterView.OnItemClickListener { a, v, position, id ->
             val adb: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -122,6 +142,7 @@ class RoutineActivity : AppCompatActivity() {
         val editText: EditText = mView.findViewById(R.id.editTextTime)
         timeDialog.setPositiveButton("Apply") { dialog, which ->
             delayTime = editText.text.toString().toInt()
+            saveDataFireBase(routine!!)
             //Toast.makeText(this, "$delayTime", Toast.LENGTH_SHORT).show()
         }
         timeDialog.setNegativeButton("Cancel") { dialog, which -> }
@@ -184,4 +205,101 @@ class RoutineActivity : AppCompatActivity() {
         val intent = Intent(this, MyExercises::class.java)
         startActivity(intent)
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadDataFireBase(){
+        val user = mAuth.currentUser?.uid.toString()
+        db.collection("routines").document(user).collection("MyRoutines").document(nameR!!)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    val routineObj = document.data as HashMap<*, *>
+                    val r = Routine()
+                    var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+
+                    with(r) {
+                        h["exercises"] = ArrayList()
+                        name    = routineObj["name"].toString()
+                        description  = routineObj["description"].toString()
+                        photo   = routineObj["photo"].toString()
+                        hashMapExercises  = h
+                        // exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        arrayList = routineObj["hashMapExercises"] as ArrayList<Exercise>
+                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                        Log.d(TAG, "routine: $r")
+                        if (routineObj["time_be"].toString().equals(""))
+                            delayTime = 20
+                        else
+                            delayTime = routineObj["time_be"].toString().toInt()
+                        routine = r
+                    }
+
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "get failed with ", exception)
+                }
+    }
+    private fun saveDataFireBase(r: Routine){
+
+        val currentUserID = mAuth.currentUser?.uid.toString()
+        val routine = hashMapOf(
+            "name" to r.name,
+            "description" to r.description,
+            "photo" to r.photo,
+            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+            "time_be" to delayTime.toString()
+        )
+        db.collection("routines").get()
+            .addOnSuccessListener { result ->
+                var userFound = false
+                for(user in result){
+                    if(user.id.equals(currentUserID)){
+                        userFound=true
+                    }
+                }
+                if(userFound){
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(routine)
+                }else{
+                    //Adding User credentials
+                    val dataUser = HashMap<String, String>()
+                    dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
+                    db.collection("routines").document(currentUserID).set(dataUser)
+                    //Adding User Routine
+                    db.collection("routines").document(currentUserID).collection("MyRoutines").document(r.name).set(routine)
+                    Log.d(TAG,"Routine added.")
+                    Toast.makeText(this,"Routine ${r.name} added",Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener{ e ->
+                Log.w(TAG,"Error getting getting data",e)
+            }
+    }
+    fun getArrayNames(ex: ArrayList<Exercise>): ArrayList<String>{
+        var a: ArrayList<String> = ArrayList()
+        for (e in ex)
+            a.add(e.getExerciseName())
+        return a
+    }
+    fun toArrayListExercise(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        for (parametersExercise in exercises) {
+            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+        }
+        return arrayList
+    }
+    private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
+        var arrayList:ArrayList<ArrayList<String>> = ArrayList()
+        Log.d(TAG, "Class ${exercises.javaClass}")
+        Log.d(TAG, "EX ${exercises}")
+        for (ex in exercises) {
+            arrayList.add(ex.getParametersList())
+        }
+        return arrayList
+    }
+
 }

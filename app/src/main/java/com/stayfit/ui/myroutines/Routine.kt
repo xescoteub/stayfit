@@ -2,7 +2,7 @@ package com.stayfit.ui.myroutines
 
 import com.stayfit.ui.workouts.exercises.Exercise
 
-data class Routine(var name: String = "", var description: String = "", var photo: String = "", var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>>? = null)
+data class Routine(var name: String = "", var description: String = "", var photo: String = "", var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>>? = null, var time_be:String = "")
 
 /*data class Routine(var name: String, var description: String, var photo: String, var hashMapExercises: HashMap<String, ArrayList<ArrayList<String>>>){
     fun getParametersList(): ArrayList<String>{
