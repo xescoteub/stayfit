@@ -45,7 +45,7 @@ class RoutineActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         val hashMap = intent.getSerializableExtra("routine_map") as HashMap<String, ArrayList<ArrayList<String>>>
         if (hashMap["exercises"]==null){hashMap["exercises"]=ArrayList()}
-        nameR = intent.getStringExtra("routine_name") as String
+        //nameR = intent.getStringExtra("routine_name") as String
         managerParametersIntent(hashMap["exercises"]!!)
         controlListView()
     }
