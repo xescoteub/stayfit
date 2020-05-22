@@ -97,7 +97,7 @@ class ProfileFragment : Fragment() {
 
 
             }
-            hadb.setTitle("Change your height")
+            hadb.setTitle("Change your height (in cm)")
             hadb.setView(hView)
             val hdialog:AlertDialog =hadb.create()
             hdialog.show()
@@ -126,7 +126,7 @@ class ProfileFragment : Fragment() {
                 }
 
             }
-            wadb.setTitle("Change your weight")
+            wadb.setTitle("Change your weight (in kg)")
             wadb.setView(wView)
             val wdialog:AlertDialog =wadb.create()
             wdialog.show()
