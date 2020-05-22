@@ -195,10 +195,12 @@ class   MyRoutinesFragment: Fragment(){
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
                         //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                        Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]!!.javaClass}")
+                        //Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]!!.javaClass}")
                         Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]}")
-                        arrayAdapter!!.add(toArrayListExercise2(routineObj["hashMapExercises"] as ArrayList<HashMap<*,String>>))
-                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                        var a:ArrayList<HashMap<*,String>> = ArrayList()
+                        if (routineObj["hashMapExercises"] != null){ a= routineObj["hashMapExercises"] as ArrayList<HashMap<*,String>>}
+                        arrayAdapter!!.add(toArrayListExercise2(a))
+                        //Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
                         time_be = routineObj["time_be"].toString()
                         routinesList.add(routine)

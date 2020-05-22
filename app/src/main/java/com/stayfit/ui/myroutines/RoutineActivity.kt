@@ -241,7 +241,7 @@ class RoutineActivity : AppCompatActivity() {
                         hashMapExercises  = h
                         // exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
                         //arrayList = routineObj["hashMapExercises"] as ArrayList<Exercise>
-                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                        //Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $r")
                         if (routineObj["time_be"].toString().equals(""))
                             delayTime = 20

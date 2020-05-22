@@ -25,6 +25,7 @@ import com.stayfit.R
 import com.stayfit.ui.myroutines.MyRoutinesFragment
 import com.stayfit.ui.myroutines.MyRoutinesViewModel
 import com.stayfit.ui.myroutines.Routine
+import com.stayfit.ui.myroutines.RoutineAdapter
 import kotlinx.android.synthetic.main.fragment_my_routines.*
 
 
@@ -37,6 +38,7 @@ class ExerciseActivity: AppCompatActivity() {
     var url_video: String = ""
     private lateinit var mAuth: FirebaseAuth
     var finished: Boolean = false
+    var params: ArrayList<String> = ArrayList()
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
     private val TAG = "ExerciseActivity"
@@ -47,7 +49,8 @@ class ExerciseActivity: AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         title = findViewById<TextView>(R.id.txt_exercise)
         val intent:Intent = intent
-        managerParametersIntent(intent.getStringArrayListExtra("exercise_name"))
+        params = intent.getStringArrayListExtra("exercise_name")
+        managerParametersIntent(params!!)
 
     }
     private fun downProgressBar(durada: Long){
@@ -118,12 +121,16 @@ class ExerciseActivity: AppCompatActivity() {
 
     fun addToRoutine(view: View) {
         var routinesList: ArrayList<Routine> = ArrayList()
-        var exercisesRoutine: ArrayList<ArrayList<Exercise>> = ArrayList()
         val builderSingle = AlertDialog.Builder(this)
+        var arrayExerciseAdapter: ArrayAdapter<ArrayList<Exercise>> ?= null
         builderSingle.setIcon(R.drawable.ic_assignment_purple)
         builderSingle.setTitle("Choose a routine")
 
         val arrayAdapter = ArrayAdapter<String>(
+            this,
+            android.R.layout.select_dialog_singlechoice
+        )
+        arrayExerciseAdapter = ArrayAdapter<ArrayList<Exercise>>(
             this,
             android.R.layout.select_dialog_singlechoice
         )
@@ -136,21 +143,27 @@ class ExerciseActivity: AppCompatActivity() {
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-
+                    arrayAdapter.add(routineObj["name"].toString())
                     with(routine) {
                         name    = routineObj["name"].toString()
+                        arrayAdapter.add(routineObj["name"].toString())
                         description  = routineObj["description"].toString()
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
-                        exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                        Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                        //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        //Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]!!.javaClass}")
+                        Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]}")
+                        var a:ArrayList<HashMap<*,String>> = ArrayList()
+                        if (routineObj["hashMapExercises"] != null){ a= routineObj["hashMapExercises"] as ArrayList<HashMap<*,String>>}
+                        arrayExerciseAdapter!!.add(toArrayListExercise2(a))
+                        //Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
+                        time_be = routineObj["time_be"].toString()
                         routinesList.add(routine)
-                        arrayAdapter.add(routineObj["name"].toString())
                     }
                     Log.d(TAG, "routineList: $routinesList")
                 }
-                //Log.d(TAG, "END2")
+                Log.d(TAG, "END2")
                 //myroutinesRecycler.adapter!!.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
@@ -167,6 +180,48 @@ class ExerciseActivity: AppCompatActivity() {
             val strName = arrayAdapter.getItem(which)
             val builderInner = AlertDialog.Builder(this)
             builderInner.setMessage(strName)
+            var r:Routine ?= null
+            for (rout in routinesList){
+                if (strName.equals(rout.name)){
+                    r = rout
+                }
+            }
+            var exes:ArrayList<ArrayList<String>> ?= r!!.hashMapExercises?.get("exercises")
+            exes!!.add(params)
+            r!!.hashMapExercises?.set("exercises", exes)
+            Log.d(TAG, "${params!!}")
+            val routine = hashMapOf(
+                "name" to r!!.name,
+                "description" to r!!.description,
+                "photo" to r!!.photo,
+                "hashMapExercises" to r!!.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+                "time_be" to r!!.time_be
+            )
+            db.collection("routines").get()
+                .addOnSuccessListener { result ->
+                    var userFound = false
+                    for(user in result){
+                        if(user.id.equals(user)){
+                            userFound=true
+                        }
+                    }
+                    if(userFound){
+                        db.collection("routines").document(user).collection("MyRoutines").document(r.name).set(routine)
+                    }else{
+                        //Adding User credentials
+                        val dataUser = HashMap<String, String>()
+                        dataUser["user_Auth"] = mAuth.currentUser?.email.toString()
+                        db.collection("routines").document(user).set(dataUser)
+                        //Adding User Routine
+                        db.collection("routines").document(user).collection("MyRoutines").document(r.name).set(routine)
+                        Log.d(TAG,"Routine added.")
+                        Toast.makeText(this,"Routine ${r.name} added",Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener{ e ->
+                    Log.w(TAG,"Error getting getting data",e)
+                }
+
             builderInner.setTitle("Your Selected Item is")
             builderInner.setPositiveButton(
                 "Ok"
@@ -181,5 +236,31 @@ class ExerciseActivity: AppCompatActivity() {
         var namesRoutines: ArrayList<String> = ArrayList()
         for (r in routinesList){ namesRoutines.add(r.name)}
         return namesRoutines
+    }
+    fun toArrayListExercise2(exercises: ArrayList<HashMap<*,String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        if (exercises.size>0){
+            for (i in exercises.indices) {
+                var exercise = exercises[i];
+                arrayList.add(
+                    Exercise(
+                        exercise["nom_exercise"],
+                        exercise["url_video"],
+                        exercise["time_count"],
+                        exercise["jason"],
+                        exercise["description"]
+                    )
+                )
+            }
+        }
+
+        return arrayList
+    }
+    fun toArrayListExercise(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        for (parametersExercise in exercises) {
+            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+        }
+        return arrayList
     }
 }
