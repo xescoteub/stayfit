@@ -184,6 +184,7 @@ class ExerciseActivity: AppCompatActivity() {
             for (rout in routinesList){
                 if (strName.equals(rout.name)){
                     r = rout
+                    break
                 }
             }
             var exes:ArrayList<ArrayList<String>> ?= r!!.hashMapExercises?.get("exercises")
