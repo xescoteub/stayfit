@@ -133,6 +133,7 @@ class   MyRoutinesFragment: Fragment(){
         }
         Log.d(TAG, ">>> startConcreteRoutine: $r")
         val intent = Intent(activity, RoutineActivity::class.java)
+        intent.putExtra("routine_name",r.name);
         intent.putExtra("routine_map",r.hashMapExercises);
         startActivity(intent)
     }
@@ -143,7 +144,8 @@ class   MyRoutinesFragment: Fragment(){
             "name" to r.name,
             "description" to r.description,
             "photo" to r.photo,
-            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+            "hashMapExercises" to r.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+            "time_be" to r.time_be
         )
         db.collection("routines").get()
             .addOnSuccessListener { result ->
@@ -196,6 +198,7 @@ class   MyRoutinesFragment: Fragment(){
                         arrayAdapter!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
                         Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
+                        time_be = routineObj["time_be"].toString()
                         routinesList.add(routine)
                     }
                     Log.d(TAG, "routineList: $routinesList")

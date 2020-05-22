@@ -45,6 +45,7 @@ class ActivityFragment : Fragment() {
     lateinit var routinesListC: ArrayList<Routine>
     var currentDayEvent:String ?= null
     var eventsAvailable:Boolean ?= null
+    var progressBar:ProgressBar ?= null
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
@@ -57,6 +58,9 @@ class ActivityFragment : Fragment() {
         Log.d(TAG, "onCreateView: CalendarAcrivity created...")
 
         mAuth = FirebaseAuth.getInstance()
+
+        progressBar = view.findViewById(R.id.waitingBar)
+        progressBar!!.visibility = View.GONE
 
         var buttonDelete: ImageView = view.findViewById(R.id.ic_deleteEvent)
         buttonDelete.setOnClickListener { deleteRoutine() }
@@ -125,6 +129,7 @@ class ActivityFragment : Fragment() {
     }
 
     private fun checkForEvents(date:String){
+        progressBar!!.visibility = View.VISIBLE
         var arrayAdapter = activity?.let {
             ArrayAdapter<ArrayList<Exercise>>(
                 it,
@@ -185,9 +190,11 @@ class ActivityFragment : Fragment() {
                                             eventsAvailable=true
                                             showList(routinesList)
                                             recyclerCalendar.visibility =View.VISIBLE
+                                            progressBar!!.visibility = View.GONE
                                             Toast.makeText(activity,"Events available",Toast.LENGTH_SHORT).show()
                                         }else{
                                             Log.d(TAG,"No events")
+                                            progressBar!!.visibility = View.GONE
                                             eventsAvailable=false
                                             recyclerCalendar.visibility =View.GONE
                                             Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
@@ -198,6 +205,7 @@ class ActivityFragment : Fragment() {
                                     }
                             }else{
                                 Log.d(TAG,"No events")
+                                progressBar!!.visibility = View.GONE
                                 eventsAvailable=false
                                 recyclerCalendar.visibility =View.GONE
                                 Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
@@ -208,6 +216,7 @@ class ActivityFragment : Fragment() {
                         }
                 }else{
                     Log.d(TAG,"No events")
+                    progressBar!!.visibility = View.GONE
                     eventsAvailable=false
                     recyclerCalendar.visibility =View.GONE
                     Toast.makeText(activity,"No events",Toast.LENGTH_SHORT).show()
