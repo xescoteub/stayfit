@@ -126,11 +126,11 @@ class   MyRoutinesFragment: Fragment(){
         Log.d(TAG, "END1")
     }
     fun startConcreteRoutine(r: Routine) {
-        try {
-            loadExercises() // <--- dóna error extrany HashMap
-        }catch (e: Exception){
-            Log.d(TAG,"Exception: ${e.message}")
-        }
+        //try {
+        loadExercises() // <--- dóna error extrany HashMap
+        //}catch (e: Exception){
+        //    Log.d(TAG,"Exception: ${e.message}")
+        //}
         Log.d(TAG, ">>> startConcreteRoutine: $r")
         val intent = Intent(activity, RoutineActivity::class.java)
         intent.putExtra("routine_name",r.name);
@@ -195,7 +195,9 @@ class   MyRoutinesFragment: Fragment(){
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
                         //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                        arrayAdapter!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
+                        Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]!!.javaClass}")
+                        Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]}")
+                        arrayAdapter!!.add(toArrayListExercise2(routineObj["hashMapExercises"] as ArrayList<HashMap<*,String>>))
                         Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $routine")
                         time_be = routineObj["time_be"].toString()
@@ -393,6 +395,17 @@ class   MyRoutinesFragment: Fragment(){
         for (parametersExercise in exercises) {
             arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
         }
+        return arrayList
+    }
+    fun toArrayListExercise2(exercises: ArrayList<HashMap<*,String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        var exercise = exercises[0];
+        arrayList.add(Exercise(
+            exercise["nom_exercise"],
+            exercise["url_video"],
+            exercise["time_count"],
+            exercise["jason"],
+            exercise["description"]))
         return arrayList
     }
     /*
