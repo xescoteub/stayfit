@@ -151,6 +151,8 @@ class RoutineActivity : AppCompatActivity() {
         val timeDialog = AlertDialog.Builder(this)
         //timeDialog.setView(R.layout.routine_change_time)
         val mView:View = getLayoutInflater().inflate(R.layout.routine_change_time,null)
+        val secTxt: TextView = mView.findViewById(R.id.ActualTime)
+        secTxt.text = delayTime.toString() + " seconds"
         val editText: EditText = mView.findViewById(R.id.editTextTime)
         timeDialog.setPositiveButton("Apply") { dialog, which ->
             delayTime = editText.text.toString().toInt()
