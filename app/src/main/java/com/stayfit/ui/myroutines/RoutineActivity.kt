@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -45,7 +46,18 @@ class RoutineActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         val hashMap = intent.getSerializableExtra("routine_map") as HashMap<String, ArrayList<ArrayList<String>>>
         if (hashMap["exercises"]==null){hashMap["exercises"]=ArrayList()}
-        //nameR = intent.getStringExtra("routine_name") as String
+        nameR = intent.getStringExtra("routine_name") as String
+        if (nameR.equals("")) {
+            val delete_btn = findViewById<ImageView>(R.id.ic_deleteExercise)
+            delete_btn.visibility = View.GONE
+            val add_btn = findViewById<ImageView>(R.id.ic_addExercise)
+            add_btn.visibility = View.GONE
+            val set_time_btn = findViewById<ImageView>(R.id.ic_setTimeBetweenExercises)
+            set_time_btn.visibility = View.GONE
+            val param = listView!!.layoutParams as ViewGroup.MarginLayoutParams
+            param.setMargins(0,100,0,0)
+            listView!!.layoutParams = param
+        }
         managerParametersIntent(hashMap["exercises"]!!)
         controlListView()
     }

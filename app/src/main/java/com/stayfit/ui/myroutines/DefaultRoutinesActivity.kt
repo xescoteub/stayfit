@@ -57,6 +57,7 @@ class DefaultRoutinesActivity : AppCompatActivity() {
     fun startConcreteRoutine(r: Routine) {
         Log.d(TAG, ">>> startConcreteRoutine: $r")
         val intent = Intent(this, RoutineActivity::class.java)
+        intent.putExtra("routine_name","");
         intent.putExtra("routine_map",r.hashMapExercises);
         startActivity(intent)
     }
