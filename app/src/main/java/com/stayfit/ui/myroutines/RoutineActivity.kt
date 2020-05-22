@@ -66,7 +66,7 @@ class RoutineActivity : AppCompatActivity() {
 
         }
         //Create Adapter
-        val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayList as List<Any>?)
+        val arrayAdapter: ArrayAdapter<*> = ArrayAdapter<Any>(this, android.R.layout.simple_list_item_1, arrayNames as List<Any>?)
         //assign adapter to listview
         listView?.adapter = arrayAdapter
         //add listener to listview
@@ -226,7 +226,7 @@ class RoutineActivity : AppCompatActivity() {
                         photo   = routineObj["photo"].toString()
                         hashMapExercises  = h
                         // exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                        arrayList = routineObj["hashMapExercises"] as ArrayList<Exercise>
+                        //arrayList = routineObj["hashMapExercises"] as ArrayList<Exercise>
                         Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                         Log.d(TAG, "routine: $r")
                         if (routineObj["time_be"].toString().equals(""))
