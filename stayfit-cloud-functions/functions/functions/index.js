@@ -83,7 +83,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
         // Get welcome blog
         await blogsRef.doc('welcome').get().then(doc => {
             if (doc.exists) {
-               console.log("Document data:", doc.data());
+               //console.log("Document data:", doc.data());
                blogs.push(doc.data());
             } else {
                // doc.data() will be undefined in this case
@@ -95,7 +95,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
         // Get motivation blog
         await blogsRef.doc('motivation').get().then(doc => {
             if (doc.exists) {
-               console.log("Document data:", doc.data());
+               //console.log("Document data:", doc.data());
                blogs.push(doc.data());
             } else {
                // doc.data() will be undefined in this case
@@ -106,7 +106,7 @@ async function handleUserBlogRecommendation(completedWorkouts) {
     else if (completedWorkouts >= 4){
         await blogsRef.doc('healthy_food').get().then(doc => {
             if (doc.exists) {
-               console.log("Document data:", doc.data());
+               //console.log("Document data:", doc.data());
                blogs.push(doc.data());
             } else {
                // doc.data() will be undefined in this case
@@ -174,25 +174,38 @@ app.get('/analytics/user/:uid', async (req, res) => {
                 }
             });
 
-            // Store promises
-            const promises = [];
-            promises.push(calculateUserCaloriesBurned(uid));
-            promises.push(calculateUserBMI(uid));
+            // --------------------------------------------------------------
+            // Fetch user analytics:
+            //
+            // - BMI
+            // - Calories
+            // - Water intake
+            // - Total workout time (in minutes)
+            // --------------------------------------------------------------
+            const bmi           = await calculateUserBMI(uid);
+            const calories      = await calculateUserCaloriesBurned(uid);
+            const water_intake  = await calculateRecommendedWaterIntake(uid);
 
-            // Full-fill all promises
-            Promise.all(promises).then((results) => {
-                // The calories burned
-                data.calories_burned = results[0];
+            /*
+            console.log("bmi: ", bmi);
+            console.log("calories: ", calories);
+            console.log("water_intake: ", water_intake);
+            */
 
-                // The previously calculated BMI
-                data.bmi = results[1];
+            // Append the user BMI
+            data.bmi = bmi;
 
-                // Sum of all workout time for a given day (in minutes)
-                data.total_time = totalWorkoutTimeOfToday.reduce((a, b) => a + b, 0);
+            // The calories
+            data.calories = calories;
 
-                // Send data object
-                res.status(200).send(data);
-            });
+            // Append the user recommended water intake
+            data.water_intake = water_intake;
+
+            // Sum of all workout time for a given day (in minutes)
+            data.total_time = totalWorkoutTimeOfToday.reduce((a, b) => a + b, 0);
+
+            // Send data object
+            res.status(200).send(data);
         });
 });
 
@@ -367,6 +380,11 @@ async function calculateUserCaloriesBurned(uid) {
     return calories.toFixed(1);
 }
 
-function calculateRecommendedWaterIntake() {
+/**
+ * Returns an estimation of the recommended daily water intake based on user data
+ */
+async function calculateRecommendedWaterIntake(uid) {
     // TODO
+    const user = await getUserData(uid);
+    return 100;
 }

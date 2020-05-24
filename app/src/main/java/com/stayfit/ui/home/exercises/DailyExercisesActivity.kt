@@ -296,7 +296,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
             rowTextView!!.textSize = 12f
 
             if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-                rowTextView!!.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_flat))
+                rowTextView!!.background = resources.getDrawable(R.drawable.ic_circle_background_flat)
             } else {
                 rowTextView!!.background = resources.getDrawable(R.drawable.ic_circle_background_flat)
             }
@@ -305,7 +305,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
         }
 
         if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-            myTextViews[currentExercise]?.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_filled))
+            myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_filled)
         } else {
             myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_filled)
         }
@@ -388,7 +388,7 @@ class DailyExercisesActivity : BaseHTTPAction() {
             for (i in myTextViews.indices) {
                 if (currentExercise == i) {
                     if (sdk < Build.VERSION_CODES.JELLY_BEAN) {
-                        myTextViews[currentExercise]?.setBackgroundDrawable(resources.getDrawable(R.drawable.ic_circle_background_filled))
+                        myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_filled)
                     } else {
                         myTextViews[currentExercise]?.background = resources.getDrawable(R.drawable.ic_circle_background_filled)
                     }

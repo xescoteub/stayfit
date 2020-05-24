@@ -67,7 +67,7 @@ class AnalyticsActivity : AppCompatActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.title = resources.getString(R.string.app_name)
 
-        toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
+        toolbar.setNavigationOnClickListener { onBackPressed() }
 
         // ====================================================================
         // Sleep bottom sheet
