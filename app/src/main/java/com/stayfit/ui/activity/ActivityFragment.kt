@@ -159,7 +159,6 @@ class ActivityFragment : Fragment() {
                             if(dateEventFound){
                                 db.collection("events").document(currentUserID).collection("myEvents").document(date).collection("myRoutines").get()
                                     .addOnSuccessListener { result3 ->
-                                        var routineAlreadyAdded = false
                                         //Contador para saber si hay rutinas prueba
                                         var i = 0
                                         var routinesList:ArrayList<Routine> = arrayListOf()
@@ -175,17 +174,23 @@ class ActivityFragment : Fragment() {
                                                 photo   = routineObj["photo"].toString()
                                                 hashMapExercises  = h
                                                 //exercisesRoutine!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                                                arrayAdapter!!.add(routineObj["hashMapExercises"] as ArrayList<Exercise>)
-                                                Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
+                                                //Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]!!.javaClass}")
+                                                Log.d(TAG, "Get exs[0] ${routineObj["hashMapExercises"]}")
+                                                var a:ArrayList<HashMap<*,String>> = ArrayList()
+                                                if (routineObj["hashMapExercises"] != null){ a= routineObj["hashMapExercises"] as ArrayList<HashMap<*,String>>}
+                                                arrayAdapter!!.add(toArrayListExercise2(a))
+                                                //Log.d(TAG, "exercisesList: ${routineObj["hashMapExercises"] as ArrayList<Exercise>}")
                                                 Log.d(TAG, "routine: $routine")
+                                                time_be = routineObj["time_be"].toString()
                                                 routinesList.add(routine)
                                             }
                                             Log.d(TAG, "routineList: $routinesList")
                                             i++
                                         }
-                                        if(i>0){
+                                        if(i>0 && arrayAdapter != null){
                                             Log.d(TAG,"Events available")
                                             routinesListC = arrayListOf()
+                                            routinesList = loadExercises(routinesList,arrayAdapter)
                                             routinesListC=routinesList
                                             eventsAvailable=true
                                             showList(routinesList)
@@ -245,9 +250,15 @@ class ActivityFragment : Fragment() {
         })
     }
 
-    fun startConcreteRoutine(r: Routine){ //No va
+    fun startConcreteRoutine(r: Routine){
+        Log.d(TAG, ">>> startConcreteRoutine: $r")
         val intent = Intent(activity, RoutineActivity::class.java)
-        intent.putExtra("routine_map",r.hashMapExercises);
+        if(r.name != "Run for life" && r.name != "Abs like rocks") {
+            intent.putExtra("routine_name", r.name)
+        }else{
+            intent.putExtra("routine_name", "")
+        }
+        intent.putExtra("routine_map",r.hashMapExercises)
         startActivity(intent)
     }
 
@@ -293,5 +304,45 @@ class ActivityFragment : Fragment() {
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    fun toArrayListExercise2(exercises: ArrayList<HashMap<*,String>>): ArrayList<Exercise>{
+        var arrayList:ArrayList<Exercise> = ArrayList()
+        if (exercises.size>0){
+            for (i in exercises.indices) {
+                var exercise = exercises[i];
+                arrayList.add(
+                    Exercise(
+                        exercise["nom_exercise"],
+                        exercise["url_video"],
+                        exercise["time_count"],
+                        exercise["jason"],
+                        exercise["description"]
+                    )
+                )
+            }
+        }
+
+        return arrayList
+    }
+
+    private fun loadExercises(routinesList: ArrayList<Routine>, arrayAdapter: ArrayAdapter<ArrayList<Exercise>>): ArrayList<Routine>{ //Devolver el routines list cargado
+        for (r in routinesList.indices) {
+            Log.d(TAG, "load exercisesList: ${arrayAdapter!!.getItem(r)}")
+            var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+            h["exercises"] = arrayListExerciseToArrayListStrings(arrayAdapter!!.getItem(r)!!)
+            routinesList[r].hashMapExercises = h
+        }
+        return routinesList
+    }
+
+    private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
+        var arrayList:ArrayList<ArrayList<String>> = ArrayList()
+        Log.d(TAG, "Class ${exercises.javaClass}")
+        Log.d(TAG, "EX ${exercises}")
+        for (ex in exercises) {
+            arrayList.add(ex.getParametersList())
+        }
+        return arrayList
     }
 }
