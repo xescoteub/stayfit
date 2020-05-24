@@ -1,6 +1,5 @@
 package com.stayfit.ui.workouts.exercises
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -10,23 +9,14 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.webkit.URLUtil
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
-import com.stayfit.ui.myroutines.MyRoutinesFragment
-import com.stayfit.ui.myroutines.MyRoutinesViewModel
 import com.stayfit.ui.myroutines.Routine
-import com.stayfit.ui.myroutines.RoutineAdapter
-import kotlinx.android.synthetic.main.fragment_my_routines.*
 
 
 class ExerciseActivity: AppCompatActivity() {
@@ -49,8 +39,8 @@ class ExerciseActivity: AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         title = findViewById<TextView>(R.id.txt_exercise)
         val intent:Intent = intent
-        params = intent.getStringArrayListExtra("exercise_name")
-        managerParametersIntent(params!!)
+        params = intent.getStringArrayListExtra("exercise_name")!!
+        managerParametersIntent(params)
 
     }
     private fun downProgressBar(durada: Long){
@@ -120,12 +110,15 @@ class ExerciseActivity: AppCompatActivity() {
     }
 
     fun addToRoutine(view: View) {
-        var routinesList: ArrayList<Routine> = ArrayList()
+        //var : ArrayList<Routine> = ArrayList()
         val builderSingle = AlertDialog.Builder(this)
         var arrayExerciseAdapter: ArrayAdapter<ArrayList<Exercise>> ?= null
         builderSingle.setIcon(R.drawable.ic_assignment_purple)
         builderSingle.setTitle("Choose a routine")
-
+        var  routinesList = ArrayAdapter<Routine>(
+            this,
+            android.R.layout.select_dialog_singlechoice
+        )
         val arrayAdapter = ArrayAdapter<String>(
             this,
             android.R.layout.select_dialog_singlechoice
@@ -143,7 +136,7 @@ class ExerciseActivity: AppCompatActivity() {
                     val routineObj = document.data as HashMap<*, *>
                     val routine = Routine()
                     var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
-                    arrayAdapter.add(routineObj["name"].toString())
+                    //arrayAdapter.add(routineObj["name"].toString())
                     with(routine) {
                         name    = routineObj["name"].toString()
                         arrayAdapter.add(routineObj["name"].toString())
@@ -181,22 +174,32 @@ class ExerciseActivity: AppCompatActivity() {
             val builderInner = AlertDialog.Builder(this)
             builderInner.setMessage(strName)
             var r:Routine ?= null
-            for (rout in routinesList){
-                if (strName.equals(rout.name)){
-                    r = rout
+            for (i in 0 until routinesList.getCount()) {
+                Log.d(TAG, "load exercisesList: ${arrayExerciseAdapter.getItem(i)}")
+                var h: HashMap<String,ArrayList<ArrayList<String>>> = HashMap()
+                h["exercises"] = arrayListExerciseToArrayListStrings(arrayExerciseAdapter.getItem(i)!!)
+                routinesList.getItem(i)?.hashMapExercises = h
+            }
+            for (i in 0 until routinesList.getCount()) {
+                if (strName.equals(routinesList.getItem(i)?.name)){
+                    r = routinesList.getItem(i)
                     break
                 }
             }
-            var exes:ArrayList<ArrayList<String>> ?= r!!.hashMapExercises?.get("exercises")
-            exes!!.add(params)
-            r!!.hashMapExercises?.set("exercises", exes)
-            Log.d(TAG, "${params!!}")
+            Log.d(TAG, "routineSelected: $r")
+            var exes:ArrayList<ArrayList<String>> = ArrayList()
+            if (r!!.hashMapExercises?.get("exercises")!=null) {
+                exes = r.hashMapExercises?.get("exercises") as ArrayList<ArrayList<String>>
+            }
+            exes.add(params)
+            r.hashMapExercises?.set("exercises", exes)
+            Log.d(TAG, "params $params")
             val routine = hashMapOf(
-                "name" to r!!.name,
-                "description" to r!!.description,
-                "photo" to r!!.photo,
-                "hashMapExercises" to r!!.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
-                "time_be" to r!!.time_be
+                "name" to r.name,
+                "description" to r.description,
+                "photo" to r.photo,
+                "hashMapExercises" to toArrayListExercise(exes) ,
+                "time_be" to r.time_be
             )
             db.collection("routines").get()
                 .addOnSuccessListener { result ->
@@ -216,20 +219,20 @@ class ExerciseActivity: AppCompatActivity() {
                         //Adding User Routine
                         db.collection("routines").document(user).collection("MyRoutines").document(r.name).set(routine)
                         Log.d(TAG,"Routine added.")
-                        Toast.makeText(this,"Routine ${r.name} added",Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener{ e ->
                     Log.w(TAG,"Error getting getting data",e)
                 }
 
-            builderInner.setTitle("Your Selected Item is")
+            builderInner.setTitle("Your exercies has been added to")
             builderInner.setPositiveButton(
                 "Ok"
             ) { dialog, which -> dialog.dismiss() }
             builderInner.show()
         }
         builderSingle.show()
+        setTime()
     }
 
     fun getRoutinesNamesList(routinesList: ArrayList<Routine>): ArrayList<String>{
@@ -263,5 +266,28 @@ class ExerciseActivity: AppCompatActivity() {
             arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
         }
         return arrayList
+    }
+    private fun arrayListExerciseToArrayListStrings(exercises: ArrayList<Exercise>): ArrayList<ArrayList<String>>{
+        var arrayList:ArrayList<ArrayList<String>> = ArrayList()
+        Log.d(TAG, "Class ${exercises.javaClass}")
+        Log.d(TAG, "EX ${exercises}")
+        for (ex in exercises) {
+            arrayList.add(ex.getParametersList())
+        }
+        return arrayList
+    }
+    fun setTime (){
+        val timeDialog = android.app.AlertDialog.Builder(this)
+        val mView:View = getLayoutInflater().inflate(R.layout.exercise_set_time,null)
+        val editText: EditText = mView.findViewById(R.id.editTextTimeExercise)
+        timeDialog.setPositiveButton("Apply") { dialog, which ->
+            params[2] = editText.text.toString()
+        }
+        timeDialog.setNegativeButton("Cancel") { dialog, which ->
+            params[2] = "0"
+        }
+        timeDialog.setView(mView)
+        val dialog: android.app.AlertDialog =timeDialog.create()
+        dialog.show()
     }
 }
