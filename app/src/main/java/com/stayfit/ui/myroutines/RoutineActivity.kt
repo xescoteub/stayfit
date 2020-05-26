@@ -65,7 +65,7 @@ class RoutineActivity : AppCompatActivity() {
     fun managerParametersIntent(exercises: ArrayList<ArrayList<String>>){
         if (exercises.size>0){
         for (parametersExercise in exercises) {
-            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4],parametersExercise[5]))
             arrayNames.add(parametersExercise[0])
         }}
     }

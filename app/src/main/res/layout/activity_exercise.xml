@@ -83,5 +83,14 @@
         android:layout_height="match_parent"
         android:max="10"
         android:progress="10" />
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="70dp"
+            android:text="OK"
+            android:id="@+id/btn_ok_exercise"
+            android:onClick="finishOK"
+            android:background="@drawable/routine_button"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center_horizontal|bottom"/>
     </FrameLayout>
 </RelativeLayout>

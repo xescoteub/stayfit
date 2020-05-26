@@ -87,8 +87,8 @@ class MyExercises : AppCompatActivity() {
         if (requestCode == 2) {
             if (resultCode == 2){
                 var arrayList: ArrayList<String> = data!!.getStringArrayListExtra("LIST")
-                addExercise(Exercise( arrayList[0], arrayList[2],"0", "null", arrayList[1]))
-                controlListView()
+                addExercise(Exercise( arrayList[0], arrayList[2],"0", "null", arrayList[1],"null"))
+                (listView?.adapter as ArrayAdapter<*>).notifyDataSetChanged()
             }
         }
     }
@@ -98,7 +98,8 @@ class MyExercises : AppCompatActivity() {
             "url_video" to e.url_video,
             "time_count" to e.time_count,
             "jason" to e.jason,
-            "description" to e.description
+            "description" to e.description,
+            "reps" to e.reps
         )
         val currentUserID = mAuth.currentUser?.uid.toString()
         db.collection("myexercises").get()
@@ -144,6 +145,7 @@ class MyExercises : AppCompatActivity() {
                         time_count  = exerciseObj["time_count"].toString()
                         jason = exerciseObj["jason"].toString()
                         description  = exerciseObj["description"].toString()
+                        reps  = exerciseObj["reps"].toString()
                     }
                     Log.d(TAG, "exercise: $exercise")
                     exerciseList.add(exercise)

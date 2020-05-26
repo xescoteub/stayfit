@@ -38,6 +38,8 @@ class ExerciseActivity: AppCompatActivity() {
         setContentView(R.layout.activity_exercise)
         mAuth = FirebaseAuth.getInstance()
         title = findViewById<TextView>(R.id.txt_exercise)
+        val btn_ok = findViewById<Button>(R.id.btn_ok_exercise)
+        btn_ok.visibility = View.GONE
         val intent:Intent = intent
         params = intent.getStringArrayListExtra("exercise_name")!!
         managerParametersIntent(params)
@@ -90,8 +92,16 @@ class ExerciseActivity: AppCompatActivity() {
 
         var time: Int = parameterIntent[2].toInt()
         if (time==0){
-            txt_time.setText(parameterIntent[4]) // set description
-            txt_time.textSize = (14).toFloat()
+            if (parameterIntent[5] != "null"){
+                txt_time.text = "x${parameterIntent[5]}"
+                txt_time.textSize = (25).toFloat()
+                txt_time.setTextColor(Color.parseColor("#6c63ff"))
+                val btn_ok = findViewById<Button>(R.id.btn_ok_exercise)
+                btn_ok.visibility = View.VISIBLE
+            }else{
+                txt_time.setText(parameterIntent[4]) // set description
+                txt_time.textSize = (14).toFloat()
+            }
             //txt_time.setTextColor(Color.BLACK)
             progBar.visibility = View.GONE
         }else{
@@ -252,7 +262,8 @@ class ExerciseActivity: AppCompatActivity() {
                         exercise["url_video"],
                         exercise["time_count"],
                         exercise["jason"],
-                        exercise["description"]
+                        exercise["description"],
+                        exercise["reps"]
                     )
                 )
             }
@@ -263,7 +274,7 @@ class ExerciseActivity: AppCompatActivity() {
     fun toArrayListExercise(exercises: ArrayList<ArrayList<String>>): ArrayList<Exercise>{
         var arrayList:ArrayList<Exercise> = ArrayList()
         for (parametersExercise in exercises) {
-            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4]))
+            arrayList.add(Exercise(parametersExercise[0],parametersExercise[1],parametersExercise[2],parametersExercise[3],parametersExercise[4],parametersExercise[5]))
         }
         return arrayList
     }
@@ -277,17 +288,43 @@ class ExerciseActivity: AppCompatActivity() {
         return arrayList
     }
     fun setTime (){
-        val timeDialog = android.app.AlertDialog.Builder(this)
-        val mView:View = getLayoutInflater().inflate(R.layout.exercise_set_time,null)
-        val editText: EditText = mView.findViewById(R.id.editTextTimeExercise)
-        timeDialog.setPositiveButton("Apply") { dialog, which ->
-            params[2] = editText.text.toString()
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Do you want to do the exercise by time or by reps?")
+        val categories = arrayOf("TIME","REPS")
+        builder.setItems(categories) { dialog, which ->
+            when (which) {
+                0 -> { val timeDialog = AlertDialog.Builder(this)
+                    val mView:View = getLayoutInflater().inflate(R.layout.exercise_set_time,null)
+                    val editText: EditText = mView.findViewById(R.id.editTextTimeExercise)
+                    timeDialog.setPositiveButton("Apply") { dialog, which ->
+                        params[2] = editText.text.toString()
+                    }
+                    timeDialog.setNegativeButton("Cancel") { dialog, which ->
+                        params[2] = "0"
+                    }
+                    timeDialog.setView(mView)
+                    timeDialog.show() }
+                1 -> {val timeDialog = AlertDialog.Builder(this)
+                    val mView:View = getLayoutInflater().inflate(R.layout.exercise_set_reps,null)
+                    val editText: EditText = mView.findViewById(R.id.editTextRepsExercise)
+                    timeDialog.setPositiveButton("Apply") { dialog, which ->
+                        params[5] = editText.text.toString()
+                    }
+                    timeDialog.setNegativeButton("Cancel") { dialog, which ->
+                        params[5] = "null"
+                    }
+                    timeDialog.setView(mView)
+                    timeDialog.show()
+                    }
+            }
         }
-        timeDialog.setNegativeButton("Cancel") { dialog, which ->
-            params[2] = "0"
-        }
-        timeDialog.setView(mView)
-        val dialog: android.app.AlertDialog =timeDialog.create()
+        // create and show the alert dialog
+        val dialog = builder.create()
         dialog.show()
+
+    }
+
+    fun finishOK(view: View) {
+        finish()
     }
 }
