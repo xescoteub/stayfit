@@ -119,7 +119,7 @@ class ExerciseActivity: AppCompatActivity() {
         }
     }
 
-    fun addToRoutine(view: View) {
+    fun addToRoutine() {
         //var : ArrayList<Routine> = ArrayList()
         val builderSingle = AlertDialog.Builder(this)
         var arrayExerciseAdapter: ArrayAdapter<ArrayList<Exercise>> ?= null
@@ -242,7 +242,6 @@ class ExerciseActivity: AppCompatActivity() {
             builderInner.show()
         }
         builderSingle.show()
-        setTime()
     }
 
     fun getRoutinesNamesList(routinesList: ArrayList<Routine>): ArrayList<String>{
@@ -287,7 +286,7 @@ class ExerciseActivity: AppCompatActivity() {
         }
         return arrayList
     }
-    fun setTime (){
+    fun setTime (view: View){
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setTitle("Do you want to do the exercise by time or by reps?")
         val categories = arrayOf("TIME","REPS")
@@ -298,6 +297,7 @@ class ExerciseActivity: AppCompatActivity() {
                     val editText: EditText = mView.findViewById(R.id.editTextTimeExercise)
                     timeDialog.setPositiveButton("Apply") { dialog, which ->
                         params[2] = editText.text.toString()
+                        addToRoutine()
                     }
                     timeDialog.setNegativeButton("Cancel") { dialog, which ->
                         params[2] = "0"
@@ -309,6 +309,7 @@ class ExerciseActivity: AppCompatActivity() {
                     val editText: EditText = mView.findViewById(R.id.editTextRepsExercise)
                     timeDialog.setPositiveButton("Apply") { dialog, which ->
                         params[5] = editText.text.toString()
+                        addToRoutine()
                     }
                     timeDialog.setNegativeButton("Cancel") { dialog, which ->
                         params[5] = "null"

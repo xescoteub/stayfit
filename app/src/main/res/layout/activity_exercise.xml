@@ -25,7 +25,7 @@
         app:srcCompat="@drawable/ic_add"
         android:layout_alignParentRight="true"
         android:layout_margin="20dp"
-        android:onClick="addToRoutine"/>
+        android:onClick="setTime"/>
 
     <ImageView
         android:id="@+id/ic_arrow1"
