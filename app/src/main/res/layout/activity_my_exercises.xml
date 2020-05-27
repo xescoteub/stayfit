@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.workouts.listexercises.MyExercises"
     android:paddingTop="16dp">
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        android:id="@+id/waitingBarExercise"
+        android:layout_toLeftOf="@+id/ic_deleteExercise"/>
     <ImageView
         android:id="@+id/ic_addExercise"
         android:layout_width="50dp"

@@ -36,6 +36,7 @@ class   MyRoutinesFragment: Fragment(){
     private lateinit var viewModel: MyRoutinesViewModel
     private lateinit var mAuth: FirebaseAuth
     var arrayAdapter: ArrayAdapter<ArrayList<Exercise>> ?= null
+    var progressBar:ProgressBar ?= null
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
@@ -44,7 +45,8 @@ class   MyRoutinesFragment: Fragment(){
         // Inflate the layout for this fragment
         var view:View = inflater.inflate(R.layout.fragment_my_routines, container, false)
         Log.d(TAG, "onCreateView: MyRoutinesFragment created...")
-
+        progressBar = view.findViewById(R.id.waitingBarRoutines)
+        progressBar!!.visibility = View.GONE
         mAuth = FirebaseAuth.getInstance()
 
         var button: ImageView = view.findViewById(R.id.ic_deleteRoutine)
@@ -173,6 +175,7 @@ class   MyRoutinesFragment: Fragment(){
             }
     }
     private fun loadDataFireBase(){
+        progressBar!!.visibility = View.VISIBLE
         arrayAdapter = activity?.let {
             ArrayAdapter<ArrayList<Exercise>>(
                 it,
@@ -209,10 +212,12 @@ class   MyRoutinesFragment: Fragment(){
                 }
                 Log.d(TAG, "END2")
                 myroutinesRecycler.adapter!!.notifyDataSetChanged()
+                progressBar!!.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
             }
+
     }
     private fun deleteRoutine() {
         Toast.makeText(activity,"Press the routine that you want to delete",Toast.LENGTH_SHORT).show()

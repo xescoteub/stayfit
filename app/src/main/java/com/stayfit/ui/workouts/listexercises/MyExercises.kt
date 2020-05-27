@@ -7,11 +7,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +28,7 @@ class MyExercises : AppCompatActivity() {
     var arrayList: ArrayList<String> = ArrayList()
     //create ArrayList of String
     var exerciseList: ArrayList<Exercise> = ArrayList()
+    var progressBar: ProgressBar?= null
 
     // Access a Cloud Firestore instance from your Activity
     val db = FirebaseFirestore.getInstance()
@@ -39,6 +37,8 @@ class MyExercises : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_exercises)
+        progressBar = findViewById(R.id.waitingBarExercise)
+        progressBar!!.visibility = View.GONE
         mAuth = FirebaseAuth.getInstance()
         listView = findViewById<ListView>(R.id.my_exercises_list)
         controlListView()
@@ -129,6 +129,7 @@ class MyExercises : AppCompatActivity() {
 
     }
     private fun loadData(){
+        progressBar!!.visibility = View.VISIBLE
         val user = mAuth.currentUser?.uid.toString()
         db.collection("myexercises").document(user).collection("exercicis")
             .get()
@@ -154,10 +155,12 @@ class MyExercises : AppCompatActivity() {
                 }
                 Log.d(TAG, "END2")
                 (listView?.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                progressBar!!.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
             }
+
 
     }
     fun deleteItem(view: View?) {

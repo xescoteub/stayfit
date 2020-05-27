@@ -7,6 +7,11 @@
     tools:context=".ui.myroutines.MyRoutinesFragment"
     android:paddingTop="16dp"
     android:paddingBottom="50dp">
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        android:id="@+id/waitingBarRoutines"
+        android:layout_toLeftOf="@+id/ic_addToCalendar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
