@@ -3,11 +3,13 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="16dp">
     <EditText
+        android:inputType="number"
         android:hint="Day--dd"
         android:id="@+id/edit_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <EditText
+        android:inputType="number"
         android:hint="Month--mm"
         android:id="@+id/edit_month"
         android:layout_below="@+id/edit_day"
@@ -15,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"/>
     <EditText
+        android:inputType="number"
         android:hint="Year--yyyy"
         android:id="@+id/edit_year"
         android:layout_width="match_parent"
