@@ -35,10 +35,7 @@ exports.api = functions.https.onRequest(app);
 app.get('/blogs/user/:uid', (req, res) => {
     const uid = req.params.uid;
 
-    // Get blogs database collection
-    let blogsRef = db.collection('blogs');
-
-    // Array used to hold user recommended blogs
+    // Array used to hold user blogs / recommendations.
     let blogs = [];
 
     // The user completed workouts
@@ -52,22 +49,47 @@ app.get('/blogs/user/:uid', (req, res) => {
           return;
         }
         completedDailyWorkouts = snapshot.size;
-      }).then(() => {
-          // Query blogs that where user_id equals the one from request(uid)
-          blogsRef.get()
-            .then(async snapshot => {
-              if (snapshot.empty) {
-                console.log('No matching documents.');
-                return;
-              }
+      }).then(async () => {
+          // Get user blogs
+          const userBlogs = await fetchUserBlogs(uid);
+          console.log("userBlogs: ", userBlogs);
 
-              // Get recommended blogs
-              const recommendations = await handleUserBlogRecommendation(completedDailyWorkouts)
-              //console.log("recommendations: ", recommendations);
-              res.status(200).send(recommendations)
-            }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
-      });
+          // Get user recommended blogs
+          const recommendations = await handleUserBlogRecommendation(completedDailyWorkouts);
+
+          blogs.push({
+            "blogs": userBlogs,
+            "recommendations": recommendations
+          });
+
+          console.log("blogs: ", blogs);
+
+          res.status(200).send(blogs);
+      }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
 });
+
+async function fetchUserBlogs(uid) {
+    // Get blogs database collection reference
+    const blogsRef = db.collection('blogs');
+
+    // Array to hold user blogs
+    const blogs = [];
+
+    // Query blogs that where user_id equals the one from request(uid)
+    blogsRef.where('user_id', '==', uid).get()
+    .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents for uid: ', uid);
+          return;
+        }
+        snapshot.forEach(doc => {
+            // console.log(doc.id, '=>', doc.data());
+            blogs.push(doc.data());
+        });
+    });
+
+    return blogs;
+}
 
 /**
  * Utility function to handle user blogs recommendation based on user data
