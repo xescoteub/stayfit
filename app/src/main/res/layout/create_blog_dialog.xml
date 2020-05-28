@@ -3,11 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
+    <!-- Blog name -->
     <EditText
         android:id="@+id/et_blog_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name" />
+
+    <!-- Blog description -->
     <EditText
         android:id="@+id/et_blog_desc"
         android:layout_width="match_parent"
@@ -16,4 +19,21 @@
         android:layout_alignParentStart="true"
         android:hint="Description"
         android:inputType="textMultiLine" />
+
+    <!--ImageView where image will be set-->
+    <ImageView
+        android:id="@+id/iv_blog_image"
+        android:scaleType="centerCrop"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_below="@id/et_blog_desc" />
+
+    <!--Button to pick image-->
+    <Button
+        android:id="@+id/image_picker_btn"
+        android:text="Choose Image"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_blog_desc"/>
 </RelativeLayout>

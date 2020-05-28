@@ -1,14 +1,22 @@
 package com.stayfit.ui.home.blogs
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +28,11 @@ import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.Response
 import com.stayfit.R
+import kotlinx.android.synthetic.main.create_blog_dialog.*
 import kotlinx.android.synthetic.main.personal_blogs_fragment.*
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
-
 
 class PersonalBlogsFragment : Fragment() {
     private val TAG = "PersonalBlogsFragment"
@@ -43,6 +51,10 @@ class PersonalBlogsFragment : Fragment() {
 
     private var progressCircular: ProgressBar? = null
 
+    private var blogImageView: ImageView? = null
+
+    val REQUEST_CODE = 100
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.personal_blogs_fragment, container, false)
 
@@ -53,6 +65,8 @@ class PersonalBlogsFragment : Fragment() {
         blogsList = ArrayList()
 
         progressCircular = root.findViewById<View>(R.id.progress_circular) as ProgressBar
+
+        blogImageView = root.findViewById<View>(R.id.iv_blog_image) as ImageView
 
         addButton = root.findViewById<View>(R.id.btn_add_blog) as FloatingActionButton
         addButton!!.setOnClickListener {
@@ -77,6 +91,12 @@ class PersonalBlogsFragment : Fragment() {
 
         val blogName = dialogView.findViewById<EditText>(R.id.et_blog_name)
         val blogDescription = dialogView.findViewById<EditText>(R.id.et_blog_desc)
+        val imagePicker = dialogView.findViewById<AppCompatButton>(R.id.image_picker_btn)
+
+        //BUTTON CLICK
+        imagePicker.setOnClickListener {
+            openGalleryForImage()
+        }
 
         dialogBuilder.setTitle("Custom new blog")
         dialogBuilder.setPositiveButton("Save") { dialog, whichButton ->
@@ -104,6 +124,29 @@ class PersonalBlogsFragment : Fragment() {
         val b = dialogBuilder.create()
         b.show()
     }
+
+
+    private fun openGalleryForImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
+            blogImageView?.setImageURI(data?.data) // handle chosen image
+        }
+    }
+
+    /*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
+            imageView.setImageURI(data?.data) // handle chosen image
+        }
+    }
+     */
 
     /**
      *
