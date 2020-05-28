@@ -19,7 +19,50 @@ import java.net.URLConnection
 /**
  * Connect activity with it's data
  */
-class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHolder>() {
+class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
+
+    /**
+     *
+     */
+    class BlogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener
+    {
+        var blogName  = itemView.blogName
+        var blogDesc  = itemView.blogDescription
+        var blogPhoto = itemView.blogImage
+
+        override fun onClick(v: View?) {
+            clickListener?.onItemClick(adapterPosition, v)
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        init {
+            itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
+        }
+    }
+
+    fun setOnItemClickListener(clickListener: ClickListener?) {
+        Companion.clickListener = clickListener
+    }
+
+    interface ClickListener {
+        fun onItemClick(position: Int, v: View?)
+        fun onItemLongClick(position: Int, v: View?)
+    }
+
+    companion object {
+        var clickListener: ClickListener? = null
+    }
+
+    /**
+     *
+     */
+    override fun getItemCount(): Int {
+        return items.size
+    }
 
     /**
      *
@@ -45,7 +88,7 @@ class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHol
 
         holder.blogPhoto.setImageBitmap(getImageBitmap(url));
     }
-
+    
     /**
      * Get bitmap from URL
      */
@@ -66,31 +109,4 @@ class BlogAdapter(var items: ArrayList<Blog>) : RecyclerView.Adapter<BlogViewHol
         }
         return bm
     }
-
-    /**
-     *
-     */
-    override fun getItemCount(): Int {
-        return items.size
-    }
-}
-
-/**
- *
- */
-class BlogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-{
-    var blogName  = itemView.blogName
-    var blogDesc  = itemView.blogDescription
-    var blogPhoto = itemView.blogImage
-
-    /*fun initialize(item: Blog, action:OnBlogItemClickListner) {
-        blogName.text = item.name
-        blogDesc.text = item.description
-        blogPhoto.setImageResource(item.photo)
-
-        itemView.setOnClickListener{
-            action.onItemClick(item, adapterPosition)
-        }
-    }*/
 }

@@ -102,6 +102,16 @@ async function handleUserBlogRecommendation(completedWorkouts) {
                console.log("No such document!");
             }
         }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
+
+        await blogsRef.doc('healthy_food').get().then(doc => {
+            if (doc.exists) {
+               //console.log("Document data:", doc.data());
+               blogs.push(doc.data());
+            } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+            }
+        }).catch(error => res.status(400).send(`Cannot get welcome blog: ${error}`));
     }
     else if (completedWorkouts >= 4){
         await blogsRef.doc('healthy_food').get().then(doc => {

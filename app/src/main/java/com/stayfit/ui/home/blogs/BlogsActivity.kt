@@ -1,5 +1,6 @@
 package com.stayfit.ui.home.blogs
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,7 +9,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.squareup.okhttp.*
+import com.squareup.okhttp.Callback
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
+import com.squareup.okhttp.Response
 import com.stayfit.R
 import kotlinx.android.synthetic.main.activity_blogs.*
 import org.json.JSONArray
@@ -56,6 +60,9 @@ class BlogsActivity : AppCompatActivity() {
 
         getUserBlogs()
     }
+
+    fun preventClicks(view: View?) {}
+
 
     /**
      *
@@ -108,11 +115,31 @@ class BlogsActivity : AppCompatActivity() {
     }
 
     /**
-     * Display list of blogs
+     * Display list of blogs and attach click listener to list items.
+     * When item is clicked, the blog details activity is started.
      */
     private fun showList() {
         blogRecycler.layoutManager = LinearLayoutManager(this)
         blogRecycler.addItemDecoration(DividerItemDecoration(this, 1))
         blogRecycler.adapter = BlogAdapter(blogList)
+        (blogRecycler.adapter as BlogAdapter).setOnItemClickListener(object :
+            BlogAdapter.ClickListener {
+            override fun onItemClick(position: Int, v: View?) {
+                startBlogDetailsActivity(blogList[position])
+            }
+
+            override fun onItemLongClick(position: Int, v: View?) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    private fun startBlogDetailsActivity(item: Blog) {
+        Log.d(TAG,"startBlogDetailsActivity >>>  $item")
+        val intent = Intent(this, BlogDetailsActivity::class.java)
+        intent.putExtra("blog_name", item.name)
+        intent.putExtra("blog_description", item.description)
+        intent.putExtra("blog_photo", item.photo)
+        startActivity(intent)
     }
 }

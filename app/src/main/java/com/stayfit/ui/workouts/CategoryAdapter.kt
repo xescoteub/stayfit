@@ -66,7 +66,7 @@ class CategoryAdapter(var items: ArrayList<Category>) : RecyclerView.Adapter<Cat
     }
 
     companion object {
-        private var clickListener: ClickListener? = null
+        var clickListener: ClickListener? = null
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
