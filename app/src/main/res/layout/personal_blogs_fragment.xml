@@ -2,16 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="Personal blogs!" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp">
         <ProgressBar
             android:id="@+id/progress_circular"
             android:layout_width="wrap_content"
@@ -23,10 +18,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blogRecycler"
             android:layout_width="match_parent"
-            android:layout_height="650dp"
-            android:layout_alignParentTop="true"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="0dp"
             android:layout_marginBottom="81dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"></androidx.recyclerview.widget.RecyclerView>

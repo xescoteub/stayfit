@@ -13,15 +13,14 @@ class BlogViewPagerAdapter(private val myContext: Context, fm: FragmentManager, 
 
     // this is for fragment tabs
     override fun getItem(position: Int): Fragment {
-        println(">>>>>>>>>>> getItem: $position")
-        when (position) {
+        return when (position) {
             0 -> {
-                return PersonalBlogsFragment()
+                PersonalBlogsFragment()
             }
             1 -> {
-                return RecommendedBlogsFrament()
+                RecommendedBlogsFrament()
             }
-            else -> return PersonalBlogsFragment()
+            else -> PersonalBlogsFragment()
         }
     }
 

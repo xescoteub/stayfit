@@ -32,43 +32,12 @@ exports.api = functions.https.onRequest(app);
 // USER BLOG'S
 //
 // ============================================================================
+/**
+ * User personal blogs
+ */
 app.get('/blogs/user/:uid', (req, res) => {
     const uid = req.params.uid;
 
-    // Array used to hold user blogs / recommendations.
-    let blogs = [];
-
-    // The user completed workouts
-    let completedDailyWorkouts = 0;
-
-    // Get user completed daily workouts count
-    db.collection('daily_exercises').where('user_id', '==', uid).get()
-      .then(snapshot => {
-        if (snapshot.empty) {
-          console.log('No matching documents.');
-          return;
-        }
-        completedDailyWorkouts = snapshot.size;
-      }).then(async () => {
-          // Get user blogs
-          const userBlogs = await fetchUserBlogs(uid);
-          console.log("userBlogs: ", userBlogs);
-
-          // Get user recommended blogs
-          const recommendations = await handleUserBlogRecommendation(completedDailyWorkouts);
-
-          blogs.push({
-            "blogs": userBlogs,
-            "recommendations": recommendations
-          });
-
-          console.log("blogs: ", blogs);
-
-          res.status(200).send(blogs);
-      }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
-});
-
-async function fetchUserBlogs(uid) {
     // Get blogs database collection reference
     const blogsRef = db.collection('blogs');
 
@@ -86,10 +55,33 @@ async function fetchUserBlogs(uid) {
             // console.log(doc.id, '=>', doc.data());
             blogs.push(doc.data());
         });
-    });
+        res.status(200).send(blogs);
+    }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
+});
 
-    return blogs;
-}
+/**
+ * User recommended blogs
+ */
+app.get('/blogs/recommended/user/:uid', (req, res) => {
+    const uid = req.params.uid;
+
+    // The user completed workouts
+    let completedDailyWorkouts = 0;
+
+    // Get user completed daily workouts count
+    db.collection('daily_exercises').where('user_id', '==', uid).get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+        completedDailyWorkouts = snapshot.size;
+      }).then(async () => {
+          // Get user recommended blogs
+          const recommendations = await handleUserBlogRecommendation(completedDailyWorkouts);
+          res.status(200).send(recommendations);
+      }).catch(error => res.status(400).send(`Cannot get user blogs: ${error}`));
+});
 
 /**
  * Utility function to handle user blogs recommendation based on user data
