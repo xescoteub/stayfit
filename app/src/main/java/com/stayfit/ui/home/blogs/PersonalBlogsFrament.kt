@@ -29,7 +29,7 @@ import java.io.IOException
 class PersonalBlogsFragment : Fragment() {
     private val TAG = "PersonalBlogsFragment"
 
-    lateinit var blogList: ArrayList<Blog>
+    lateinit var blogsList: ArrayList<Blog>
 
     private lateinit var mAuth: FirebaseAuth
 
@@ -50,7 +50,7 @@ class PersonalBlogsFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
 
         // Create list to hold blogs
-        blogList = ArrayList()
+        blogsList = ArrayList()
 
         progressCircular = root.findViewById<View>(R.id.progress_circular) as ProgressBar
 
@@ -140,7 +140,7 @@ class PersonalBlogsFragment : Fragment() {
                                 photo           = item["image"].toString()
                             }
                             Log.d(TAG, "> blog : $blog")
-                            blogList.add(blog)
+                            blogsList.add(blog)
 
                             showList()
                         }
@@ -172,11 +172,11 @@ class PersonalBlogsFragment : Fragment() {
     private fun showList() {
         blogRecycler.layoutManager = LinearLayoutManager(activity)
         blogRecycler.addItemDecoration(DividerItemDecoration(activity, 1))
-        blogRecycler.adapter = BlogAdapter(blogList)
+        blogRecycler.adapter = BlogAdapter(blogsList)
         (blogRecycler.adapter as BlogAdapter).setOnItemClickListener(object :
             BlogAdapter.ClickListener {
             override fun onItemClick(position: Int, v: View?) {
-                startBlogDetailsActivity(blogList[position])
+                startBlogDetailsActivity(blogsList[position])
             }
 
             override fun onItemLongClick(position: Int, v: View?) {
@@ -185,5 +185,8 @@ class PersonalBlogsFragment : Fragment() {
         })
     }
 
+    /**
+     * Trick to prevent floating action button click propagate to blog item.
+     */
     fun preventClicks(view: View?) {}
 }

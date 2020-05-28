@@ -18,11 +18,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blogRecycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="618dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="81dp"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"></androidx.recyclerview.widget.RecyclerView>
+            android:paddingBottom="10dp" />
     </RelativeLayout>
 
     <LinearLayout
