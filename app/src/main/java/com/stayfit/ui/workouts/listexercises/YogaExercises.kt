@@ -27,7 +27,7 @@ class YogaExercises : AppCompatActivity() {
     }
     fun controlListView(){
         //Add elements to arraylist
-        var tadasana: Exercise = Exercise("Mountain Pose (Tadasana)", "https://www.youtube.com/watch?v=aEQVYMb9P6U", "0", "null", "")
+        var tadasana: Exercise = Exercise("Mountain Pose (Tadasana)", "https://www.youtube.com/watch?v=aEQVYMb9P6U", "0", "null", "", "null")
         addExercise(tadasana)
 
         arrayList.add("Raised Arms Pose (Urdhva Hastansana)")

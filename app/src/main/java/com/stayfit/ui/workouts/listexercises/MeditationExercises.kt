@@ -27,7 +27,7 @@ class MeditationExercises : AppCompatActivity() {
     }
     fun controlListView(){
         //Add elements to arraylist
-        var theStimulatingBreath: Exercise = Exercise("The Stimulating Breath (Bellows Breath)", "https://www.youtube.com/watch?v=5Jnq9zToku0", "0", "null", "")
+        var theStimulatingBreath: Exercise = Exercise("The Stimulating Breath (Bellows Breath)", "https://www.youtube.com/watch?v=5Jnq9zToku0", "0", "null", "", "null")
         addExercise(theStimulatingBreath)
 
         arrayList.add("Relaxing Breathing (4-7-8) Exercise")

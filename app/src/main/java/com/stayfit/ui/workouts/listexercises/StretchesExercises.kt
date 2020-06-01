@@ -27,7 +27,7 @@ class StretchesExercises : AppCompatActivity() {
     }
     fun controlListView(){
         //Add elements to arraylist
-        var standingHamstringStretch: Exercise = Exercise("Standing Hamstring Stretch", "https://www.youtube.com/watch?v=SAU77ionqJ4", "0", "null", "")
+        var standingHamstringStretch: Exercise = Exercise("Standing Hamstring Stretch", "https://www.youtube.com/watch?v=SAU77ionqJ4", "0", "null", "", "null")
         addExercise(standingHamstringStretch)
 
         arrayList.add("Piriformis Stretch")
