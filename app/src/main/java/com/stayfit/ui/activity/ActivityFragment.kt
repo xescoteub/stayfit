@@ -317,7 +317,8 @@ class ActivityFragment : Fragment() {
                         exercise["url_video"],
                         exercise["time_count"],
                         exercise["jason"],
-                        exercise["description"]
+                        exercise["description"],
+                        exercise["reps"]
                     )
                 )
             }

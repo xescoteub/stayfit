@@ -35,9 +35,10 @@ class DarkTheme : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             setTheme(R.style.darkTheme)
-        }else{setTheme(R.style.darkTheme)}
+        }else{setTheme(R.style.AppTheme)}
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dark_theme)

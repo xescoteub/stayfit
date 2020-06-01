@@ -326,7 +326,8 @@ class   MyRoutinesFragment: Fragment(){
                                                 "name" to routine.name,
                                                 "description" to routine.description,
                                                 "photo" to routine.photo,
-                                                "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+                                                "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+                                                "time_be" to routine.time_be
                                             )
                                             db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routineData)
                                             Log.d(TAG,"Event added.")
@@ -346,7 +347,8 @@ class   MyRoutinesFragment: Fragment(){
                                     "name" to routine.name,
                                     "description" to routine.description,
                                     "photo" to routine.photo,
-                                    "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+                                    "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+                                    "time_be" to routine.time_be
                                 )
                                 db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routineData)
                                 Log.d(TAG,"Event added.")
@@ -370,7 +372,8 @@ class   MyRoutinesFragment: Fragment(){
                         "name" to routine.name,
                         "description" to routine.description,
                         "photo" to routine.photo,
-                        "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) }
+                        "hashMapExercises" to routine.hashMapExercises?.get("exercises")?.let { toArrayListExercise(it) },
+                        "time_be" to routine.time_be
                     )
                     db.collection("events").document(currentUserID).collection("myEvents").document(dateEvent).collection("myRoutines").document(routine.name).set(routineData)
                     Log.d(TAG,"Event added.")
