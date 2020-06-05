@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stayfit.R
 import com.stayfit.ui.myroutines.Routine
+import kotlinx.android.synthetic.main.activity_exercise.*
 
 
 class ExerciseActivity: AppCompatActivity() {
@@ -113,10 +114,15 @@ class ExerciseActivity: AppCompatActivity() {
         }
 
         var jason: String = parameterIntent[3]
+        //setJason(parameterIntent[3])
+        val js = findViewById<com.airbnb.lottie.LottieAnimationView>(R.id.jason_exercise)
         if (!jason.equals("null")){
-            val js = findViewById<com.airbnb.lottie.LottieAnimationView>(R.id.jason_exercise)
-            js.setAnimation(jason)
+            jason_exercise.setAnimation(jason)
+        } else{
+            jason_exercise.setAnimation("character_running.json")
         }
+        jason_exercise.playAnimation()
+        jason_exercise.loop(true)
     }
 
     fun addToRoutine() {
@@ -328,4 +334,15 @@ class ExerciseActivity: AppCompatActivity() {
     fun finishOK(view: View) {
         finish()
     }
+    /*
+    fun setJason(jason: String){
+        when(jason) {
+            "" -> println("Invalid number")
+            1, 2 -> println("Number too low")
+            3 -> println("Number correct")
+            4 -> println("Number too high, but acceptable")
+            else -> {val js = findViewById<com.airbnb.lottie.LottieAnimationView>(R.id.jason_exercise)
+                js.setAnimation(R)}
+        }
+    } */
 }

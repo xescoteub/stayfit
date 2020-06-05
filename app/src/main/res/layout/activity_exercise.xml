@@ -47,9 +47,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="character_running.json"
-        app:lottie_loop="true"
         android:layout_gravity="top|center_horizontal"
         android:id="@+id/jason_exercise"/>
     </FrameLayout>
