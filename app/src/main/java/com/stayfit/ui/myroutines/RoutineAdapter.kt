@@ -74,23 +74,6 @@ class RoutineAdapter(var items: ArrayList<Routine>) : RecyclerView.Adapter<Routi
             storageRef.getBytes(1073741824).addOnSuccessListener {
                 holder.routinePhoto.setImageBitmap(BitmapFactory.decodeByteArray(it,0,it.size))
             }
-            /*
-            Log.e("RoutineAdapter", "$url")
-            storageRef.child("1589965060105.jpg").downloadUrl
-                .addOnSuccessListener {
-                    // val image = BitmapFactory.decodeStream(URL(it!!.toString()) .openConnection().getInputStream())
-                    //holder.routinePhoto.setImageBitmap(image)
-                    //holder.routinePhoto.setImageURI(it!!)
-                    url = it!!.toString()
-                    Log.e("RoutineAdapter", "$url")
-                    //holder.routinePhoto.setImageResource(R.drawable.blog_1)
-                    holder.routinePhoto.setImageBitmap(getImageBitmap(url))
-                }.addOnFailureListener {
-                    // Handle any errors
-                    holder.routinePhoto.setImageResource(R.drawable.blog_1)
-                }
-
-             */
         }else{
             holder.routinePhoto.setImageResource(R.drawable.blog_5)
         }

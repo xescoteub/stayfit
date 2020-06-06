@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.stayfit.R
 import kotlinx.android.synthetic.main.routines_recycler_item.view.*
 import java.io.BufferedInputStream
@@ -65,14 +68,13 @@ class RoutineAdapterCalendar(var items: ArrayList<Routine>) : RecyclerView.Adapt
         holder.routineDesc?.text = items.get(position).description
         //holder.routinePhoto.setImageResource(items.get(position).photo)
         // holder.routinePhoto.setImageBitmap(items.get(position).photo)
-        val url = items.get(position).photo
+        var url = items.get(position).photo
+
         if (!url.equals("null")) {
-            //holder.routinePhoto.setImageBitmap(items.get(position).photo)
-            //holder.routinePhoto.setImageResource(R.drawable.blog_1)
-            if(getImageBitmap(url)!=null){
-                holder.routinePhoto.setImageBitmap(getImageBitmap(url))
-            } else{
-                holder.routinePhoto.setImageResource(R.drawable.blog_1)
+            val currentUserID = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            var storageRef: StorageReference = FirebaseStorage.getInstance().getReference().child("Backgrounds").child(currentUserID).child(url)
+            storageRef.getBytes(1073741824).addOnSuccessListener {
+                holder.routinePhoto.setImageBitmap(BitmapFactory.decodeByteArray(it,0,it.size))
             }
         }else{
             holder.routinePhoto.setImageResource(R.drawable.blog_5)
@@ -82,19 +84,19 @@ class RoutineAdapterCalendar(var items: ArrayList<Routine>) : RecyclerView.Adapt
     /**
      * Get bitmap from URL
      */
-    private fun getImageBitmap(url: String): Bitmap? {
+    open fun getImageBitmap(url: String): Bitmap? {
         var bm: Bitmap? = null
         try {
             val aURL = URL(url)
-            val conn: URLConnection = aURL.openConnection()
+            val conn = aURL.openConnection()
             conn.connect()
-            val `is`: InputStream = conn.getInputStream()
+            val `is` = conn.getInputStream()
             val bis = BufferedInputStream(`is`)
             bm = BitmapFactory.decodeStream(bis)
             bis.close()
             `is`.close()
         } catch (e: IOException) {
-            Log.e("BlogAdapter", "Error getting bitmap", e)
+            Log.e("Routine adapter", "Error getting bitmap", e)
         }
         return bm
     }
