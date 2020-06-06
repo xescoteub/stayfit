@@ -82,7 +82,9 @@ class LoginActivity : AppCompatActivity() {
     private fun init()
     {
         val currentUser = mAuth.currentUser
-        updateUI(currentUser)
+        if (currentUser !== null) {
+            updateUI(currentUser)
+        }
 
         viewModel = ViewModelProviders.of(
                 this,
@@ -139,7 +141,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?)
     {
         if (currentUser != null) {
-            if(currentUser.isEmailVerified) {
+            if (currentUser.isEmailVerified) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else{

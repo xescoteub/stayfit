@@ -1,8 +1,12 @@
 package com.stayfit.ui.home.blogs
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -12,13 +16,20 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import com.squareup.okhttp.Callback
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
@@ -27,7 +38,10 @@ import com.stayfit.R
 import kotlinx.android.synthetic.main.personal_blogs_fragment.*
 import org.json.JSONArray
 import org.json.JSONException
+import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PersonalBlogsFragment : Fragment() {
     private val TAG = "PersonalBlogsFragment"
@@ -37,6 +51,10 @@ class PersonalBlogsFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
 
     private val db = FirebaseFirestore.getInstance()
+
+    // instance for firebase storage and StorageReference
+    private var storage: FirebaseStorage? = null
+    private var storageReference: StorageReference? = null
 
     var baseURL = "https://us-central1-stayfit-87c1a.cloudfunctions.net"
 
@@ -48,7 +66,12 @@ class PersonalBlogsFragment : Fragment() {
 
     private var blogImageView: ImageView? = null
 
+    private var blogPhoto: String = "";
+    private var filePath: Uri? = null
+
     val REQUEST_CODE = 100
+
+    val REQUEST_IMAGE_CAPTURE = 3
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.personal_blogs_fragment, container, false)
@@ -75,6 +98,14 @@ class PersonalBlogsFragment : Fragment() {
         return root
     }
 
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        appContext = activity
+    }
+
+    companion object {
+        lateinit  var appContext: Context
+    }
     /**
      *
      */
@@ -99,7 +130,8 @@ class PersonalBlogsFragment : Fragment() {
             val payload = hashMapOf(
                 "user_id" to mAuth.uid,
                 "name" to blogName.text.toString(),
-                "description" to blogDescription.text.toString()
+                "description" to blogDescription.text.toString(),
+                "photo" to blogPhoto
             )
             db.collection("blogs")
                 .add(payload)
@@ -128,20 +160,64 @@ class PersonalBlogsFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        println(">>>>>>>>>>>>>>>> onActivityResult $requestCode resultCode $resultCode")
+
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
-            //blogImageView?.setImageURI(data?.data) // handle chosen image
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && null != data) {
+            filePath = data.data
+            println(">>>>>>>>>>>>>>>> filePath: $filePath")
+            val bitmap = MediaStore.Images.Media.getBitmap(appContext.contentResolver, filePath)
+            uploadImage(bitmap)
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(appContext.contentResolver, filePath)
+                uploadImage(bitmap)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
     }
 
-    /*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
-            imageView.setImageURI(data?.data) // handle chosen image
+    private fun uploadImage(bitmap: Bitmap) {
+        println("uploadImage: $filePath")
+        if(filePath != null){
+            val ref = storageReference?.child("blog_images/" + UUID.randomUUID().toString())
+            val uploadTask = ref?.putFile(filePath!!)
+
+            val urlTask = uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation ref.downloadUrl
+            })?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    blogPhoto = downloadUri.toString()
+                    println(">>>>>>>>>> PHOTO URI <<<<<<<<<<")
+                    println(blogPhoto)
+                } else {
+                    // Handle failures
+                }
+            }?.addOnFailureListener{
+
+            }
+        }else{
+            Toast.makeText(appContext, "Please Upload an Image", Toast.LENGTH_SHORT).show()
         }
     }
-     */
+
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            inContext.getContentResolver(),
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
 
     /**
      *
