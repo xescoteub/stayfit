@@ -79,19 +79,23 @@ class RecommendedBlogsFrament : Fragment() {
                     try {
                         val json = JSONArray(myResponse)
                         println("json: $json")
-                        // Generate a new blog object for each received document
-                        for (i in 0 until json.length()) {
-                            val item = json.getJSONObject(i)
-                            val blog = Blog()
-                            with(blog) {
-                                name            = item["name"].toString()
-                                description     = item["description"].toString()
-                                photo           = item["image"].toString()
-                            }
-                            Log.d(TAG, "> blog : $blog")
-                            blogsList.add(blog)
+                        if (json.length() > 0) {
+                            // Generate a new blog object for each received document
+                            for (i in 0 until json.length()) {
+                                val item = json.getJSONObject(i)
+                                val blog = Blog()
+                                with(blog) {
+                                    name = item["name"].toString()
+                                    description = item["description"].toString()
+                                    photo = item["photo"].toString()
+                                }
+                                Log.d(TAG, "> blog : $blog")
+                                blogsList.add(blog)
 
-                            showList();
+                                showList();
+                            }
+                        } else {
+                            Log.d(TAG, "User has no recommended blogs")
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()

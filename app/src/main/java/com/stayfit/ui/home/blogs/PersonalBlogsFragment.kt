@@ -160,7 +160,7 @@ class PersonalBlogsFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        println(">>>>>>>>>>>>>>>> onActivityResult $requestCode resultCode $resultCode")
+        /*println(">>>>>>>>>>>>>>>> onActivityResult $requestCode resultCode $resultCode")
 
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && null != data) {
@@ -175,6 +175,7 @@ class PersonalBlogsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+         */
     }
 
     private fun uploadImage(bitmap: Bitmap) {
@@ -224,48 +225,58 @@ class PersonalBlogsFragment : Fragment() {
      */
     private fun fetchUserBlogs()
     {
-        Log.d(TAG, "getUserBlogs")
-        progressCircular?.visibility = View.VISIBLE;
+        Log.d(TAG, "fetchUserBlogs")
+        try {
+            progressCircular?.visibility = View.VISIBLE;
 
-        val client = OkHttpClient()
-        val request: Request = Request.Builder()
-            .url("$FIREBASE_CLOUD_FUNCTION_BASE_URL/blogs/user/${mAuth.uid}")
-            .build()
+            val client = OkHttpClient()
+            val request: Request = Request.Builder()
+                .url("$FIREBASE_CLOUD_FUNCTION_BASE_URL/blogs/user/${mAuth.uid}")
+                .build()
 
-        client.newCall(request).enqueue(object : Callback {
+            client.newCall(request).enqueue(object : Callback {
 
-            override fun onFailure(request: Request?, e: IOException?) {
+                override fun onFailure(request: Request?, e: IOException?) {
 
-            }
+                }
 
-            override fun onResponse(response: Response?) {
-                val myResponse: String = response?.body()!!.string()
-                this@PersonalBlogsFragment.activity?.runOnUiThread(Runnable {
-                    try {
-                        val json = JSONArray(myResponse)
-                        println("json: $json")
-                        // Generate a new blog object for each received document
-                        for (i in 0 until json.length()) {
-                            val item = json.getJSONObject(i)
-                            val blog = Blog()
-                            with(blog) {
-                                name            = item["name"].toString()
-                                description     = item["description"].toString()
-                                photo           = item["image"].toString()
+                override fun onResponse(response: Response?) {
+                    val myResponse: String = response?.body()!!.string()
+                    println("onResponse: $myResponse")
+
+                    this@PersonalBlogsFragment.activity?.runOnUiThread(Runnable {
+                        try {
+                            val json = JSONArray(myResponse)
+                            println("json: $json")
+                            if (json.length() > 0) {
+                                // Generate a new blog object for each received document
+                                for (i in 0 until json.length()) {
+                                    val item = json.getJSONObject(i)
+                                    val blog = Blog()
+                                    with(blog) {
+                                        name = item["name"].toString()
+                                        description = item["description"].toString()
+                                        photo = item["photo"].toString()
+                                    }
+                                    Log.d(TAG, "> blog : $blog")
+                                    blogsList.add(blog)
+
+                                    showList()
+                                }
+                            } else {
+                                Log.d(TAG, "User has no blogs")
                             }
-                            Log.d(TAG, "> blog : $blog")
-                            blogsList.add(blog)
-
-                            showList()
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        } finally {
+                            progressCircular?.visibility = View.GONE;
                         }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    } finally {
-                        progressCircular?.visibility = View.GONE;
-                    }
-                })
-            }
-        })
+                    })
+                }
+            })
+        } finally {
+            progressCircular?.visibility = View.GONE;
+        }
     }
 
     /**
