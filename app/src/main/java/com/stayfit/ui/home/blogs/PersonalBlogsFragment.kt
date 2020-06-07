@@ -117,12 +117,12 @@ class PersonalBlogsFragment : Fragment() {
 
         val blogName = dialogView.findViewById<EditText>(R.id.et_blog_name)
         val blogDescription = dialogView.findViewById<EditText>(R.id.et_blog_desc)
-        val imagePicker = dialogView.findViewById<AppCompatButton>(R.id.image_picker_btn)
+        //val imagePicker = dialogView.findViewById<AppCompatButton>(R.id.image_picker_btn)
 
         //BUTTON CLICK
-        imagePicker.setOnClickListener {
+        /*imagePicker.setOnClickListener {
             openGalleryForImage()
-        }
+        }*/
 
         dialogBuilder.setTitle("Custom new blog")
         dialogBuilder.setPositiveButton("Save") { dialog, whichButton ->
